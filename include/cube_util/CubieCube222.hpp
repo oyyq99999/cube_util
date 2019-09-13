@@ -68,6 +68,20 @@ namespace cube_util {
         CubieCube222(array<uint16_t, N_CORNER> perm, array<uint16_t, N_CORNER> twist);
 
         /**
+         * Constructor of the class.
+         * @param perm permutation index to initialize with
+         * @param twist orientation index to initialize with
+         */
+        CubieCube222(uint16_t perm, uint16_t twist);
+
+        /**
+         * Constructor of the class.
+         * `index` = `perm` * `N_TWIST` + `twist`
+         * @param index index to initialize with
+         */
+        CubieCube222(uint32_t index);
+
+        /**
          * Apply move to the current cube.
          * @param move the move to apply, as described in cube_util::constants
          */

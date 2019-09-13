@@ -41,6 +41,18 @@ namespace cube_util {
         }
     }
 
+    CubieCube222::CubieCube222(uint16_t perm, uint16_t twist) {
+        if (perm >= N_PERM || twist >= N_TWIST) {
+            throw invalid_argument("invalid parameters!");
+        }
+        this->setPerm(perm);
+        this->setTwist(twist);
+    }
+
+    CubieCube222::CubieCube222(uint32_t index): CubieCube222(index / N_TWIST, index % N_TWIST) {
+
+    }
+
     ostream& operator<<(ostream &os, const CubieCube222 &cc) {
         os << "Perms:";
         for (auto i = 0; i < N_CORNER; i++) {
