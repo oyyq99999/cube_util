@@ -26,7 +26,7 @@ namespace cube_util {
         const string FACELET_NAMES = "URFDLB";
 
         /** Number of corners in a cube */
-        const int N_CORNERS = 8;
+        const int N_CORNER = 8;
 
         // Corners
         const int URF = 0; /**< URF corner */
@@ -61,6 +61,10 @@ namespace cube_util {
 
         /** Type of moves for a 2x2 cube */
         const int N_MOVE = 9;
+        /** Total orientations count of first 6 cubies of a 2x2 cube. */
+        const int N_TWIST = 729; // 3 ^ 6
+        /** Total permutations count of first 7 cubies of a 2x2 cube. */
+        const int N_PERM = 5040; // 7!
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -84,6 +88,81 @@ namespace cube_util {
             arr[d] = arr[c];
             arr[c] = arr[b];
             arr[b] = tmp;
+        }
+
+        /**
+         * Calculate permutation index based on given fixed-length permutation.
+         * @param arr permutation array
+         * @param n number of elements to calculate, n <= 16
+         * @returns index of the given permutation
+         */
+        template<size_t SIZE>
+        uint64_t getNPerm(array<uint16_t, SIZE> arr, int n) {
+            uint64_t index = 0;
+            uint64_t val = 0xFEDCBA9876543210;
+            for (auto i = 0; i < n - 1; i++) {
+                auto v = arr[i] << 2;
+                index = (n - i) * index + (val >> v & 0xf);
+                val -= 0x1111111111111110 << v;
+            }
+            return index;
+        }
+
+        /**
+         * Calculate fixed-length permutation based on given index.
+         * @param[out] arr permutation array
+         * @param index given index
+         * @param n number of elements in the permutation, n <= 16
+         */
+        template<size_t SIZE>
+        void setNPerm(array<uint16_t, SIZE> &arr, uint64_t index, int n) {
+            uint64_t val = 0xFEDCBA9876543210;
+            uint64_t extract = 0;
+            for (auto p = 2; p <= n; p++) {
+                extract = extract << 4 | index % p;
+                index /= p;
+            }
+            for (auto i = 0; i < n - 1; i++) {
+                uint16_t v = (extract & 0xf) << 2;
+                extract >>= 4;
+                arr[i] = val >> v & 0xf;
+                uint64_t m = (1 << v) - 1;
+                val = (val & m) | (val >> 4 & ~m);
+            }
+            arr[n - 1] = val & 0xf;
+        }
+
+        /**
+         * Calculate twist index based on given fixed-length orientation.
+         * @param arr orientation array
+         * @param n number of elements to calculate, n <= 10
+         * @returns index of the given orientation
+         */
+        template<size_t SIZE>
+        uint16_t getNTwist(array<uint16_t, SIZE> arr, int n) {
+            uint16_t index = 0;
+            for (auto i = 0; i < n - 1; i++) {
+                index *= 3;
+                index += arr[i];
+            }
+            return index;
+        }
+
+        /**
+         * Calculate fixed-length orientation based on given index.
+         * @param[out] arr orientation array
+         * @param index given index
+         * @param n number of elements in the orientation, n <= 10
+         */
+        template<size_t SIZE>
+        void setNTwist(array<uint16_t, SIZE> &arr, uint16_t index, int n) {
+            int twist = 0;
+            for (auto i = n - 2; i >= 0; i--) {
+                arr[i] = index % 3;
+                twist += arr[i];
+                index /= 3;
+            }
+            arr[n - 1] = (3 - twist % 3) % 3;
         }
 
         /**
