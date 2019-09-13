@@ -99,47 +99,4 @@ namespace cube_util {
         result.perm = perm;
         result.twist = twist;
     }
-
-    const array<CubieCube222, N_MOVE> CubieCube222::MOVE_CUBES = [] {
-        auto ret = array<CubieCube222, N_MOVE>();
-        ret[Ux1] = CubieCube222({3, 0, 1, 2, 4, 5, 6, 7}, {0});
-        ret[Rx1] = CubieCube222({5, 1, 2, 0, 4, 6, 3, 7}, {2, 0, 0, 1, 0, 1, 2, 0});
-        ret[Fx1] = CubieCube222({1, 4, 2, 3, 5, 0, 6, 7}, {1, 2, 0, 0, 1, 2, 0, 0});
-
-        for (auto i = 0; i < N_MOVE; i+=3) {
-            for (auto j = 1; j < 3; j++) {
-                ret[i + j] = CubieCube222();
-                cubeMult(ret[i + j - 1], ret[i], ret[i + j]);
-            }
-        }
-        return ret;
-    }();
-
-    const array<array<uint16_t, N_MOVE>, N_PERM> CubieCube222::PERM_MOVE = [] {
-        auto ret = array<array<uint16_t, N_MOVE>, N_PERM>();
-        CubieCube222 c = CubieCube222();
-        CubieCube222 d = CubieCube222();
-        for (auto i = 0; i < N_PERM; i++) {
-            c.setPerm(i);
-            for (auto j = 0; j < N_MOVE; j++) {
-                cubeMult(c, MOVE_CUBES[j], d);
-                ret[i][j] = d.getPerm();
-            }
-        }
-        return ret;
-    }();
-
-    const array<array<uint16_t, N_MOVE>, N_TWIST> CubieCube222::TWIST_MOVE = [] {
-        auto ret = array<array<uint16_t, N_MOVE>, N_TWIST>();
-        CubieCube222 c = CubieCube222();
-        CubieCube222 d = CubieCube222();
-        for (auto i = 0; i < N_TWIST; i++) {
-            c.setTwist(i);
-            for (auto j = 0; j < N_MOVE; j++) {
-                cubeMult(c, MOVE_CUBES[j], d);
-                ret[i][j] = d.getTwist();
-            }
-        }
-        return ret;
-    }();
 }

@@ -14,6 +14,9 @@ namespace cube_util {
         /** Max cube size limited to a reasonable number */
         const uint16_t MAX_SIZE = 33;
 
+        /** Number of axis in a cube */
+        const uint16_t N_AXIS = 6;
+
         // Colors
         const uint16_t U = 0; /**< A sticker with U face color */
         const uint16_t R = 1; /**< A sticker with R face color */
@@ -42,6 +45,11 @@ namespace cube_util {
         const uint16_t T_CLOCKWISE = 1; /**< Corner is twisted clockwise **/
         const uint16_t T_COUNTER_CLOCKWISE = 2; /**< Corner is twisted counter-clockwise **/
 
+        /** Possible move amount types for an axis */
+        const uint16_t N_MOVE_PER_AXIS = 3;
+        /** Possible move types for a fixed shift */
+        const uint16_t N_MOVE_PER_SHIFT = N_MOVE_PER_AXIS * N_AXIS;
+
         // Moves
         const uint16_t Ux1 = 0; /**< U move */
         const uint16_t Ux2 = 1; /**< U2 move */
@@ -65,6 +73,13 @@ namespace cube_util {
         const uint16_t N_TWIST = 729; // 3 ^ 6
         /** Total permutations count of first 7 cubies of a 2x2x2 cube. */
         const uint16_t N_PERM = 5040; // 7!
+        /** God's number of a 2x2x2 cube */
+        const uint16_t N_MAX_LENGTH = 11;
+
+        /** Permutation index of solved permutation */
+        const uint16_t SOLVED_PERM = 0;
+        /** Orientation index of solved orientation */
+        const uint16_t SOLVED_TWIST = 0;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -166,6 +181,38 @@ namespace cube_util {
         }
 
         /**
+         * Set pruning value into pruning table.
+         * Each element of the array contains pruning values for 4 indices.
+         * Each pruning value needs to be less than 15.
+         * @param[inout] arr table reference
+         * @param index pruning index
+         * @param p pruning value
+         */
+        template<size_t SIZE>
+        void setPruning(array<uint16_t, SIZE> &arr, uint16_t index, uint16_t p) {
+            auto i = index >> 2;
+            auto shift = (index & 0x3) << 2;
+            auto mask = ~((uint16_t)0xf << shift);
+            p &= 0xf;
+            arr[i] = (arr[i] & mask) | (p << shift);
+        }
+
+        /**
+         * Get pruning value from pruning table.
+         * Each element of the array contains pruning values for 4 indices.
+         * Each pruning value needs to be less than 15.
+         * @param arr table reference
+         * @param index pruning index
+         * @returns the pruning value
+         */
+        template<size_t SIZE>
+        uint16_t getPruning(array<uint16_t, SIZE> arr, uint16_t index) {
+            auto i = index >> 2;
+            auto shift = (index & 0x3) << 2;
+            return (arr[i] >> shift) & 0xf;
+        }
+
+        /**
          * Get a random generator which returns a random int between
          * `start` and `end` (inclusive).
          * @param start lower bound of random range
@@ -190,6 +237,28 @@ namespace cube_util {
          * @returns generated scramble string
          */
         string scrambleString(int cubeSize);
+
+        /**
+         * Return a string by removing heading and trailing whitespaces
+         * from `s`.
+         * @param s original string
+         * @returns trimmed string
+         */
+        string trim(string s);
+
+        /**
+         * Get the reverse of a move.
+         * @param move a move
+         * @returns reversed move
+         */
+        uint16_t reverseMove(uint16_t move);
+
+        /**
+         * Translate a move code to human-readable move string.
+         * @param move numbered move code
+         * @returns move name in WCA notation
+         */
+        string move2Str(uint16_t move);
 
     }
 }
