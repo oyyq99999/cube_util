@@ -35,26 +35,26 @@ namespace cube_util {
                 ret.append(" ");
             }
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[U * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[U * size * size + i * size + j]], 1);
             }
             ret.append("\n");
         }
         ret.append("\n");
         for (auto i = 0; i < size; i++) {
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[L * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[L * size * size + i * size + j]], 1);
             }
             ret.append(" ");
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[F * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[F * size * size + i * size + j]], 1);
             }
             ret.append(" ");
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[R * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[R * size * size + i * size + j]], 1);
             }
             ret.append(" ");
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[B * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[B * size * size + i * size + j]], 1);
             }
             ret.append("\n");
         }
@@ -64,7 +64,7 @@ namespace cube_util {
                 ret.append(" ");
             }
             for (auto j = 0; j < size; j++) {
-                ret.append(&FACELET_NAMES[this->facelets[D * size * size + i * size + j]], 1);
+                ret.append(&FACE_NAMES[this->facelets[D * size * size + i * size + j]], 1);
             }
             ret.append("\n");
         }

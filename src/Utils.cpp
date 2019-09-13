@@ -48,7 +48,7 @@ namespace cube_util {
                 if (shift > 2) {
                     scr.append(to_string(shift));
                 }
-                scr.append(&FACELET_NAMES[axis], 1);
+                scr.append(&FACE_NAMES[axis], 1);
                 if (shift >= 2) {
                     scr.append("w");
                 }

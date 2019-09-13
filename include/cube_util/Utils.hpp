@@ -12,46 +12,46 @@ namespace cube_util {
     namespace constants {
 
         /** Max cube size limited to a reasonable number */
-        const int MAX_SIZE = 33;
+        const uint16_t MAX_SIZE = 33;
 
         // Colors
-        const int U = 0; /**< A sticker with U face color */
-        const int R = 1; /**< A sticker with R face color */
-        const int F = 2; /**< A sticker with F face color */
-        const int D = 3; /**< A sticker with D face color */
-        const int L = 4; /**< A sticker with L face color */
-        const int B = 5; /**< A sticker with B face color */
+        const uint16_t U = 0; /**< A sticker with U face color */
+        const uint16_t R = 1; /**< A sticker with R face color */
+        const uint16_t F = 2; /**< A sticker with F face color */
+        const uint16_t D = 3; /**< A sticker with D face color */
+        const uint16_t L = 4; /**< A sticker with L face color */
+        const uint16_t B = 5; /**< A sticker with B face color */
 
         /** Facelet names in order */
-        const string FACELET_NAMES = "URFDLB";
+        const string FACE_NAMES = "URFDLB";
 
         /** Number of corners in a cube */
-        const int N_CORNER = 8;
+        const uint16_t N_CORNER = 8;
 
         // Corners
-        const int URF = 0; /**< URF corner */
-        const int UFL = 1; /**< UFL corner */
-        const int ULB = 2; /**< ULB corner */
-        const int UBR = 3; /**< UBR corner */
-        const int DLF = 4; /**< DLF corner */
-        const int DFR = 5; /**< DFR corner */
-        const int DRB = 6; /**< DRB corner */
-        const int DBL = 7; /**< DBL corner */
+        const uint16_t URF = 0; /**< URF corner */
+        const uint16_t UFL = 1; /**< UFL corner */
+        const uint16_t ULB = 2; /**< ULB corner */
+        const uint16_t UBR = 3; /**< UBR corner */
+        const uint16_t DLF = 4; /**< DLF corner */
+        const uint16_t DFR = 5; /**< DFR corner */
+        const uint16_t DRB = 6; /**< DRB corner */
+        const uint16_t DBL = 7; /**< DBL corner */
 
-        const int T_ORIENTED = 0; /**< Corner is oriented **/
-        const int T_CLOCKWISE = 1; /**< Corner is twisted clockwise **/
-        const int T_COUNTER_CLOCKWISE = 2; /**< Corner is twisted counter-clockwise **/
+        const uint16_t T_ORIENTED = 0; /**< Corner is oriented **/
+        const uint16_t T_CLOCKWISE = 1; /**< Corner is twisted clockwise **/
+        const uint16_t T_COUNTER_CLOCKWISE = 2; /**< Corner is twisted counter-clockwise **/
 
         // Moves
-        const int Ux1 = 0; /**< U move */
-        const int Ux2 = 1; /**< U2 move */
-        const int Ux3 = 2; /**< U' move */
-        const int Rx1 = 3; /**< R move */
-        const int Rx2 = 4; /**< R2 move */
-        const int Rx3 = 5; /**< R' move */
-        const int Fx1 = 6; /**< F move */
-        const int Fx2 = 7; /**< F2 move */
-        const int Fx3 = 8; /**< F' move */
+        const uint16_t Ux1 = 0; /**< U move */
+        const uint16_t Ux2 = 1; /**< U2 move */
+        const uint16_t Ux3 = 2; /**< U' move */
+        const uint16_t Rx1 = 3; /**< R move */
+        const uint16_t Rx2 = 4; /**< R2 move */
+        const uint16_t Rx3 = 5; /**< R' move */
+        const uint16_t Fx1 = 6; /**< F move */
+        const uint16_t Fx2 = 7; /**< F2 move */
+        const uint16_t Fx3 = 8; /**< F' move */
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -59,12 +59,12 @@ namespace cube_util {
     ////////////////////////////////////////////////////////////////////////////
     namespace cube222 {
 
-        /** Type of moves for a 2x2 cube */
-        const int N_MOVE = 9;
-        /** Total orientations count of first 6 cubies of a 2x2 cube. */
-        const int N_TWIST = 729; // 3 ^ 6
-        /** Total permutations count of first 7 cubies of a 2x2 cube. */
-        const int N_PERM = 5040; // 7!
+        /** Type of moves for a 2x2x2 cube */
+        const uint16_t N_MOVE = 9;
+        /** Total orientations count of first 6 cubies of a 2x2x2 cube. */
+        const uint16_t N_TWIST = 729; // 3 ^ 6
+        /** Total permutations count of first 7 cubies of a 2x2x2 cube. */
+        const uint16_t N_PERM = 5040; // 7!
     }
 
     ////////////////////////////////////////////////////////////////////////////
