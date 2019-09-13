@@ -18,48 +18,26 @@ namespace cube_util {
             return bind(dist, gen);
         }
 
-        // TODO: use move id to generate moves and translate to string using
-        // move2Str
         string scrambleString(int cubeSize, int length) {
-            string scr = "";
+            string scr;
             int count = 0;
             int lastAxis = -1;
-            bool turned[3 * (cubeSize - 1)];
-            fill_n(turned, 3 * (cubeSize - 1), false);
-            auto rAxis = randomizer(0, 2);
-            auto rShift = randomizer(0, cubeSize - 2);
-            auto rAmount = randomizer(0, 2);
+            bool turned[cubeSize - 1];
+            auto r = randomizer(0, 3 * 3 * (cubeSize - 1) - 1);
             while (count < length) {
-                int axis = rAxis();
-                int shift = rShift();
+                auto move = r();
+                auto axis = (move / N_MOVE_PER_AXIS) % 3;
+                auto shift = move / N_MOVE_PER_SHIFT;
                 if (axis != lastAxis) {
-                    if (lastAxis != -1) {
-                        fill_n(turned + lastAxis * (cubeSize - 1), (lastAxis + 1) * (cubeSize - 1), false);
-                    }
+                    fill_n(turned, cubeSize - 1, false);
                 } else {
-                    if (turned[axis * (cubeSize - 1) + shift] == true) {
+                    if (turned[shift] == true) {
                         continue;
                     }
                 }
-                int amount = rAmount();
-                turned[axis * (cubeSize - 1) + shift] = true;
+                turned[shift] = true;
                 lastAxis = axis;
-                if (shift >= cubeSize >> 1) {
-                    axis += 3;
-                    shift -= cubeSize >> 1;
-                }
-                shift++;
-                if (shift > 2) {
-                    scr.append(to_string(shift));
-                }
-                scr.append(&FACE_NAMES[axis], 1);
-                if (shift >= 2) {
-                    scr.append("w");
-                }
-                scr.append(&" 2'"[amount], 1);
-                if (amount > 0) {
-                    scr.append(" ");
-                }
+                scr.append(move2Str(move)).append(" ");
                 count++;
             }
             return trim(scr);
