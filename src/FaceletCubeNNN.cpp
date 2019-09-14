@@ -17,9 +17,9 @@ namespace cube_util {
             throw invalid_argument("The size should between 2 and " + to_string(MAX_SIZE));
         }
         this->size = size;
-        this->facelets = new uint16_t[6 * size * size];
+        this->facelets = vector<uint16_t>(6 * size * size);
         for (auto i = 0; i < 6; i++) {
-            fill_n(this->facelets + i * size * size, size * size, i);
+            fill_n(this->facelets.begin() + i * size * size, size * size, i);
         }
     }
 
@@ -27,11 +27,8 @@ namespace cube_util {
         return this->size;
     }
 
-    uint16_t* FaceletCubeNNN::getFacelets() const {
-        auto faceletCount = 6 * this->size * this->size;
-        uint16_t *ret = new uint16_t[faceletCount];
-        copy(this->facelets, this->facelets + faceletCount, ret);
-        return ret;
+    vector<uint16_t> FaceletCubeNNN::getFacelets() const {
+        return this->facelets;
     }
 
     string FaceletCubeNNN::prettify() const {

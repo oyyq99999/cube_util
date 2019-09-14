@@ -1,5 +1,8 @@
 #ifndef CUBE_UTIL_FACELETCUBENNN_HPP
 #define CUBE_UTIL_FACELETCUBENNN_HPP
+#include<vector>
+
+using namespace std;
 
 namespace cube_util {
 
@@ -17,7 +20,7 @@ namespace cube_util {
         /// Currently supports from 2 to constants::MAX_SIZE.
         uint16_t size;
         /** Facelets definitions of the cube. */
-        uint16_t *facelets;
+        vector<uint16_t> facelets;
 
         /**
          * Outputs info about the cube, includes size and facelets
@@ -42,7 +45,7 @@ namespace cube_util {
          * Get a current facelets status.
          * @returns a copy of #facelets
          */
-        uint16_t* getFacelets() const;
+        vector<uint16_t> getFacelets() const;
 
         /**
          * Get a prettified string representation of the current cube state

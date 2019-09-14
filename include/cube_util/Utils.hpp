@@ -124,19 +124,19 @@ namespace cube_util {
         /**
          * Auxiliary function to cycle 4 pieces.
          * It cycles pieces from `a` to `b` to `c` to `d` then back to `a`
-         * @param[inout] arr object to cycle
+         * @param[inout] vec object to cycle
          * @param a index of first element
          * @param b index of second element
          * @param c index of third element
          * @param d index of fourth element
          */
         template<typename T>
-        void cycle4(T* arr, int a, int b, int c, int d) {
-            T tmp = arr[a];
-            arr[a] = arr[d];
-            arr[d] = arr[c];
-            arr[c] = arr[b];
-            arr[b] = tmp;
+        void cycle4(vector<T> &vec, int a, int b, int c, int d) {
+            T tmp = vec[a];
+            vec[a] = vec[d];
+            vec[d] = vec[c];
+            vec[c] = vec[b];
+            vec[b] = tmp;
         }
 
         /**
