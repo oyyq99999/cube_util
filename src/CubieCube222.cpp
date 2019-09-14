@@ -1,4 +1,5 @@
 #include<cube_util/CubieCube222.hpp>
+#include<cube_util/FaceletCubeNNN.hpp>
 #include<cube_util/Utils.hpp>
 
 using namespace std;
@@ -98,5 +99,34 @@ namespace cube_util {
         }
         result.perm = perm;
         result.twist = twist;
+    }
+
+    CubieCube222 CubieCube222::fromFaceletCube(FaceletCubeNNN fc) {
+        if (fc.getSize() != 2) {
+            throw invalid_argument("needs a 2x2x2 cube!");
+        }
+        auto f = fc.getFacelets();
+        array<uint16_t, N_CORNER> perm;
+        array<uint16_t, N_CORNER> twist;
+        uint16_t color1, color2, ori;
+        for (auto i = 0; i < N_CORNER; i++) {
+            for (ori = 0; ori < 3; ori++) {
+                if (f[FACELET_MAP[i][ori]] == U || f[FACELET_MAP[i][ori]] == D) {
+                    break;
+                }
+            }
+            color1 = f[FACELET_MAP[i][(ori + 1) % 3]];
+            color2 = f[FACELET_MAP[i][(ori + 2) % 3]];
+            for (auto j = 0; j < N_CORNER; j++) {
+                if (color1 == FACELET_MAP[j][1] / FACELET_PER_FACE &&
+                    color2 == FACELET_MAP[j][2] / FACELET_PER_FACE) {
+                    perm[i] = j;
+                    twist[i] = ori;
+                    break;
+                }
+            }
+
+        }
+        return CubieCube222(perm, twist);
     }
 }

@@ -2,6 +2,7 @@
 #define CUBIE_CUBE222_HPP
 #include<iostream>
 #include<array>
+#include<cube_util/FaceletCubeNNN.hpp>
 #include<cube_util/Utils.hpp>
 
 using namespace std;
@@ -96,6 +97,13 @@ namespace cube_util {
          * Calculate orientation index of current state.
          */
         uint16_t getTwist();
+
+        /**
+         * Create a CubieCube222 based on a FaceletCubeNNN.
+         * @param fc a FaceletCubeNNN with a size of 2
+         * @returns a CubieCube222 instance
+         */
+        static CubieCube222 fromFaceletCube(FaceletCubeNNN fc);
 
         /**
          * Table representing moves applied to an identity cube,

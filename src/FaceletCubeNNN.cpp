@@ -12,19 +12,26 @@ namespace cube_util {
     using namespace constants;
     using namespace utils;
 
-    FaceletCubeNNN::FaceletCubeNNN(int size) {
+    FaceletCubeNNN::FaceletCubeNNN(uint16_t size) {
         if (size < 2 || size > MAX_SIZE) {
             throw invalid_argument("The size should between 2 and " + to_string(MAX_SIZE));
         }
         this->size = size;
-        this->facelets = new int[6 * size * size];
+        this->facelets = new uint16_t[6 * size * size];
         for (auto i = 0; i < 6; i++) {
             fill_n(this->facelets + i * size * size, size * size, i);
         }
     }
 
-    int FaceletCubeNNN::getSize() const {
+    uint16_t FaceletCubeNNN::getSize() const {
         return this->size;
+    }
+
+    uint16_t* FaceletCubeNNN::getFacelets() const {
+        auto faceletCount = 6 * this->size * this->size;
+        uint16_t *ret = new uint16_t[faceletCount];
+        copy(this->facelets, this->facelets + faceletCount, ret);
+        return ret;
     }
 
     string FaceletCubeNNN::prettify() const {

@@ -15,9 +15,9 @@ namespace cube_util {
 
         /// Size of the cube.
         /// Currently supports from 2 to constants::MAX_SIZE.
-        int size;
+        uint16_t size;
         /** Facelets definitions of the cube. */
-        int *facelets;
+        uint16_t *facelets;
 
         /**
          * Outputs info about the cube, includes size and facelets
@@ -30,13 +30,19 @@ namespace cube_util {
          * @param size size of the cube, currently supports from 2 to
          * cube_util::constants::MAX_SIZE.
          */
-        FaceletCubeNNN(int size);
+        FaceletCubeNNN(uint16_t size);
 
         /**
          * Get the size of the cube
          * @returns size of the cube
          */
-        int getSize() const;
+        uint16_t getSize() const;
+
+        /**
+         * Get a current facelets status.
+         * @returns a copy of #facelets
+         */
+        uint16_t* getFacelets() const;
 
         /**
          * Get a prettified string representation of the current cube state

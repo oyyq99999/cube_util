@@ -80,6 +80,40 @@ namespace cube_util {
         const uint16_t SOLVED_PERM = 0;
         /** Orientation index of solved orientation */
         const uint16_t SOLVED_TWIST = 0;
+
+        /** Number of stickers on a face */
+        const uint16_t FACELET_PER_FACE = 4;
+        // Facelets
+        const uint16_t U1 = 0; /**< 1st sticker on U */
+        const uint16_t U2 = 1; /**< 2nd sticker on U */
+        const uint16_t U3 = 2; /**< 3rd sticker on U */
+        const uint16_t U4 = 3; /**< 4th sticker on U */
+        const uint16_t R1 = 4; /**< 1st sticker on R */
+        const uint16_t R2 = 5; /**< 2nd sticker on R */
+        const uint16_t R3 = 6; /**< 3rd sticker on R */
+        const uint16_t R4 = 7; /**< 4th sticker on R */
+        const uint16_t F1 = 8; /**< 1st sticker on F */
+        const uint16_t F2 = 9; /**< 2nd sticker on F */
+        const uint16_t F3 = 10; /**< 3rd sticker on F */
+        const uint16_t F4 = 11; /**< 4th sticker on F */
+        const uint16_t D1 = 12; /**< 1st sticker on D */
+        const uint16_t D2 = 13; /**< 2nd sticker on D */
+        const uint16_t D3 = 14; /**< 3rd sticker on D */
+        const uint16_t D4 = 15; /**< 4th sticker on D */
+        const uint16_t L1 = 16; /**< 1st sticker on L */
+        const uint16_t L2 = 17; /**< 2nd sticker on L */
+        const uint16_t L3 = 18; /**< 3rd sticker on L */
+        const uint16_t L4 = 19; /**< 4th sticker on L */
+        const uint16_t B1 = 20; /**< 1st sticker on B */
+        const uint16_t B2 = 21; /**< 2nd sticker on B */
+        const uint16_t B3 = 22; /**< 3rd sticker on B */
+        const uint16_t B4 = 23; /**< 4th sticker on B */
+
+        /** Facelet mapping for cubies */
+        const uint16_t FACELET_MAP[][3] = {
+            {U4, R1, F2}, {U3, F1, L2}, {U1, L1, B2}, {U2, B1, R2},
+            {D1, L4, F3}, {D2, F4, R3}, {D4, R4, B3}, {D3, B4, L3}
+        };
     }
 
     ////////////////////////////////////////////////////////////////////////////
