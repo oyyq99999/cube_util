@@ -17,7 +17,8 @@ namespace cube_util {
         /** Length of the solution */
         int16_t solutionLength = -1;
 
-        bool search(uint64_t perm, uint16_t twist, uint16_t moveCount, int16_t lastAxis, uint16_t depth);
+        bool search(uint64_t perm, uint16_t twist, uint16_t moveCount,
+            int16_t lastAxis, uint16_t depth, bool saveSolution);
         void _solve(uint16_t minLength);
 
     public:
@@ -32,7 +33,7 @@ namespace cube_util {
          * Get the solution length.
          * @returns length of the current solution or -1 if not solved (yet)
          */
-        int16_t getSolutionLength();
+        int16_t getSolutionLength() const;
 
         /**
          * Get solution sequence for the cube.
@@ -59,6 +60,14 @@ namespace cube_util {
          * @returns sequence to generate the cube state
          */
         string generate(uint16_t minLength);
+
+
+        /**
+         * Check whether the cube is solvable within given length.
+         * @param maxLength maxLength to attempt
+         * @returns whether the cube is solvable within given length
+         */
+        bool isSolvableIn(uint16_t maxLength);
 
         /**
          * Pruning table for 2x2x2 permutations.

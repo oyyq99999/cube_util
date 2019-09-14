@@ -9,8 +9,8 @@ namespace cube_util {
         this->cc = c;
     }
 
-    int16_t Cube222Solver::getSolutionLength() {
-        return this->solutionLength;
+    int16_t Cube222Solver::getSolutionLength() const {
+        return solutionLength;
     }
 
     string Cube222Solver::solve() {
@@ -46,12 +46,14 @@ namespace cube_util {
      * @param moveCount move count used to solve
      * @param lastAxis axis of last move
      * @param depth current search depth
+     * @param saveSolution whether to save the solution
      * @returns whether the cube is solved
      */
-    bool Cube222Solver::search(uint64_t perm, uint16_t twist, uint16_t moveCount, int16_t lastAxis, uint16_t depth) {
+    bool Cube222Solver::search(uint64_t perm, uint16_t twist, uint16_t moveCount,
+        int16_t lastAxis, uint16_t depth, bool saveSolution) {
         if (moveCount == 0) {
             if (perm == SOLVED_PERM && twist == SOLVED_TWIST) {
-                this->solutionLength = depth;
+                this->solutionLength = saveSolution ? depth : -1;
                 return true;
             }
             return false;
@@ -75,7 +77,7 @@ namespace cube_util {
                         getPruning(TWIST_PRUNING, newTwist) == moveCount) {
                         continue;
                     }
-                    if (search(newPerm, newTwist, moveCount - 1, axis, depth + 1)) {
+                    if (search(newPerm, newTwist, moveCount - 1, axis, depth + 1, saveSolution)) {
                         return true;
                     }
                 }
@@ -97,10 +99,21 @@ namespace cube_util {
         const auto perm = cc.getPerm();
         const auto twist = cc.getTwist();
         for (auto i = minLength; i <= N_MAX_LENGTH; i++) {
-            if (search(perm, twist, i, -1, 0)) {
+            if (search(perm, twist, i, -1, 0, true)) {
                 break;
             }
         }
+    }
+
+    bool Cube222Solver::isSolvableIn(uint16_t maxLength) {
+        const auto perm = cc.getPerm();
+        const auto twist = cc.getTwist();
+        for (auto i = 0; i <= maxLength; i++) {
+            if (search(perm, twist, i, -1, 0, false)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
