@@ -99,6 +99,12 @@ namespace cube_util {
         uint16_t getTwist();
 
         /**
+         * Create a FaceletCubeNNN based on the CubieCube222.
+         * @returns a FaceletCubeNNN instance with a size of 2
+         */
+        FaceletCubeNNN toFaceletCube();
+
+        /**
          * Create a CubieCube222 based on a FaceletCubeNNN.
          * @param fc a FaceletCubeNNN with a size of 2
          * @returns a CubieCube222 instance

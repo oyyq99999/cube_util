@@ -36,6 +36,14 @@ namespace cube_util {
         FaceletCubeNNN(uint16_t size);
 
         /**
+         * Constructor of the class.
+         * @param size size of the cube, currently supports from 2 to
+         * @param facelets definition of the current facelets state
+         * cube_util::constants::MAX_SIZE.
+         */
+        FaceletCubeNNN(uint16_t size, vector<uint16_t> facelets);
+
+        /**
          * Get the size of the cube
          * @returns size of the cube
          */

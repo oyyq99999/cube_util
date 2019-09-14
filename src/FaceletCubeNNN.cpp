@@ -23,6 +23,18 @@ namespace cube_util {
         }
     }
 
+    FaceletCubeNNN::FaceletCubeNNN(uint16_t size, vector<uint16_t> facelets) {
+        if (size < 2 || size > MAX_SIZE) {
+            throw invalid_argument("The size should between 2 and " + to_string(MAX_SIZE));
+        }
+        if (facelets.size() != 6 * size * size) {
+            throw invalid_argument("The facelets definition length should be " +
+                to_string(6 * size * size));
+        }
+        this->size = size;
+        this->facelets = facelets;
+    }
+
     uint16_t FaceletCubeNNN::getSize() const {
         return this->size;
     }

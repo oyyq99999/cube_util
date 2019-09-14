@@ -129,4 +129,16 @@ namespace cube_util {
         }
         return CubieCube222(perm, twist);
     }
+
+    FaceletCubeNNN CubieCube222::toFaceletCube() {
+        auto f = vector<uint16_t>(N_FACE * FACELET_PER_FACE);
+        for (auto i = 0; i < N_CORNER; i++) {
+            auto piece = perm[i];
+            auto orient = twist[i];
+            for (auto j = 0; j < 3; j++) {
+                f[FACELET_MAP[i][(j + orient) % 3]] = FACELET_MAP[piece][j] / FACELET_PER_FACE;
+            }
+        }
+        return FaceletCubeNNN(2, f);
+    }
 }

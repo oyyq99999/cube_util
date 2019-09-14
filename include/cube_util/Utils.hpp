@@ -17,6 +17,9 @@ namespace cube_util {
         /** Number of axis in a cube */
         const uint16_t N_AXIS = 6;
 
+        /** Number of face in a cube */
+        const uint16_t N_FACE = 6;
+
         // Colors
         const uint16_t U = 0; /**< A sticker with U face color */
         const uint16_t R = 1; /**< A sticker with R face color */
