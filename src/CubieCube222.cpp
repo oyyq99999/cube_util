@@ -101,6 +101,18 @@ namespace cube_util {
         result.twist = twist;
     }
 
+    FaceletCubeNNN CubieCube222::toFaceletCube() {
+        auto f = vector<uint16_t>(N_FACE * FACELET_PER_FACE);
+        for (auto i = 0; i < N_CORNER; i++) {
+            auto piece = perm[i];
+            auto orient = twist[i];
+            for (auto j = 0; j < 3; j++) {
+                f[FACELET_MAP[i][(j + orient) % 3]] = FACELET_MAP[piece][j] / FACELET_PER_FACE;
+            }
+        }
+        return FaceletCubeNNN(2, f);
+    }
+
     CubieCube222 CubieCube222::fromFaceletCube(FaceletCubeNNN fc) {
         if (fc.getSize() != 2) {
             throw invalid_argument("needs a 2x2x2 cube!");
@@ -130,15 +142,8 @@ namespace cube_util {
         return CubieCube222(perm, twist);
     }
 
-    FaceletCubeNNN CubieCube222::toFaceletCube() {
-        auto f = vector<uint16_t>(N_FACE * FACELET_PER_FACE);
-        for (auto i = 0; i < N_CORNER; i++) {
-            auto piece = perm[i];
-            auto orient = twist[i];
-            for (auto j = 0; j < 3; j++) {
-                f[FACELET_MAP[i][(j + orient) % 3]] = FACELET_MAP[piece][j] / FACELET_PER_FACE;
-            }
-        }
-        return FaceletCubeNNN(2, f);
+    CubieCube222 CubieCube222::randomCube() {
+        auto r = randomizer(0, N_TWIST * N_PERM - 1);
+        return CubieCube222(r());
     }
 }

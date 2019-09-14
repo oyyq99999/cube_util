@@ -112,6 +112,12 @@ namespace cube_util {
         static CubieCube222 fromFaceletCube(FaceletCubeNNN fc);
 
         /**
+         * Get a cube in random position.
+         * @returns a CubbieCube222 with random state
+         */
+        static CubieCube222 randomCube();
+
+        /**
          * Table representing moves applied to an identity cube,
          * used to calculate new cube states.
          */
