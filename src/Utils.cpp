@@ -1,7 +1,7 @@
 #include<functional>
 #include<random>
-#include<iostream>
 #include<cube_util/Utils.hpp>
+#include<cube_util/Scrambler222.hpp>
 
 using namespace std;
 
@@ -19,11 +19,15 @@ namespace cube_util {
         }
 
         string scrambleString(int cubeSize, int length) {
+            if (cubeSize == 2) {
+                length = length > cube222::N_MAX_LENGTH ? cube222::N_MAX_LENGTH : length;
+                return Scrambler222(length).scramble();
+            }
             string scr;
             int count = 0;
             int lastAxis = -1;
             bool turned[cubeSize - 1];
-            auto r = randomizer(0, 3 * 3 * (cubeSize - 1) - 1);
+            auto r = randomizer(0, 3 * N_MOVE_PER_AXIS * (cubeSize - 1) - 1);
             while (count < length) {
                 auto move = r();
                 auto axis = (move / N_MOVE_PER_AXIS) % 3;
@@ -44,7 +48,10 @@ namespace cube_util {
         }
 
         string scrambleString(int cubeSize) {
-            if (cubeSize <= 3) {
+            if (cubeSize == 2) {
+                return scrambleString(2, cube222::N_MAX_LENGTH);
+            }
+            if (cubeSize == 3) {
                 return scrambleString(cubeSize, 25);
             }
             return scrambleString(cubeSize, (cubeSize - 2) * 20);

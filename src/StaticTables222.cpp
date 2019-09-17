@@ -14,7 +14,7 @@ namespace cube_util {
         ret[Rx1] = CubieCube222({5, 1, 2, 0, 4, 6, 3, 7}, {2, 0, 0, 1, 0, 1, 2, 0});
         ret[Fx1] = CubieCube222({1, 4, 2, 3, 5, 0, 6, 7}, {1, 2, 0, 0, 1, 2, 0, 0});
 
-        for (auto i = 0; i < N_MOVE; i+=3) {
+        for (auto i = 0; i < N_MOVE; i += 3) {
             for (auto j = 1; j < 3; j++) {
                 ret[i + j] = CubieCube222();
                 cubeMult(ret[i + j - 1], ret[i], ret[i + j]);

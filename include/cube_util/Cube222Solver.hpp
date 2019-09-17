@@ -23,6 +23,8 @@ namespace cube_util {
 
     public:
 
+        Cube222Solver() = default;
+
         /**
          * Constructor of the class.
          * @param c the cube to solve
