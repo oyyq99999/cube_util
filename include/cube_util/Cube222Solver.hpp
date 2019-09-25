@@ -17,7 +17,7 @@ namespace cube_util {
         /** Length of the solution */
         int16_t solutionLength = -1;
 
-        bool search(uint64_t perm, uint16_t twist, uint16_t moveCount,
+        bool search(uint16_t perm, uint16_t twist, uint16_t moveCount,
             int16_t lastAxis, uint16_t depth, bool saveSolution);
         void _solve(uint16_t minLength);
 

@@ -1,5 +1,5 @@
-#ifndef CUBE_UTIL_FACELETCUBENNN_HPP
-#define CUBE_UTIL_FACELETCUBENNN_HPP
+#ifndef FACELET_CUBE_NNN_HPP
+#define FACELET_CUBE_NNN_HPP
 #include<vector>
 
 using namespace std;
@@ -243,4 +243,4 @@ namespace cube_util {
     };
 }
 
-#endif // CUBE_UTIL_FACELETCUBENNN_HPP
+#endif // FACELET_CUBE_NNN_HPP

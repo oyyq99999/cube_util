@@ -226,7 +226,7 @@ namespace cube_util {
          * @param p pruning value
          */
         template<size_t SIZE>
-        void setPruning(array<uint16_t, SIZE> &arr, uint16_t index, uint16_t p) {
+        void setPruning(array<uint16_t, SIZE> &arr, uint32_t index, uint16_t p) {
             auto i = index >> 2;
             auto shift = (index & 0x3) << 2;
             auto mask = ~((uint16_t)0xf << shift);
@@ -243,7 +243,7 @@ namespace cube_util {
          * @returns the pruning value
          */
         template<size_t SIZE>
-        uint16_t getPruning(array<uint16_t, SIZE> arr, uint16_t index) {
+        uint16_t getPruning(array<uint16_t, SIZE> arr, uint32_t index) {
             auto i = index >> 2;
             auto shift = (index & 0x3) << 2;
             return (arr[i] >> shift) & 0xf;

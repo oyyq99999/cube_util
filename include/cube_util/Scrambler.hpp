@@ -36,6 +36,8 @@ namespace cube_util {
          * @returns the scramble sequence
          */
         virtual string scramble() = 0;
+
+        virtual ~Scrambler() = 0;
     };
 }
 

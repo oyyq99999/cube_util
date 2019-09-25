@@ -3,6 +3,7 @@
 #include<iostream>
 #include<array>
 #include<cube_util/FaceletCubeNNN.hpp>
+#include<cube_util/CubieCubeNNN.hpp>
 #include<cube_util/Utils.hpp>
 
 using namespace std;
@@ -21,34 +22,14 @@ namespace cube_util {
     /// - 1 means **clockwise** twisted once from the **oriented** status;
     /// - 2 means **counter-clockwise** twisted.
     ///
-    /// Currently the last one (perm[7] needs to be the `DBL` corner) and the
+    /// Currently the last corner (cp[7] needs to be the `DBL` corner) and the
     /// twist of it needs to be `0` (oriented).
     ////////////////////////////////////////////////////////////////////////////
-    class CubieCube222 {
+    class CubieCube222: public CubieCubeNNN {
 
-        /** Permutations of the cubies. */
-        array<uint16_t, N_CORNER> perm;
+        void setCP(uint16_t index) override;
 
-        /** Orientations of the cubies. */
-        array<uint16_t, N_CORNER> twist;
-
-        /**
-         * Outputs info about the cube, includes perms and twists
-         */
-        friend ostream& operator<<(ostream& os, const CubieCube222 &cc);
-
-        /**
-         * Set permutation state according to given index.
-         * @param index specified index
-         */
-        void setPerm(uint64_t index);
-
-        /**
-         * Set orientation state according to given index.
-         * @param index specified index
-         */
-        void setTwist(uint16_t);
-
+        void setCO(uint16_t) override;
 
         /**
          * Calculate product (_one_ * _another_) of two cubes.
@@ -59,7 +40,7 @@ namespace cube_util {
         static void cubeMult(CubieCube222 one, CubieCube222 another, CubieCube222 &result);
 
     public:
-        CubieCube222();
+        CubieCube222() {}
 
         /**
          * Constructor of the class.
@@ -88,21 +69,13 @@ namespace cube_util {
          */
         void move(int move);
 
-        /**
-         * Calculate permutation index of current state.
-         */
-        uint64_t getPerm();
+        uint16_t getCP() const override;
 
-        /**
-         * Calculate orientation index of current state.
-         */
-        uint16_t getTwist();
+        uint16_t getCO() const override;
 
-        /**
-         * Create a FaceletCubeNNN based on the CubieCube222.
-         * @returns a FaceletCubeNNN instance with a size of 2
-         */
-        FaceletCubeNNN toFaceletCube();
+        string toString() const override;
+
+        FaceletCubeNNN toFaceletCube() override;
 
         /**
          * Create a CubieCube222 based on a FaceletCubeNNN.

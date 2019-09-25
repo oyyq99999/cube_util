@@ -28,10 +28,10 @@ namespace cube_util {
         CubieCube222 c = CubieCube222();
         CubieCube222 d = CubieCube222();
         for (auto i = 0; i < N_PERM; i++) {
-            c.setPerm(i);
+            c.setCP(i);
             for (auto j = 0; j < N_MOVE; j++) {
                 cubeMult(c, MOVE_CUBES[j], d);
-                ret[i][j] = d.getPerm();
+                ret[i][j] = d.getCP();
             }
         }
         return ret;
@@ -42,10 +42,10 @@ namespace cube_util {
         CubieCube222 c = CubieCube222();
         CubieCube222 d = CubieCube222();
         for (auto i = 0; i < N_TWIST; i++) {
-            c.setTwist(i);
+            c.setCO(i);
             for (auto j = 0; j < N_MOVE; j++) {
                 cubeMult(c, MOVE_CUBES[j], d);
-                ret[i][j] = d.getTwist();
+                ret[i][j] = d.getCO();
             }
         }
         return ret;

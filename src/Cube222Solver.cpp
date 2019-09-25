@@ -49,7 +49,7 @@ namespace cube_util {
      * @param saveSolution whether to save the solution
      * @returns whether the cube is solved
      */
-    bool Cube222Solver::search(uint64_t perm, uint16_t twist, uint16_t moveCount,
+    bool Cube222Solver::search(uint16_t perm, uint16_t twist, uint16_t moveCount,
         int16_t lastAxis, uint16_t depth, bool saveSolution) {
         if (moveCount == 0) {
             if (perm == SOLVED_PERM && twist == SOLVED_TWIST) {
@@ -96,8 +96,8 @@ namespace cube_util {
             minLength = N_MAX_LENGTH;
         }
 
-        const auto perm = cc.getPerm();
-        const auto twist = cc.getTwist();
+        const auto perm = cc.getCP();
+        const auto twist = cc.getCO();
         for (auto i = minLength; i <= N_MAX_LENGTH; i++) {
             if (search(perm, twist, i, -1, 0, true)) {
                 break;
@@ -106,8 +106,8 @@ namespace cube_util {
     }
 
     bool Cube222Solver::isSolvableIn(uint16_t maxLength) {
-        const auto perm = cc.getPerm();
-        const auto twist = cc.getTwist();
+        const auto perm = cc.getCP();
+        const auto twist = cc.getCO();
         for (auto i = 0; i <= maxLength; i++) {
             if (search(perm, twist, i, -1, 0, false)) {
                 return true;
