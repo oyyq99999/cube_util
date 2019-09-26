@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(cube_util)
+project(cube_util VERSION 0.1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+# include(GNUInstallDirs)
 
-include_directories(include)
-
-file(GLOB SRC_LIST "src/*.cpp")
-
-add_executable(test ${SRC_LIST})
+add_subdirectory(cube_util)

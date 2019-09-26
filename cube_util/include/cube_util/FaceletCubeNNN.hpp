@@ -50,7 +50,7 @@ namespace cube_util {
         uint16_t getSize() const;
 
         /**
-         * Get a current facelets status.
+         * Get current facelets status.
          * @returns a copy of #facelets
          */
         vector<uint16_t> getFacelets() const;
