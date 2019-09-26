@@ -149,7 +149,7 @@ namespace cube_util {
          * @returns index of the given permutation
          */
         template<size_t SIZE>
-        uint64_t getNPerm(array<uint16_t, SIZE> arr, int n) {
+        uint64_t getNPerm(array<uint16_t, SIZE> arr, uint16_t n) {
             uint64_t index = 0;
             uint64_t val = 0xFEDCBA9876543210;
             for (auto i = 0; i < n - 1; i++) {
@@ -167,7 +167,7 @@ namespace cube_util {
          * @param n number of elements in the permutation, n <= 16
          */
         template<size_t SIZE>
-        void setNPerm(array<uint16_t, SIZE> &arr, uint64_t index, int n) {
+        void setNPerm(array<uint16_t, SIZE> &arr, uint64_t index, uint16_t n) {
             uint64_t val = 0xFEDCBA9876543210;
             uint64_t extract = 0;
             for (auto p = 2; p <= n; p++) {
@@ -191,7 +191,7 @@ namespace cube_util {
          * @returns index of the given orientation
          */
         template<size_t SIZE>
-        uint16_t getNTwist(array<uint16_t, SIZE> arr, int n) {
+        uint16_t getNTwist(array<uint16_t, SIZE> arr, uint16_t n) {
             uint16_t index = 0;
             for (auto i = 0; i < n - 1; i++) {
                 index *= 3;
@@ -207,7 +207,7 @@ namespace cube_util {
          * @param n number of elements in the orientation, n <= 10
          */
         template<size_t SIZE>
-        void setNTwist(array<uint16_t, SIZE> &arr, uint16_t index, int n) {
+        void setNTwist(array<uint16_t, SIZE> &arr, uint16_t index, uint16_t n) {
             int twist = 0;
             for (auto i = n - 2; i >= 0; i--) {
                 arr[i] = index % 3;

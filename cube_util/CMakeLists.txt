@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.0)
 
 project(cube_util VERSION 0.1.0 LANGUAGES CXX)
 
