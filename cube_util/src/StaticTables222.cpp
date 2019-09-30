@@ -7,6 +7,7 @@ using namespace std;
 namespace cube_util {
 
     using namespace utils;
+    using namespace enums;
 
     const array<CubieCube222, N_MOVE> CubieCube222::MOVE_CUBES = [] {
         auto ret = array<CubieCube222, N_MOVE>();

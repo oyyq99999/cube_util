@@ -3,10 +3,11 @@
 namespace cube_util {
 
     using namespace utils;
+    using namespace enums;
 
     CubieCubeNNN::CubieCubeNNN():
         cp {URF, UFL, ULB, UBR, DLF, DFR, DRB, DBL},
-        co {T_ORIENTED} {
+        co {ORIENTED} {
     }
 
     void CubieCubeNNN::setCP(uint16_t index) {
@@ -28,6 +29,4 @@ namespace cube_util {
     ostream& operator<<(ostream &os, const CubieCubeNNN &cc) {
         return os << cc.toString();
     }
-
-    CubieCubeNNN::~CubieCubeNNN() {}
 }

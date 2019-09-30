@@ -9,6 +9,7 @@
 using namespace std;
 using namespace cube_util;
 using namespace cube_util::utils;
+using namespace cube_util::enums;
 
 BOOST_AUTO_TEST_SUITE(cube_model)
 

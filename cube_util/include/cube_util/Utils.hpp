@@ -20,49 +20,47 @@ namespace cube_util {
         /** Number of face in a cube */
         const uint16_t N_FACE = 6;
 
-        // Colors
-        const uint16_t U = 0; /**< A sticker with U face color */
-        const uint16_t R = 1; /**< A sticker with R face color */
-        const uint16_t F = 2; /**< A sticker with F face color */
-        const uint16_t D = 3; /**< A sticker with D face color */
-        const uint16_t L = 4; /**< A sticker with L face color */
-        const uint16_t B = 5; /**< A sticker with B face color */
-
         /** Facelet names in order */
         const string FACE_NAMES = "URFDLB";
 
         /** Number of corners in a cube */
         const uint16_t N_CORNER = 8;
 
-        // Corners
-        const uint16_t URF = 0; /**< URF corner */
-        const uint16_t UFL = 1; /**< UFL corner */
-        const uint16_t ULB = 2; /**< ULB corner */
-        const uint16_t UBR = 3; /**< UBR corner */
-        const uint16_t DLF = 4; /**< DLF corner */
-        const uint16_t DFR = 5; /**< DFR corner */
-        const uint16_t DRB = 6; /**< DRB corner */
-        const uint16_t DBL = 7; /**< DBL corner */
-
-        const uint16_t T_ORIENTED = 0; /**< Corner is oriented **/
-        const uint16_t T_CLOCKWISE = 1; /**< Corner is twisted clockwise **/
-        const uint16_t T_COUNTER_CLOCKWISE = 2; /**< Corner is twisted counter-clockwise **/
-
         /** Possible move amount types for an axis */
         const uint16_t N_MOVE_PER_AXIS = 3;
         /** Possible move types for a fixed shift */
         const uint16_t N_MOVE_PER_SHIFT = N_MOVE_PER_AXIS * N_AXIS;
+    }
 
-        // Moves
-        const uint16_t Ux1 = 0; /**< U move */
-        const uint16_t Ux2 = 1; /**< U2 move */
-        const uint16_t Ux3 = 2; /**< U' move */
-        const uint16_t Rx1 = 3; /**< R move */
-        const uint16_t Rx2 = 4; /**< R2 move */
-        const uint16_t Rx3 = 5; /**< R' move */
-        const uint16_t Fx1 = 6; /**< F move */
-        const uint16_t Fx2 = 7; /**< F2 move */
-        const uint16_t Fx3 = 8; /**< F' move */
+    ////////////////////////////////////////////////////////////////////////////
+    /// Enumerations used in the project
+    ////////////////////////////////////////////////////////////////////////////
+    namespace enums {
+
+        /** Sticker colors */
+        enum Colors {
+            U, R, F, D, L, B,
+        };
+
+        /** Corner numbers */
+        enum Corners {
+            URF, UFL, ULB, UBR, DLF, DFR, DRB, DBL,
+        };
+
+        /** Corner orientation representations */
+        enum CornerTwists {
+            ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE,
+        };
+
+        /** Part of applicable moves */
+        enum Moves {
+            Ux1, Ux2, Ux3, Rx1, Rx2, Rx3, Fx1, Fx2, Fx3,
+            Dx1, Dx2, Dx3, Lx1, Lx2, Lx3, Bx1, Bx2, Bx3,
+            Uw1, Uw2, Uw3, Rw1, Rw2, Rw3, Fw1, Fw2, Fw3,
+            Dw1, Dw2, Dw3, Lw1, Lw2, Lw3, Bw1, Bw2, Bw3,
+            _3Uw1, _3Uw2, _3Uw3, _3Rw1, _3Rw2, _3Rw3, _3Fw1, _3Fw2, _3Fw3,
+            _3Dw1, _3Dw2, _3Dw3, _3Lw1, _3Lw2, _3Lw3, _3Bw1, _3Bw2, _3Bw3,
+        };
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -86,31 +84,16 @@ namespace cube_util {
 
         /** Number of stickers on a face */
         const uint16_t FACELET_PER_FACE = 4;
-        // Facelets
-        const uint16_t U1 = 0; /**< 1st sticker on U */
-        const uint16_t U2 = 1; /**< 2nd sticker on U */
-        const uint16_t U3 = 2; /**< 3rd sticker on U */
-        const uint16_t U4 = 3; /**< 4th sticker on U */
-        const uint16_t R1 = 4; /**< 1st sticker on R */
-        const uint16_t R2 = 5; /**< 2nd sticker on R */
-        const uint16_t R3 = 6; /**< 3rd sticker on R */
-        const uint16_t R4 = 7; /**< 4th sticker on R */
-        const uint16_t F1 = 8; /**< 1st sticker on F */
-        const uint16_t F2 = 9; /**< 2nd sticker on F */
-        const uint16_t F3 = 10; /**< 3rd sticker on F */
-        const uint16_t F4 = 11; /**< 4th sticker on F */
-        const uint16_t D1 = 12; /**< 1st sticker on D */
-        const uint16_t D2 = 13; /**< 2nd sticker on D */
-        const uint16_t D3 = 14; /**< 3rd sticker on D */
-        const uint16_t D4 = 15; /**< 4th sticker on D */
-        const uint16_t L1 = 16; /**< 1st sticker on L */
-        const uint16_t L2 = 17; /**< 2nd sticker on L */
-        const uint16_t L3 = 18; /**< 3rd sticker on L */
-        const uint16_t L4 = 19; /**< 4th sticker on L */
-        const uint16_t B1 = 20; /**< 1st sticker on B */
-        const uint16_t B2 = 21; /**< 2nd sticker on B */
-        const uint16_t B3 = 22; /**< 3rd sticker on B */
-        const uint16_t B4 = 23; /**< 4th sticker on B */
+
+        /** Facelets on each face */
+        enum Facelets {
+            U1, U2, U3, U4,
+            R1, R2, R3, R4,
+            F1, F2, F3, F4,
+            D1, D2, D3, D4,
+            L1, L2, L3, L4,
+            B1, B2, B3, B4,
+        };
 
         /** Facelet mapping for cubies */
         const uint16_t FACELET_MAP[][3] = {

@@ -37,7 +37,7 @@ namespace cube_util {
          */
         virtual string scramble() = 0;
 
-        virtual ~Scrambler() = 0;
+        virtual ~Scrambler() = default;
     };
 }
 

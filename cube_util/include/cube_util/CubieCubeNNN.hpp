@@ -69,7 +69,7 @@ namespace cube_util {
          */
         virtual FaceletCubeNNN toFaceletCube() = 0;
 
-        virtual ~CubieCubeNNN() = 0;
+        virtual ~CubieCubeNNN() = default;
     };
 }
 

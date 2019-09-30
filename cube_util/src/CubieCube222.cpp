@@ -7,9 +7,9 @@ using namespace std;
 
 namespace cube_util {
 
-    using namespace constants;
     using namespace cube222;
     using namespace utils;
+    using namespace enums;
 
     CubieCube222::CubieCube222(array<uint16_t, N_CORNER> perm, array<uint16_t, N_CORNER> twist) {
 

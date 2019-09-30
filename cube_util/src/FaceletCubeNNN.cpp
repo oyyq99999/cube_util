@@ -11,6 +11,7 @@ namespace cube_util {
 
     using namespace constants;
     using namespace utils;
+    using namespace enums;
 
     FaceletCubeNNN::FaceletCubeNNN(uint16_t size) {
         if (size < 2 || size > MAX_SIZE) {
