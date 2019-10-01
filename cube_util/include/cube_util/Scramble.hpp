@@ -1,54 +1,60 @@
-#ifndef SCRAMBLE_HPP
-#define SCRAMBLE_HPP
+// Copyright 2019 Yunqi Ouyang
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_
 #include<iostream>
 #include<vector>
-
-using namespace std;
+#include<string>
 
 namespace cube_util {
 
-    ////////////////////////////////////////////////////////////////////////////
-    /// A class representing a scramble object, which contains scramble
-    /// sequence in numbers and length, and can be converted to string.
-    ////////////////////////////////////////////////////////////////////////////
-    class Scramble {
-        /**
-         * Outputs the scramble
-         */
-        friend ostream& operator<<(ostream& os, const Scramble &s);
-    protected:
-        /** Move sequence in numbers */
-        vector<uint16_t> moveSequence;
+    using std::ostream;
+    using std::vector;
+    using std::string;
 
-        /** Scramble length */
-        uint16_t length;
+////////////////////////////////////////////////////////////////////////////
+/// A class representing a scramble object, which contains scramble
+/// sequence in numbers and length, and can be converted to string.
+////////////////////////////////////////////////////////////////////////////
+class Scramble {
+    /**
+     * Outputs the scramble
+     */
+    friend ostream& operator<<(ostream& os, const Scramble &s);
 
-        /**
-         * Constructor of the class.
-         * @param moves move sequence in numbers
-         */
-        Scramble(vector<uint16_t> moves);
-    public:
-        /**
-         * Get move sequence in numbers.
-         * @returns move sequence in numbers
-         */
-        vector<uint16_t> getMoves() const;
+ protected:
+    /** Move sequence in numbers */
+    vector<uint16_t> moveSequence;
 
-        /**
-         * Get scramble length.
-         * @returns scramble length
-         */
-        uint16_t getLength() const;
+    /** Scramble length */
+    uint16_t length;
 
-        /**
-         * Get the scramble in humban-readable format.
-         * @returns the scramble string
-         */
-        virtual string toString() const = 0;
+    /**
+     * Constructor of the class.
+     * @param moves move sequence in numbers
+     */
+    explicit Scramble(vector<uint16_t> moves);
 
-        virtual ~Scramble() = default;
-    };
-}
+ public:
+    /**
+     * Get move sequence in numbers.
+     * @returns move sequence in numbers
+     */
+    vector<uint16_t> getMoves() const;
 
-#endif // SCRAMBLE_HPP
+    /**
+     * Get scramble length.
+     * @returns scramble length
+     */
+    uint16_t getLength() const;
+
+    /**
+     * Get the scramble in humban-readable format.
+     * @returns the scramble string
+     */
+    virtual string toString() const = 0;
+
+    virtual ~Scramble() = default;
+};
+}  // namespace cube_util
+
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_

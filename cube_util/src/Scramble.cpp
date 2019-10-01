@@ -1,3 +1,4 @@
+// Copyright 2019 Yunqi Ouyang
 #include<cube_util/Scramble.hpp>
 
 namespace cube_util {
@@ -17,4 +18,4 @@ namespace cube_util {
     ostream& operator<<(ostream& os, const Scramble &s) {
         return os << s.toString();
     }
-}
+}  // namespace cube_util

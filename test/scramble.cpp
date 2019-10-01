@@ -1,10 +1,67 @@
+// Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE scramble
 #include<boost/test/unit_test.hpp>
 #include<cube_util/ScrambleNNN.hpp>
 #include<cube_util/Utils.hpp>
 
-using namespace cube_util;
-using namespace cube_util::enums;
+using std::vector;
+
+using cube_util::ScrambleNNN;
+
+using cube_util::enums::Moves::Ux1;
+using cube_util::enums::Moves::Ux2;
+using cube_util::enums::Moves::Ux3;
+using cube_util::enums::Moves::Rx1;
+using cube_util::enums::Moves::Rx2;
+using cube_util::enums::Moves::Rx3;
+using cube_util::enums::Moves::Fx1;
+using cube_util::enums::Moves::Fx2;
+using cube_util::enums::Moves::Fx3;
+using cube_util::enums::Moves::Dx1;
+using cube_util::enums::Moves::Dx2;
+using cube_util::enums::Moves::Dx3;
+using cube_util::enums::Moves::Lx1;
+using cube_util::enums::Moves::Lx2;
+using cube_util::enums::Moves::Lx3;
+using cube_util::enums::Moves::Bx1;
+using cube_util::enums::Moves::Bx2;
+using cube_util::enums::Moves::Bx3;
+using cube_util::enums::Moves::Uw1;
+using cube_util::enums::Moves::Uw2;
+using cube_util::enums::Moves::Uw3;
+using cube_util::enums::Moves::Rw1;
+using cube_util::enums::Moves::Rw2;
+using cube_util::enums::Moves::Rw3;
+using cube_util::enums::Moves::Fw1;
+using cube_util::enums::Moves::Fw2;
+using cube_util::enums::Moves::Fw3;
+using cube_util::enums::Moves::Dw1;
+using cube_util::enums::Moves::Dw2;
+using cube_util::enums::Moves::Dw3;
+using cube_util::enums::Moves::Lw1;
+using cube_util::enums::Moves::Lw2;
+using cube_util::enums::Moves::Lw3;
+using cube_util::enums::Moves::Bw1;
+using cube_util::enums::Moves::Bw2;
+using cube_util::enums::Moves::Bw3;
+using cube_util::enums::Moves::_3Uw1;
+using cube_util::enums::Moves::_3Uw2;
+using cube_util::enums::Moves::_3Uw3;
+using cube_util::enums::Moves::_3Rw1;
+using cube_util::enums::Moves::_3Rw2;
+using cube_util::enums::Moves::_3Rw3;
+using cube_util::enums::Moves::_3Fw1;
+using cube_util::enums::Moves::_3Fw2;
+using cube_util::enums::Moves::_3Fw3;
+using cube_util::enums::Moves::_3Dw1;
+using cube_util::enums::Moves::_3Dw2;
+using cube_util::enums::Moves::_3Dw3;
+using cube_util::enums::Moves::_3Lw1;
+using cube_util::enums::Moves::_3Lw2;
+using cube_util::enums::Moves::_3Lw3;
+using cube_util::enums::Moves::_3Bw1;
+using cube_util::enums::Moves::_3Bw2;
+using cube_util::enums::Moves::_3Bw3;
 
 BOOST_AUTO_TEST_SUITE(scramble)
 
@@ -15,19 +72,20 @@ BOOST_AUTO_TEST_CASE(test_parse_scramble) {
     auto sequence = scrn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     auto size = sequence.size();
-    for( int i = 0; i < size; ++i ) {
+    for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
     BOOST_CHECK_EQUAL(scrn.toString(), str);
     BOOST_CHECK_EQUAL(scrn.getLength(), 9);
 
     str = "F2 R2 U' B2 R2 D U2 B2 D2 U' B' U R U L' F' D' B' U L";
-    exp = {Fx2, Rx2, Ux3, Bx2, Rx2, Dx1, Ux2, Bx2, Dx2, Ux3, Bx3, Ux1, Rx1, Ux1, Lx3, Fx3, Dx3, Bx3, Ux1, Lx1};
+    exp = {Fx2, Rx2, Ux3, Bx2, Rx2, Dx1, Ux2, Bx2, Dx2, Ux3, Bx3, Ux1, Rx1,
+        Ux1, Lx3, Fx3, Dx3, Bx3, Ux1, Lx1};
     scrn = ScrambleNNN(3, str);
     sequence = scrn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     size = sequence.size();
-    for( int i = 0; i < size; ++i ) {
+    for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
     BOOST_CHECK_EQUAL(scrn.toString(), str);
@@ -54,7 +112,7 @@ BOOST_AUTO_TEST_CASE(test_parse_scramble) {
     sequence = scrn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     size = sequence.size();
-    for( int i = 0; i < size; ++i ) {
+    for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
     BOOST_CHECK_EQUAL(scrn.toString(), str);

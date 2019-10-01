@@ -1,18 +1,24 @@
+// Copyright 2019 Yunqi Ouyang
+#include<cube_util/ScrambleNNN.hpp>
 #include<boost/regex.hpp>
 #include<boost/algorithm/string/regex.hpp>
 #include<boost/algorithm/string/join.hpp>
-#include<cube_util/ScrambleNNN.hpp>
 #include<cube_util/Utils.hpp>
 
 using boost::algorithm::join;
 using boost::smatch;
 using boost::regex;
-using namespace cube_util::constants;
-using namespace cube_util::utils;
 
 namespace cube_util {
 
-    ScrambleNNN::ScrambleNNN(uint16_t size, string s): Scramble(ScrambleNNN::parse(s)) {
+    using constants::FACE_NAMES;
+    using constants::N_MOVE_PER_SHIFT;
+    using constants::N_MOVE_PER_AXIS;
+
+    using utils::move2Str;
+
+    ScrambleNNN::ScrambleNNN(uint16_t size, string s):
+        Scramble(ScrambleNNN::parse(s)) {
         this->size = size;
     }
 
@@ -27,7 +33,8 @@ namespace cube_util {
         //         2 for shifts,
         //         3 for wide turn axis name,
         //         4 for amount
-        auto pattern = regex("^(?:([URFDLB])|([2-9]|[1-9]\\d+)?([URFDLB])w)([2'])?$");
+        auto pattern = regex(
+            "^(?:([URFDLB])|([2-9]|[1-9]\\d+)?([URFDLB])w)([2'])?$");
         smatch m;
         for (auto str : moveStrs) {
             auto shift = 1;
@@ -41,7 +48,9 @@ namespace cube_util {
 
                 amount = (m[4] == "" ? 0 : string(" 2'").find(m[4]));
 
-                uint16_t move = shift * N_MOVE_PER_SHIFT + axis * N_MOVE_PER_AXIS + amount;
+                uint16_t move = shift * N_MOVE_PER_SHIFT
+                    + axis * N_MOVE_PER_AXIS
+                    + amount;
                 moves.push_back(move);
             }
         }
@@ -55,4 +64,4 @@ namespace cube_util {
         }
         return join(strVec, " ");
     }
-}
+}  // namespace cube_util

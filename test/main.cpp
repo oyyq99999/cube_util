@@ -1,15 +1,42 @@
+// Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE cube_util
-#include<regex>
 #include<boost/test/unit_test.hpp>
+#include<boost/regex.hpp>
 #include<cube_util/FaceletCubeNNN.hpp>
 #include<cube_util/CubieCube222.hpp>
 #include<cube_util/Cube222Solver.hpp>
 #include<cube_util/Utils.hpp>
 
-using namespace std;
-using namespace cube_util;
-using namespace cube_util::utils;
-using namespace cube_util::enums;
+using std::vector;
+using std::array;
+
+using boost::regex;
+
+using cube_util::FaceletCubeNNN;
+using cube_util::CubieCube222;
+using cube_util::Cube222Solver;
+
+using cube_util::enums::Colors::U;
+using cube_util::enums::Colors::R;
+using cube_util::enums::Colors::F;
+using cube_util::enums::Colors::D;
+using cube_util::enums::Colors::L;
+using cube_util::enums::Colors::B;
+
+using cube_util::enums::Moves::Ux1;
+using cube_util::enums::Moves::Ux2;
+using cube_util::enums::Moves::Ux3;
+using cube_util::enums::Moves::Rx1;
+using cube_util::enums::Moves::Rx2;
+using cube_util::enums::Moves::Rx3;
+using cube_util::enums::Moves::Fx1;
+
+using cube_util::utils::getNPerm;
+using cube_util::utils::setNPerm;
+using cube_util::utils::getNTwist;
+using cube_util::utils::setNTwist;
+using cube_util::utils::cycle4;
+using cube_util::utils::scrambleString;
 
 BOOST_AUTO_TEST_SUITE(cube_model)
 
@@ -78,8 +105,8 @@ BOOST_AUTO_TEST_SUITE(utils)
 
 BOOST_AUTO_TEST_CASE(test_cycle4) {
     vector<uint16_t> v = {3, 5, 7, 1, 6, 0, 8, 2};
-    cycle4(v, 3, 7, 2, 5);
-    ostringstream os;
+    cycle4(&v, 3, 7, 2, 5);
+    std::ostringstream os;
     for (auto e : v) {
         os << e;
     }
@@ -90,12 +117,12 @@ BOOST_AUTO_TEST_CASE(test_getSetNPerm) {
     array<uint16_t, 5> arr1 = {0, 1, 2, 3, 4};
     auto i = getNPerm(arr1, 5);
     BOOST_CHECK_EQUAL(i, 0);
-    setNPerm(arr1, i + 1, 5);
+    setNPerm(&arr1, i + 1, 5);
     array<uint16_t, 5> exp1 = {0, 1, 2, 4, 3};
     BOOST_CHECK(arr1 == exp1);
 
     array<uint16_t, 12> arr2 = {1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-    BOOST_CHECK_EQUAL(getNPerm(arr2, 12), 39916800); // 11!
+    BOOST_CHECK_EQUAL(getNPerm(arr2, 12), 39916800);  // 11!
     BOOST_CHECK_EQUAL(getNPerm(arr2, 5), 24);
 
     array<uint16_t, 12> arr3 = {3, 2, 4, 1, 0};
@@ -106,7 +133,7 @@ BOOST_AUTO_TEST_CASE(test_getSetNTwist) {
     array<uint16_t, 5> arr1 = {0, 1, 2, 0, 0};
     auto i = getNTwist(arr1, 5);
     BOOST_CHECK_EQUAL(i, 15);
-    setNTwist(arr1, i + 1, 5);
+    setNTwist(&arr1, i + 1, 5);
     array<uint16_t, 5> exp1 = {0, 1, 2, 1, 2};
     BOOST_CHECK(arr1 == exp1);
 }
@@ -115,9 +142,12 @@ BOOST_AUTO_TEST_CASE(test_scramble) {
     auto re2 = regex("^[URF][2']?( [URF][2']?){10}$");
     auto re3 = regex("^[URFDLB][2']?( [URFDLB][2']?){24}$");
     auto re4 = regex("^([URF]w?|[DLB])[2']?( ([URF]w?|[DLB])[2']?){39}$");
-    auto re5 = regex("^[URFDLB]w?[2']?( ([URFDLB]w?[2']?)){59}$");
-    auto re6 = regex("^([URFDLB]w?|3[URF]w)[2']?( ([URFDLB]w?|3[URF]w)[2']?){79}$");
-    auto re7 = regex("^([URFDLB]w?|3[URFDLB]w)[2']?( ([URFDLB]w?|3[URFDLB]w)[2']?){99}$");
+    auto re5 = regex(
+        "^[URFDLB]w?[2']?( ([URFDLB]w?[2']?)){59}$");
+    auto re6 = regex(
+        "^([URFDLB]w?|3[URF]w)[2']?( ([URFDLB]w?|3[URF]w)[2']?){79}$");
+    auto re7 = regex(
+        "^([URFDLB]w?|3[URFDLB]w)[2']?( ([URFDLB]w?|3[URFDLB]w)[2']?){99}$");
 
     auto scr = scrambleString(2);
     BOOST_CHECK(regex_match(scr, re2));

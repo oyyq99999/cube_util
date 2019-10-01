@@ -1,9 +1,20 @@
+// Copyright 2019 Yunqi Ouyang
 #include<cube_util/Cube222Solver.hpp>
-#include<cube_util/CubieCube222.hpp>
+#include<boost/algorithm/string/trim.hpp>
 
 namespace cube_util {
 
-    using namespace utils;
+    using boost::trim;
+
+    using constants::N_AXIS;
+    using constants::N_MOVE_PER_AXIS;
+    using cube222::SOLVED_PERM;
+    using cube222::SOLVED_TWIST;
+    using cube222::N_MAX_LENGTH;
+
+    using utils::reverseMove;
+    using utils::move2Str;
+    using utils::getPruning;
 
     Cube222Solver::Cube222Solver(CubieCube222 c) {
         this->cc = c;
@@ -18,12 +29,15 @@ namespace cube_util {
     }
 
     string Cube222Solver::solve(uint16_t minLength) {
+        using utils::move2Str;
+
         this->_solve(minLength);
-        string g;
+        string s;
         for (auto i = 0; i < this->solutionLength; i++) {
-            g.append(move2Str(this->solution[i])).append(" ");
+            s.append(move2Str(this->solution[i])).append(" ");
         }
-        return trim(g);
+        trim(s);
+        return s;
     }
 
     string Cube222Solver::generate() {
@@ -32,11 +46,12 @@ namespace cube_util {
 
     string Cube222Solver::generate(uint16_t minLength) {
         this->_solve(minLength);
-        string g;
+        string s;
         for (auto i = this->solutionLength - 1; i >= 0; i--) {
-            g.append(move2Str(reverseMove(this->solution[i]))).append(" ");
+            s.append(move2Str(reverseMove(this->solution[i]))).append(" ");
         }
-        return trim(g);
+        trim(s);
+        return s;
     }
 
     /**
@@ -49,8 +64,9 @@ namespace cube_util {
      * @param saveSolution whether to save the solution
      * @returns whether the cube is solved
      */
-    bool Cube222Solver::search(uint16_t perm, uint16_t twist, uint16_t moveCount,
-        int16_t lastAxis, uint16_t depth, bool saveSolution) {
+    bool Cube222Solver::search(uint16_t perm, uint16_t twist,
+        uint16_t moveCount, int16_t lastAxis, uint16_t depth,
+        bool saveSolution) {
         if (moveCount == 0) {
             if (perm == SOLVED_PERM && twist == SOLVED_TWIST) {
                 this->solutionLength = saveSolution ? depth : -1;
@@ -77,7 +93,8 @@ namespace cube_util {
                         getPruning(TWIST_PRUNING, newTwist) == moveCount) {
                         continue;
                     }
-                    if (search(newPerm, newTwist, moveCount - 1, axis, depth + 1, saveSolution)) {
+                    if (search(newPerm, newTwist, moveCount - 1, axis,
+                        depth + 1, saveSolution)) {
                         return true;
                     }
                 }
@@ -116,4 +133,4 @@ namespace cube_util {
         return false;
     }
 
-}
+}  // namespace cube_util

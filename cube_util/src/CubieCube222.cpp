@@ -1,18 +1,29 @@
-#include<sstream>
+// Copyright 2019 Yunqi Ouyang
 #include<cube_util/CubieCube222.hpp>
-#include<cube_util/FaceletCubeNNN.hpp>
-#include<cube_util/Utils.hpp>
-
-using namespace std;
+#include<sstream>
 
 namespace cube_util {
 
-    using namespace cube222;
-    using namespace utils;
-    using namespace enums;
+    using std::invalid_argument;
+    using std::ostringstream;
+    using std::endl;
 
-    CubieCube222::CubieCube222(array<uint16_t, N_CORNER> perm, array<uint16_t, N_CORNER> twist) {
+    using constants::N_FACE;
 
+    using enums::Colors::U;
+    using enums::Colors::D;
+
+    using cube222::FACELET_PER_FACE;
+    using cube222::FACELET_MAP;
+
+    using utils::setNPerm;
+    using utils::getNPerm;
+    using utils::setNTwist;
+    using utils::getNTwist;
+    using utils::randomizer;
+
+    CubieCube222::CubieCube222(array<uint16_t, N_CORNER> perm,
+        array<uint16_t, N_CORNER> twist) {
         int twistsTotal = 0;
         uint16_t mask = 0;
 
@@ -27,8 +38,8 @@ namespace cube_util {
             }
             twistsTotal += twist[i];
 
-            // assume all things are good, if we find something is wrong later, we throw an
-            // exception
+            // assume all things are good, if we find something is wrong later,
+            // we throw an exception
             this->cp[i] = perm[i];
             this->co[i] = twist[i];
         }
@@ -46,16 +57,15 @@ namespace cube_util {
         this->setCO(twist);
     }
 
-    CubieCube222::CubieCube222(uint32_t index): CubieCube222(index / N_TWIST, index % N_TWIST) {
-
-    }
+    CubieCube222::CubieCube222(uint32_t index):
+        CubieCube222(index / N_TWIST, index % N_TWIST) {}
 
     void CubieCube222::setCP(uint16_t index) {
-        setNPerm(this->cp, index, N_CORNER - 1);
+        setNPerm(&this->cp, index, N_CORNER - 1);
     }
 
     void CubieCube222::setCO(uint16_t index) {
-        setNTwist(this->co, index, N_CORNER - 1);
+        setNTwist(&this->co, index, N_CORNER - 1);
     }
 
     uint16_t CubieCube222::getCP() const {
@@ -71,18 +81,19 @@ namespace cube_util {
             move = N_MOVE - ((-move) % N_MOVE);
         }
         move %= N_MOVE;
-        cubeMult(*this, MOVE_CUBES[move], *this);
+        cubeMult(*this, MOVE_CUBES[move], this);
     }
 
-    void CubieCube222::cubeMult(CubieCube222 one, CubieCube222 another, CubieCube222 &result) {
+    void CubieCube222::cubeMult(CubieCube222 one, CubieCube222 another,
+        CubieCube222 *result) {
         auto perm = array<uint16_t, N_CORNER>();
         auto twist = array<uint16_t, N_CORNER>();
         for (auto i = 0; i < N_CORNER; i++) {
             perm[i] = one.cp[another.cp[i]];
             twist[i] = (one.co[another.cp[i]] + another.co[i]) % 3;
         }
-        result.cp = perm;
-        result.co = twist;
+        result->cp = perm;
+        result->co = twist;
     }
 
     string CubieCube222::toString() const {
@@ -105,7 +116,8 @@ namespace cube_util {
             auto piece = cp[i];
             auto orient = co[i];
             for (auto j = 0; j < 3; j++) {
-                f[FACELET_MAP[i][(j + orient) % 3]] = FACELET_MAP[piece][j] / FACELET_PER_FACE;
+                f[FACELET_MAP[i][(j + orient) % 3]]
+                    = FACELET_MAP[piece][j] / FACELET_PER_FACE;
             }
         }
         return FaceletCubeNNN(2, f);
@@ -121,7 +133,8 @@ namespace cube_util {
         uint16_t color1, color2, ori;
         for (auto i = 0; i < N_CORNER; i++) {
             for (ori = 0; ori < 3; ori++) {
-                if (f[FACELET_MAP[i][ori]] == U || f[FACELET_MAP[i][ori]] == D) {
+                if (f[FACELET_MAP[i][ori]] == U
+                    || f[FACELET_MAP[i][ori]] == D) {
                     break;
                 }
             }
@@ -135,7 +148,6 @@ namespace cube_util {
                     break;
                 }
             }
-
         }
         return CubieCube222(perm, twist);
     }
@@ -144,4 +156,4 @@ namespace cube_util {
         auto r = randomizer(0, N_TWIST * N_PERM - 1);
         return CubieCube222(r());
     }
-}
+}  // namespace cube_util

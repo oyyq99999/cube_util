@@ -1,4 +1,5 @@
-#include<cube_util/Scrambler222.hpp>
+// Copyright 2019 Yunqi Ouyang
+#include<cube_util/Scrambler.hpp>
 
 namespace cube_util {
 
