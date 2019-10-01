@@ -7,7 +7,7 @@ enable_testing()
 set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
-file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} TEST_SRCS)
 
 foreach(testSrc ${TEST_SRCS})
   get_filename_component(testName test_${testSrc} NAME_WE)

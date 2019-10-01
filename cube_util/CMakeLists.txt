@@ -35,4 +35,24 @@ target_compile_features(cube_util
 )
 target_link_libraries(cube_util PRIVATE Boost::regex)
 
+find_program(_cpplint cpplint)
+if (_cpplint)
+  file(GLOB_RECURSE LINT_SRC_FILES
+    include/*.hpp
+    src/*.hpp
+    src/*.cpp
+  )
+  add_custom_command(TARGET cube_util
+    PRE_BUILD COMMAND ${_cpplint} --quiet ${LINT_SRC_FILES}
+    COMMENT "linting code")
+endif()
+
+find_program(_doxygen doxygen)
+if (_doxygen)
+  add_custom_command(TARGET cube_util
+    POST_BUILD COMMAND ${_doxygen} > /dev/null
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "generating documents")
+endif()
+
 export(TARGETS cube_util FILE CubeUtil.cmake)
