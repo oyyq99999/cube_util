@@ -23,8 +23,7 @@ namespace cube_util {
 
     CubieCubeNNN::CubieCubeNNN():
         cp {URF, UFL, ULB, UBR, DLF, DFR, DRB, DBL},
-        co {ORIENTED} {
-    }
+        co {ORIENTED} {}
 
     void CubieCubeNNN::setCP(uint16_t index) {
         setNPerm(&this->cp, index, N_CORNER);

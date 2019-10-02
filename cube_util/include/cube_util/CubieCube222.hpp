@@ -27,7 +27,7 @@ namespace cube_util {
 class CubieCube222: public CubieCubeNNN {
     void setCP(uint16_t index) override;
 
-    void setCO(uint16_t) override;
+    void setCO(uint16_t index) override;
 
     /**
      * Calculate product (_one_ * _another_) of two cubes.
@@ -39,7 +39,7 @@ class CubieCube222: public CubieCubeNNN {
         CubieCube222 *result);
 
  public:
-    CubieCube222() {}
+    CubieCube222() = default;
 
     /**
      * Constructor of the class.
@@ -63,11 +63,7 @@ class CubieCube222: public CubieCubeNNN {
      */
     explicit CubieCube222(uint32_t index);
 
-    /**
-     * Apply move to the current cube.
-     * @param move the move to apply, as described in cube_util::constants
-     */
-    void move(int move);  // NOLINT(build/include_what_you_use)
+    void move(uint16_t move) override;  // NOLINT(build/include_what_you_use)
 
     uint16_t getCP() const override;
 

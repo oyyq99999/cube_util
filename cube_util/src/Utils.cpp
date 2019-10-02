@@ -18,10 +18,10 @@ namespace utils {
     using constants::N_MOVE_PER_AXIS;
     using constants::N_MOVE_PER_SHIFT;
 
-    function<int()> randomizer(int start, int end) {
+    function<int64_t()> randomizer(int64_t start, int64_t end) {
         random_device rd;
         default_random_engine gen = default_random_engine(rd());
-        uniform_int_distribution<int> dist(start, end);
+        uniform_int_distribution<int64_t> dist(start, end);
         return bind(dist, gen);
     }
 

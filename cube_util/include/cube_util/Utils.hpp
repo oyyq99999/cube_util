@@ -140,12 +140,12 @@ namespace utils {
      */
     template<size_t SIZE>
     uint64_t getNPerm(array<uint16_t, SIZE> arr, uint16_t n) {
-        uint64_t index = 0;
-        uint64_t val = 0xFEDCBA9876543210;
+        uint64_t index = 0UL;
+        uint64_t val = 0xFEDCBA9876543210UL;
         for (auto i = 0; i < n - 1; i++) {
             auto v = arr[i] << 2;
             index = (n - i) * index + (val >> v & 0xf);
-            val -= 0x1111111111111110 << v;
+            val -= 0x1111111111111110UL << v;
         }
         return index;
     }
@@ -158,8 +158,8 @@ namespace utils {
      */
     template<size_t SIZE>
     void setNPerm(array<uint16_t, SIZE> *arr, uint64_t index, uint16_t n) {
-        uint64_t val = 0xFEDCBA9876543210;
-        uint64_t extract = 0;
+        uint64_t val = 0xFEDCBA9876543210UL;
+        uint64_t extract = 0UL;
         for (auto p = 2; p <= n; p++) {
             extract = extract << 4 | index % p;
             index /= p;
@@ -168,7 +168,7 @@ namespace utils {
             uint16_t v = (extract & 0xf) << 2;
             extract >>= 4;
             (*arr)[i] = val >> v & 0xf;
-            uint64_t m = (1 << v) - 1;
+            uint64_t m = (1UL << v) - 1;
             val = (val & m) | (val >> 4 & ~m);
         }
         (*arr)[n - 1] = val & 0xf;
@@ -245,9 +245,9 @@ namespace utils {
      * `start` and `end` (inclusive).
      * @param start lower bound of random range
      * @param end upper bound of random range
-     * @returns a function<int ()> which returns a random int on each call
+     * @returns a function<int64_t()> which returns a random int on each call
      */
-    function<int()> randomizer(int start, int end);
+    function<int64_t()> randomizer(int64_t start, int64_t end);
 
     /**
      * Generate a scramble sequence string for specified cube size and

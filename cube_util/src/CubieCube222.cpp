@@ -13,6 +13,9 @@ namespace cube_util {
     using enums::Colors::U;
     using enums::Colors::D;
 
+    using enums::CornerTwists::ORIENTED;
+    using enums::CornerTwists::COUNTER_CLOCKWISE;
+
     using cube222::FACELET_PER_FACE;
     using cube222::FACELET_MAP;
 
@@ -33,7 +36,7 @@ namespace cube_util {
                 throw invalid_argument("invalid permutation!");
             }
             mask |= 1 << perm[i];
-            if (twist[i] < 0 || twist[i] > 2) {
+            if (twist[i] < ORIENTED || twist[i] > COUNTER_CLOCKWISE) {
                 throw invalid_argument("invalid orientation!");
             }
             twistsTotal += twist[i];
@@ -76,10 +79,7 @@ namespace cube_util {
         return getNTwist(this->co, N_CORNER - 1);
     }
 
-    void CubieCube222::move(int move) {
-        if (move < 0) {
-            move = N_MOVE - ((-move) % N_MOVE);
-        }
+    void CubieCube222::move(uint16_t move) {
         move %= N_MOVE;
         cubeMult(*this, MOVE_CUBES[move], this);
     }
@@ -141,8 +141,8 @@ namespace cube_util {
             color1 = f[FACELET_MAP[i][(ori + 1) % 3]];
             color2 = f[FACELET_MAP[i][(ori + 2) % 3]];
             for (auto j = 0; j < N_CORNER; j++) {
-                if (color1 == FACELET_MAP[j][1] / FACELET_PER_FACE &&
-                    color2 == FACELET_MAP[j][2] / FACELET_PER_FACE) {
+                if (color1 == FACELET_MAP[j][1] / FACELET_PER_FACE
+                    && color2 == FACELET_MAP[j][2] / FACELET_PER_FACE) {
                     perm[i] = j;
                     twist[i] = ori;
                     break;

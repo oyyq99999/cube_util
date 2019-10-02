@@ -10,22 +10,40 @@ namespace cube_util {
     using enums::Moves::Rx1;
     using enums::Moves::Fx1;
 
+    using enums::Corners::URF;
+    using enums::Corners::UFL;
+    using enums::Corners::ULB;
+    using enums::Corners::UBR;
+    using enums::Corners::DLF;
+    using enums::Corners::DFR;
+    using enums::Corners::DRB;
+    using enums::Corners::DBL;
+
+    using enums::CornerTwists::ORIENTED;
+    using enums::CornerTwists::CLOCKWISE;
+    using enums::CornerTwists::COUNTER_CLOCKWISE;
+
     using cube222::SOLVED_PERM;
     using cube222::SOLVED_TWIST;
+
+    using constants::N_MOVE_PER_AXIS;
 
     using utils::setPruning;
     using utils::getPruning;
 
     const array<CubieCube222, N_MOVE> CubieCube222::MOVE_CUBES = [] {
         auto ret = array<CubieCube222, N_MOVE>();
-        ret[Ux1] = CubieCube222({3, 0, 1, 2, 4, 5, 6, 7}, {0});
-        ret[Rx1] = CubieCube222({5, 1, 2, 0, 4, 6, 3, 7},
-            {2, 0, 0, 1, 0, 1, 2, 0});
-        ret[Fx1] = CubieCube222({1, 4, 2, 3, 5, 0, 6, 7},
-            {1, 2, 0, 0, 1, 2, 0, 0});
+        ret[Ux1] = CubieCube222({UBR, URF, UFL, ULB, DLF, DFR, DRB, DBL},
+            {ORIENTED});
+        ret[Rx1] = CubieCube222({DFR, UFL, ULB, URF, DLF, DRB, UBR, DBL},
+            {COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE, ORIENTED,
+                CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED});
+        ret[Fx1] = CubieCube222({UFL, DLF, ULB, UBR, DFR, URF, DRB, DBL},
+            {CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE,
+                COUNTER_CLOCKWISE, ORIENTED, ORIENTED});
 
-        for (auto i = 0; i < N_MOVE; i += 3) {
-            for (auto j = 1; j < 3; j++) {
+        for (auto i = 0; i < N_MOVE; i += N_MOVE_PER_AXIS) {
+            for (auto j = 1; j < N_MOVE_PER_AXIS; j++) {
                 ret[i + j] = CubieCube222();
                 cubeMult(ret[i + j - 1], ret[i], &ret[i + j]);
             }

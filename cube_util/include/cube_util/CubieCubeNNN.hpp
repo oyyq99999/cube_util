@@ -47,10 +47,16 @@ class CubieCubeNNN {
      * Set corner orientation state according to given index.
      * @param index specified index
      */
-    virtual void setCO(uint16_t);
+    virtual void setCO(uint16_t index);
 
  public:
     CubieCubeNNN();
+
+    /**
+     * Apply move to the current cube.
+     * @param move the move to apply, using move from cube_util::enums::Moves
+     */
+    virtual void move(uint16_t move) = 0;  // NOLINT(build/include_what_you_use)
 
     /**
      * Calculate corner permutation index of current state.

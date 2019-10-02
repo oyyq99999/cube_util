@@ -127,6 +127,14 @@ BOOST_AUTO_TEST_CASE(test_getSetNPerm) {
 
     array<uint16_t, 12> arr3 = {3, 2, 4, 1, 0};
     BOOST_CHECK_EQUAL(getNPerm(arr3, 5), 89);
+
+    uint32_t testI = 478908019;
+    array<uint16_t, 12> arr4;
+    array<uint16_t, 12> exp4 = {11, 10, 9, 6, 5, 3, 0, 1, 8, 2, 7, 4};
+    setNPerm(&arr4, testI, 12);
+    for (auto j = 0; j < 12; j++) {
+        BOOST_CHECK_EQUAL(arr4[j], exp4[j]);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(test_getSetNTwist) {
