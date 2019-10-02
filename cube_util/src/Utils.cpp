@@ -18,6 +18,15 @@ namespace utils {
     using constants::N_MOVE_PER_AXIS;
     using constants::N_MOVE_PER_SHIFT;
 
+    bool getNParity(uint64_t index, uint16_t n) {
+        uint16_t p = 0;
+        for (auto i = n - 2; i >= 0; i--) {
+            p ^= index % (n - i);
+            index /= (n - i);
+        }
+        return p & 1;
+    }
+
     function<int64_t()> randomizer(int64_t start, int64_t end) {
         random_device rd;
         default_random_engine gen = default_random_engine(rd());

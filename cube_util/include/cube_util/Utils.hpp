@@ -106,6 +106,67 @@ namespace cube222 {
 }  // namespace cube222
 
 ////////////////////////////////////////////////////////////////////////////
+/// Constants used for 3x3x3 cube
+////////////////////////////////////////////////////////////////////////////
+namespace cube333 {
+
+    /** Type of moves for a 3x3x3 cube */
+    const uint16_t N_MOVE = 18;
+    /** Total orientations count of first 7 corners of a 3x3x3 cube. */
+    const uint16_t N_CORNER_TWIST = 2187;  // 3 ^ 7
+    /** Total permutations count of corners of a 3x3x3 cube. */
+    const uint16_t N_CORNER_PERM = 40320;  // 8!
+    /** Total orientations count of first 11 edges of a 3x3x3 cube. */
+    const uint16_t N_EDGE_FLIP = 2048;  // 2 ^ 11
+    /** Total permutations count of edges of a 3x3x3 cube. */
+    const uint32_t N_EDGE_PERM = 479001600;  // 12!
+
+    /** Number of edges in a 3x3x3 cube */
+    const uint16_t N_EDGE = 12;
+
+    /** Corner permutation index of solved state */
+    const uint16_t SOLVED_CORNER_PERM = 0;
+    /** Corner orientation index of solved state */
+    const uint16_t SOLVED_CORNER_TWIST = 0;
+
+    /** Number of stickers on a face */
+    const uint16_t FACELET_PER_FACE = 9;
+
+    /** Facelets on each face */
+    enum Facelets {
+        U1, U2, U3, U4, U5, U6, U7, U8, U9,
+        R1, R2, R3, R4, R5, R6, R7, R8, R9,
+        F1, F2, F3, F4, F5, F6, F7, F8, F9,
+        D1, D2, D3, D4, D5, D6, D7, D8, D9,
+        L1, L2, L3, L4, L5, L6, L7, L8, L9,
+        B1, B2, B3, B4, B5, B6, B7, B8, B9,
+    };
+
+    /** Edge numbers */
+    enum Edges {
+        UF, UL, UB, UR, DF, DR, DB, DL, FL, BL, BR, FR,
+    };
+
+    /** Edge orientation representations */
+    enum EdgeFlips {
+        NOT_FLIPPED, FLIPPED,
+    };
+
+    /** Facelet mapping for corners */
+    const uint16_t CORNER_FACELET_MAP[][3] = {
+        {U9, R1, F3}, {U7, F1, L3}, {U1, L1, B3}, {U3, B1, R3},
+        {D1, L9, F7}, {D3, F9, R7}, {D9, R9, B7}, {D7, B9, L7}
+    };
+
+    /** Facelet mapping for edges */
+    const uint16_t EDGE_FACELET_MAP[][2] = {
+        {U8, F2}, {U4, L2}, {U2, B2}, {U6, R2},
+        {D2, F8}, {D6, R8}, {D8, B8}, {D4, L8},
+        {F4, L6}, {B6, L4}, {B4, R6}, {F6, R4}
+    };
+}  // namespace cube333
+
+////////////////////////////////////////////////////////////////////////////
 /// Auxiliary functions etc.
 ////////////////////////////////////////////////////////////////////////////
 namespace utils {
@@ -208,6 +269,39 @@ namespace utils {
     }
 
     /**
+     * Calculate flip index based on given fixed-length orientation.
+     * @param arr orientation array
+     * @param n number of elements to calculate, n <= 16
+     * @returns index of the given orientation
+     */
+    template<size_t SIZE>
+    uint16_t getNFlip(array<uint16_t, SIZE> arr, uint16_t n) {
+        uint16_t index = 0;
+        for (auto i = 0; i < n - 1; i++) {
+            index <<= 1;
+            index |= arr[i] & 1;
+        }
+        return index;
+    }
+
+    /**
+     * Calculate fixed-length orientation based on given index.
+     * @param[out] arr orientation array
+     * @param index given index
+     * @param n number of elements in the orientation, n <= 16
+     */
+    template<size_t SIZE>
+    void setNFlip(array<uint16_t, SIZE> *arr, uint16_t index, uint16_t n) {
+        int flip = 0;
+        for (auto i = n - 2; i >= 0; i--) {
+            (*arr)[i] = index & 1;
+            flip ^= (*arr)[i];
+            index >>= 1;
+        }
+        (*arr)[n - 1] = flip;
+    }
+
+    /**
      * Set pruning value into pruning table.
      * Each element of the array contains pruning values for 4 indices.
      * Each pruning value needs to be less than 15.
@@ -239,6 +333,15 @@ namespace utils {
         auto shift = (index & 0x3) << 2;
         return (arr[i] >> shift) & 0xf;
     }
+
+    /**
+     * Check if specified permutation index represents a permutation
+     * with an **odd** parity.
+     * @param index the index to check
+     * @param n element count in the permutation, n <= 16
+     * @returns true if the parity is odd, false otherwise
+     */
+    bool getNParity(uint64_t index, uint16_t n);
 
     /**
      * Get a random generator which returns a random int between

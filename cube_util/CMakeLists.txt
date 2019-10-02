@@ -9,6 +9,8 @@ set(CUBE_UTIL_SRC_FILES
   src/CubieCube222.cpp
   src/Cube222Solver.cpp
   src/StaticTables222.cpp
+  src/CubieCube333.cpp
+  src/StaticTables333.cpp
   src/Scrambler.cpp
   src/Scrambler222.cpp
   src/Scramble.cpp
