@@ -1,6 +1,6 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_
 #include<iostream>
 #include<vector>
 #include<string>
@@ -12,27 +12,27 @@ namespace cube_util {
     using std::string;
 
 ////////////////////////////////////////////////////////////////////////////
-/// A class representing a scramble object, which contains scramble
+/// A class representing a move sequence object, which contains move
 /// sequence in numbers and length, and can be converted to string.
 ////////////////////////////////////////////////////////////////////////////
-class Scramble {
+class MoveSequence {
     /**
-     * Outputs the scramble
+     * Outputs the sequence
      */
-    friend ostream& operator<<(ostream& os, const Scramble &s);
+    friend ostream& operator<<(ostream& os, const MoveSequence &s);
 
  protected:
     /** Move sequence in numbers */
-    vector<uint16_t> moveSequence;
+    vector<uint16_t> sequence;
 
-    /** Scramble length */
+    /** Move Sequence length */
     uint16_t length;
 
     /**
      * Constructor of the class.
      * @param moves move sequence in numbers
      */
-    explicit Scramble(vector<uint16_t> moves);
+    explicit MoveSequence(vector<uint16_t> moves);
 
  public:
     /**
@@ -42,19 +42,19 @@ class Scramble {
     vector<uint16_t> getMoves() const;
 
     /**
-     * Get scramble length.
-     * @returns scramble length
+     * Get move sequence length.
+     * @returns sequence length
      */
     uint16_t getLength() const;
 
     /**
-     * Get the scramble in humban-readable format.
-     * @returns the scramble string
+     * Get the move sequence in humban-readable format.
+     * @returns the sequence string
      */
     virtual string toString() const = 0;
 
-    virtual ~Scramble() = default;
+    virtual ~MoveSequence() = default;
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_

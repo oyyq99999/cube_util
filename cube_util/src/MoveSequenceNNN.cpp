@@ -1,5 +1,5 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/ScrambleNNN.hpp>
+#include<cube_util/MoveSequenceNNN.hpp>
 #include<boost/regex.hpp>
 #include<boost/algorithm/string/regex.hpp>
 #include<boost/algorithm/string/join.hpp>
@@ -17,12 +17,12 @@ namespace cube_util {
 
     using utils::move2Str;
 
-    ScrambleNNN::ScrambleNNN(uint16_t size, string s):
-        Scramble(ScrambleNNN::parse(s)) {
+    MoveSequenceNNN::MoveSequenceNNN(uint16_t size, string s):
+        MoveSequence(MoveSequenceNNN::parse(s)) {
         this->size = size;
     }
 
-    vector<uint16_t> ScrambleNNN::parse(string s) {
+    vector<uint16_t> MoveSequenceNNN::parse(string s) {
         auto delimeter = regex("\\s+");
         vector<string> moveStrs;
         split_regex(moveStrs, s, delimeter);
@@ -57,9 +57,9 @@ namespace cube_util {
         return moves;
     }
 
-    string ScrambleNNN::toString() const {
+    string MoveSequenceNNN::toString() const {
         vector<string> strVec;
-        for (auto m : moveSequence) {
+        for (auto m : sequence) {
             strVec.push_back(move2Str(m));
         }
         return join(strVec, " ");

@@ -1,12 +1,12 @@
 // Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE scramble
 #include<boost/test/unit_test.hpp>
-#include<cube_util/ScrambleNNN.hpp>
+#include<cube_util/MoveSequenceNNN.hpp>
 #include<cube_util/Utils.hpp>
 
 using std::vector;
 
-using cube_util::ScrambleNNN;
+using cube_util::MoveSequenceNNN;
 
 using cube_util::enums::Moves::Ux1;
 using cube_util::enums::Moves::Ux2;
@@ -68,28 +68,28 @@ BOOST_AUTO_TEST_SUITE(scramble)
 BOOST_AUTO_TEST_CASE(test_parse_scramble) {
     auto str = "U2 R U F U2 R2 U' F R'";
     vector<uint16_t> exp = {Ux2, Rx1, Ux1, Fx1, Ux2, Rx2, Ux3, Fx1, Rx3};
-    auto scrn = ScrambleNNN(2, str);
-    auto sequence = scrn.getMoves();
+    auto msn = MoveSequenceNNN(2, str);
+    auto sequence = msn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     auto size = sequence.size();
     for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
-    BOOST_CHECK_EQUAL(scrn.toString(), str);
-    BOOST_CHECK_EQUAL(scrn.getLength(), 9);
+    BOOST_CHECK_EQUAL(msn.toString(), str);
+    BOOST_CHECK_EQUAL(msn.getLength(), 9);
 
     str = "F2 R2 U' B2 R2 D U2 B2 D2 U' B' U R U L' F' D' B' U L";
     exp = {Fx2, Rx2, Ux3, Bx2, Rx2, Dx1, Ux2, Bx2, Dx2, Ux3, Bx3, Ux1, Rx1,
         Ux1, Lx3, Fx3, Dx3, Bx3, Ux1, Lx1};
-    scrn = ScrambleNNN(3, str);
-    sequence = scrn.getMoves();
+    msn = MoveSequenceNNN(3, str);
+    sequence = msn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     size = sequence.size();
     for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
-    BOOST_CHECK_EQUAL(scrn.toString(), str);
-    BOOST_CHECK_EQUAL(scrn.getLength(), 20);
+    BOOST_CHECK_EQUAL(msn.toString(), str);
+    BOOST_CHECK_EQUAL(msn.getLength(), 20);
 
     str = "3Rw' Fw' Uw F' Uw' U' F 3Dw 3Fw 3Rw Uw2 R 3Dw' 3Bw' Fw U 3Uw2 "
       "3Fw2 3Uw2 Fw2 L2 3Lw Rw2 U Bw' L2 Dw' 3Fw 3Dw Fw' 3Rw 3Fw2 3Bw2 Fw "
@@ -108,15 +108,15 @@ BOOST_AUTO_TEST_CASE(test_parse_scramble) {
         Lw2, _3Bw3, Bw3, Dw2, Bx2, Lw3, Bx3, _3Fw3, _3Uw3, Fw1, Dw2, Dx1, Fx1,
         Ux2, Rw3, Fw3,
     };
-    scrn = ScrambleNNN(7, str);
-    sequence = scrn.getMoves();
+    msn = MoveSequenceNNN(7, str);
+    sequence = msn.getMoves();
     BOOST_REQUIRE_EQUAL(sequence.size(), exp.size());
     size = sequence.size();
     for (auto i = 0; i < size; i++) {
         BOOST_CHECK_EQUAL(sequence[i], exp[i]);
     }
-    BOOST_CHECK_EQUAL(scrn.toString(), str);
-    BOOST_CHECK_EQUAL(scrn.getLength(), 100);
+    BOOST_CHECK_EQUAL(msn.toString(), str);
+    BOOST_CHECK_EQUAL(msn.getLength(), 100);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -13,8 +13,8 @@ set(CUBE_UTIL_SRC_FILES
   src/StaticTables333.cpp
   src/Scrambler.cpp
   src/Scrambler222.cpp
-  src/Scramble.cpp
-  src/ScrambleNNN.cpp
+  src/MoveSequence.cpp
+  src/MoveSequenceNNN.cpp
 )
 
 set(Boost_NO_BOOST_CMAKE ON)
