@@ -87,22 +87,30 @@ class CubieCube222: public CubieCubeNNN {
     static CubieCube222 randomCube();
 
     /**
-     * Table representing moves applied to an identity cube,
-     * used to calculate new cube states.
+     * Get a new CubieCube222 model with specified move applied to
+     * an identity cube. This is used to calculate new cube states.
+     * @param move the move applied
+     * @returns the move cube
      */
-    static const array<CubieCube222, N_MOVE> MOVE_CUBES;
+    static CubieCube222 getMoveCube(uint16_t move);
 
     /**
-     * Table representing new permutation coordinate by applying a move to
+     * Get new permutation coordinate by applying a move to
      * specified permutation coordinate.
+     * @param perm the original permutation coordinate
+     * @param move the move to apply
+     * @returns new permutation coordinate
      */
-    static const array<array<uint16_t, N_MOVE>, N_PERM> PERM_MOVE;
+    static uint16_t getPermMove(uint16_t perm, uint16_t move);
 
     /**
-     * Table representing new orientation coordinate by applying a move to
+     * Get new orientation coordinate by applying a move to
      * specified orientation coordinate.
+     * @param twist the original orientation coordinate
+     * @param move the move to apply
+     * @returns new orientation coordinate
      */
-    static const array<array<uint16_t, N_MOVE>, N_TWIST> TWIST_MOVE;
+    static uint16_t getTwistMove(uint16_t twist, uint16_t move);
 };
 }  // namespace cube_util
 

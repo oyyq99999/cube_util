@@ -9,11 +9,26 @@ namespace cube_util {
     using std::endl;
 
     using constants::N_FACE;
+    using constants::N_MOVE_PER_AXIS;
 
     using enums::Colors::U;
     using enums::Colors::D;
 
+    using enums::Moves::Ux1;
+    using enums::Moves::Rx1;
+    using enums::Moves::Fx1;
+
+    using enums::Corners::URF;
+    using enums::Corners::UFL;
+    using enums::Corners::ULB;
+    using enums::Corners::UBR;
+    using enums::Corners::DLF;
+    using enums::Corners::DFR;
+    using enums::Corners::DRB;
+    using enums::Corners::DBL;
+
     using enums::CornerTwists::ORIENTED;
+    using enums::CornerTwists::CLOCKWISE;
     using enums::CornerTwists::COUNTER_CLOCKWISE;
 
     using cube222::FACELET_PER_FACE;
@@ -81,7 +96,7 @@ namespace cube_util {
 
     void CubieCube222::move(uint16_t move) {
         move %= N_MOVE;
-        cubeMult(*this, MOVE_CUBES[move], this);
+        cubeMult(*this, getMoveCube(move), this);
     }
 
     void CubieCube222::cubeMult(CubieCube222 one, CubieCube222 another,
@@ -155,5 +170,62 @@ namespace cube_util {
     CubieCube222 CubieCube222::randomCube() {
         auto r = randomizer(0, N_TWIST * N_PERM - 1);
         return CubieCube222(r());
+    }
+
+    CubieCube222 CubieCube222::getMoveCube(uint16_t move) {
+        static auto moveCubeTable = [] {
+            auto ret = array<CubieCube222, N_MOVE>();
+            ret[Ux1] = CubieCube222({UBR, URF, UFL, ULB, DLF, DFR, DRB, DBL},
+                {ORIENTED});
+            ret[Rx1] = CubieCube222({DFR, UFL, ULB, URF, DLF, DRB, UBR, DBL},
+                {COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE, ORIENTED,
+                    CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED});
+            ret[Fx1] = CubieCube222({UFL, DLF, ULB, UBR, DFR, URF, DRB, DBL},
+                {CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE,
+                    COUNTER_CLOCKWISE, ORIENTED, ORIENTED});
+
+            for (auto i = 0; i < N_MOVE; i += N_MOVE_PER_AXIS) {
+                for (auto j = 1; j < N_MOVE_PER_AXIS; j++) {
+                    ret[i + j] = CubieCube222();
+                    cubeMult(ret[i + j - 1], ret[i], &ret[i + j]);
+                }
+            }
+            return ret;
+        }();
+        return moveCubeTable[move];
+    }
+
+    uint16_t CubieCube222::getPermMove(uint16_t perm, uint16_t move) {
+        static auto moveTable = [] {
+            auto ret = array<array<uint16_t, N_MOVE>, N_PERM>();
+            CubieCube222 c = CubieCube222();
+            CubieCube222 d = CubieCube222();
+            for (auto i = 0; i < N_PERM; i++) {
+                c.setCP(i);
+                for (auto j = 0; j < N_MOVE; j++) {
+                    cubeMult(c, getMoveCube(j), &d);
+                    ret[i][j] = d.getCP();
+                }
+            }
+            return ret;
+        }();
+        return moveTable[perm][move];
+    }
+
+    uint16_t CubieCube222::getTwistMove(uint16_t twist, uint16_t move) {
+        static auto moveTable = [] {
+            auto ret = array<array<uint16_t, N_MOVE>, N_TWIST>();
+            CubieCube222 c = CubieCube222();
+            CubieCube222 d = CubieCube222();
+            for (auto i = 0; i < N_TWIST; i++) {
+                c.setCO(i);
+                for (auto j = 0; j < N_MOVE; j++) {
+                    cubeMult(c, getMoveCube(j), &d);
+                    ret[i][j] = d.getCO();
+                }
+            }
+            return ret;
+        }();
+        return moveTable[twist][move];
     }
 }  // namespace cube_util

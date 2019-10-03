@@ -112,10 +112,12 @@ class CubieCube333: public CubieCubeNNN {
     static CubieCube333 randomCube();
 
     /**
-     * Table representing moves applied to an identity cube,
-     * used to calculate new cube states.
+     * Get a new CubieCube333 model with specified move applied to
+     * an identity cube. This is used to calculate new cube states.
+     * @param move the move applied
+     * @returns the move cube
      */
-    static const array<CubieCube333, N_MOVE> MOVE_CUBES;
+    static CubieCube333 getMoveCube(uint16_t move);
 };
 }  // namespace cube_util
 

@@ -9,19 +9,24 @@ namespace cube_util {
 
     using std::unique_ptr;
 
+    using cube222::N_MAX_LENGTH;
+
 ////////////////////////////////////////////////////////////////////////////
 /// A 2x2x2 cube solver utilizing the IDA* algorithm with prunning tables.
 ////////////////////////////////////////////////////////////////////////////
 class Cube222Solver {
     /** The cube to solve */
     CubieCube222 cc;
+
     /** Array storing solution move sequences */
-    array<uint16_t, 11> solution;
+    array<uint16_t, N_MAX_LENGTH> solution;
+
     /** Length of the solution */
     int16_t solutionLength = -1;
 
     bool search(uint16_t perm, uint16_t twist, uint16_t moveCount,
         int16_t lastAxis, uint16_t depth, bool saveSolution);
+
     void _solve(uint16_t minLength);
 
  public:
@@ -65,7 +70,6 @@ class Cube222Solver {
      */
     unique_ptr<MoveSequence> generate(uint16_t minLength);
 
-
     /**
      * Check whether the cube is solvable within given length.
      * @param maxLength maxLength to attempt
@@ -74,14 +78,18 @@ class Cube222Solver {
     bool isSolvableIn(uint16_t maxLength);
 
     /**
-     * Pruning table for 2x2x2 permutations.
+     * Get pruning value for a specified permutation.
+     * @param perm the permutation index to lookup
+     * @returns the pruning value
      */
-    static const array<uint16_t, ((N_PERM + 3) >> 2)> PERM_PRUNING;
+    static uint16_t getPermPruning(uint16_t perm);
 
     /**
-     * Pruning table for 2x2x2 orientations.
+     * Get pruning value for a specified orientation.
+     * @param twist the orientation index to lookup
+     * @returns the pruning value
      */
-    static const array<uint16_t, ((N_TWIST + 3) >> 2)> TWIST_PRUNING;
+    static uint16_t getTwistPruning(uint16_t twist);
 };
 
 }  // namespace cube_util
