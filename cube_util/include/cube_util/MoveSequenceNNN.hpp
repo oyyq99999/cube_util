@@ -13,6 +13,7 @@ namespace cube_util {
 class MoveSequenceNNN : public MoveSequence {
     /** The cube size */
     uint16_t size;
+
  public:
     /**
      * Constructor of the class.
@@ -20,6 +21,13 @@ class MoveSequenceNNN : public MoveSequence {
      * @param s the sequence string to parse from
      */
     MoveSequenceNNN(uint16_t size, string s);
+
+    /**
+     * Constructor of the class.
+     * @param size size of the cube
+     * @param moves the sequence in numbers
+     */
+    MoveSequenceNNN(uint16_t size, vector<uint16_t> moves);
 
     string toString() const override;
 

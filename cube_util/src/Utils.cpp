@@ -39,7 +39,7 @@ namespace utils {
 
         if (cubeSize == 2) {
             length = length > N_MAX_LENGTH ? N_MAX_LENGTH : length;
-            return Scrambler222(length).scramble();
+            return Scrambler222(length).scramble()->toString();
         }
         string scr;
         int count = 0;

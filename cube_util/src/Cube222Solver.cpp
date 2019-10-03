@@ -1,10 +1,11 @@
 // Copyright 2019 Yunqi Ouyang
 #include<cube_util/Cube222Solver.hpp>
-#include<boost/algorithm/string/trim.hpp>
+#include<memory>
+#include<cube_util/MoveSequenceNNN.hpp>
 
 namespace cube_util {
 
-    using boost::trim;
+    using std::make_unique;
 
     using constants::N_AXIS;
     using constants::N_MOVE_PER_AXIS;
@@ -12,9 +13,8 @@ namespace cube_util {
     using cube222::SOLVED_TWIST;
     using cube222::N_MAX_LENGTH;
 
-    using utils::reverseMove;
-    using utils::move2Str;
     using utils::getPruning;
+    using utils::reverseMove;
 
     Cube222Solver::Cube222Solver(CubieCube222 c) {
         this->cc = c;
@@ -24,34 +24,31 @@ namespace cube_util {
         return solutionLength;
     }
 
-    string Cube222Solver::solve() {
+    unique_ptr<MoveSequence> Cube222Solver::solve() {
         return this->solve(0);
     }
 
-    string Cube222Solver::solve(uint16_t minLength) {
-        using utils::move2Str;
+    unique_ptr<MoveSequence> Cube222Solver::solve(uint16_t minLength) {
 
         this->_solve(minLength);
-        string s;
+        vector<uint16_t> moves;
         for (auto i = 0; i < this->solutionLength; i++) {
-            s.append(move2Str(this->solution[i])).append(" ");
+            moves.push_back(solution[i]);
         }
-        trim(s);
-        return s;
+        return make_unique<MoveSequenceNNN>(2, moves);
     }
 
-    string Cube222Solver::generate() {
+    unique_ptr<MoveSequence> Cube222Solver::generate() {
         return this->generate(0);
     }
 
-    string Cube222Solver::generate(uint16_t minLength) {
+    unique_ptr<MoveSequence> Cube222Solver::generate(uint16_t minLength) {
         this->_solve(minLength);
-        string s;
+        vector<uint16_t> moves;
         for (auto i = this->solutionLength - 1; i >= 0; i--) {
-            s.append(move2Str(reverseMove(this->solution[i]))).append(" ");
+            moves.push_back(reverseMove(solution[i]));
         }
-        trim(s);
-        return s;
+        return make_unique<MoveSequenceNNN>(2, moves);
     }
 
     /**

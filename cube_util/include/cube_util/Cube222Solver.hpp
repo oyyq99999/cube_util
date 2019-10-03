@@ -1,11 +1,13 @@
 // Copyright 2019 Yunqi Ouyang
 #ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE222SOLVER_HPP_
 #define CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE222SOLVER_HPP_
-#include<string>
+#include<memory>
 #include<cube_util/CubieCube222.hpp>
+#include<cube_util/MoveSequence.hpp>
 
 namespace cube_util {
 
+    using std::unique_ptr;
 
 ////////////////////////////////////////////////////////////////////////////
 /// A 2x2x2 cube solver utilizing the IDA* algorithm with prunning tables.
@@ -39,29 +41,29 @@ class Cube222Solver {
 
     /**
      * Get solution sequence for the cube.
-     * @returns sequence to solve the cube
+     * @returns a pointer to sequence to solve the cube
      */
-    string solve();
+    unique_ptr<MoveSequence> solve();
 
     /**
      * Get solution sequence of at least `minLength` moves for the cube.
      * @param minLength minimal length of the solution
-     * @returns sequence to solve the cube
+     * @returns a pointer to sequence to solve the cube
      */
-    string solve(uint16_t minLength);
+    unique_ptr<MoveSequence> solve(uint16_t minLength);
 
     /**
      * Get generator sequence for the cube.
-     * @returns sequence to generate the cube state
+     * @returns a pointer to sequence to generate the cube state
      */
-    string generate();
+    unique_ptr<MoveSequence> generate();
 
     /**
      * Get generator sequence of at least `minLength` moves for the cube.
      * @param minLength minimal length of the generator
-     * @returns sequence to generate the cube state
+     * @returns a pointer to sequence to generate the cube state
      */
-    string generate(uint16_t minLength);
+    unique_ptr<MoveSequence> generate(uint16_t minLength);
 
 
     /**

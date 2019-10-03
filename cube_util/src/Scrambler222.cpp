@@ -13,7 +13,7 @@ namespace cube_util {
         minStateLength = 4;
         this->minScrambleLength = minScrambleLength;
     }
-    string Scrambler222::scramble() {
+    unique_ptr<MoveSequence> Scrambler222::scramble() {
         Cube222Solver s;
         do {
             s = Cube222Solver(CubieCube222::randomCube());

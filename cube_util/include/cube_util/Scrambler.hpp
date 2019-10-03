@@ -2,11 +2,12 @@
 #ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
 #define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
 #include<cstdint>
-#include<string>
+#include<memory>
+#include<cube_util/MoveSequence.hpp>
 
 namespace cube_util {
 
-    using std::string;
+    using std::unique_ptr;
 
 ////////////////////////////////////////////////////////////////////////////
 /// A general cube scrambler interface which is able to give
@@ -35,7 +36,7 @@ class Scrambler {
      * The scramble function. This generates a new scramble on each call.
      * @returns the scramble sequence
      */
-    virtual string scramble() = 0;
+    virtual unique_ptr<MoveSequence> scramble() = 0;
 
     virtual ~Scrambler() = default;
 };

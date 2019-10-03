@@ -22,6 +22,11 @@ namespace cube_util {
         this->size = size;
     }
 
+    MoveSequenceNNN::MoveSequenceNNN(uint16_t size, vector<uint16_t> moves):
+        MoveSequence(moves) {
+        this->size = size;
+    }
+
     vector<uint16_t> MoveSequenceNNN::parse(string s) {
         auto delimeter = regex("\\s+");
         vector<string> moveStrs;

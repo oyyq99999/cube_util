@@ -1,7 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
 #ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER222_HPP_
 #define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER222_HPP_
-#include<string>
+#include<memory>
 #include<cube_util/Scrambler.hpp>
 
 namespace cube_util {
@@ -23,7 +23,7 @@ class Scrambler222 : public Scrambler {
      */
     explicit Scrambler222(uint16_t minScrambleLength);
 
-    string scramble() override;
+    unique_ptr<MoveSequence> scramble() override;
 };
 }  // namespace cube_util
 
