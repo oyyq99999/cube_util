@@ -26,19 +26,19 @@ namespace cube_util {
         co {ORIENTED} {}
 
     void CubieCubeNNN::setCP(uint16_t index) {
-        setNPerm(&this->cp, index, N_CORNER);
+        setNPerm(&cp, index, N_CORNER);
     }
 
     void CubieCubeNNN::setCO(uint16_t index) {
-        setNTwist(&this->co, index, N_CORNER);
+        setNTwist(&co, index, N_CORNER);
     }
 
-    uint16_t CubieCubeNNN::getCP() const {
-        return getNPerm(this->cp, N_CORNER);
+    uint16_t CubieCubeNNN::getCPIndex() const {
+        return getNPerm(cp, N_CORNER);
     }
 
-    uint16_t CubieCubeNNN::getCO() const {
-        return getNTwist(this->co, N_CORNER);
+    uint16_t CubieCubeNNN::getCOIndex() const {
+        return getNTwist(co, N_CORNER);
     }
 
     ostream& operator<<(ostream &os, const CubieCubeNNN &cc) {

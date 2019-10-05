@@ -79,19 +79,19 @@ namespace cube_util {
         CubieCube222(index / N_TWIST, index % N_TWIST) {}
 
     void CubieCube222::setCP(uint16_t index) {
-        setNPerm(&this->cp, index, N_CORNER - 1);
+        setNPerm(&cp, index, N_CORNER - 1);
     }
 
     void CubieCube222::setCO(uint16_t index) {
-        setNTwist(&this->co, index, N_CORNER - 1);
+        setNTwist(&co, index, N_CORNER - 1);
     }
 
-    uint16_t CubieCube222::getCP() const {
-        return getNPerm(this->cp, N_CORNER - 1);
+    uint16_t CubieCube222::getCPIndex() const {
+        return getNPerm(cp, N_CORNER - 1);
     }
 
-    uint16_t CubieCube222::getCO() const {
-        return getNTwist(this->co, N_CORNER - 1);
+    uint16_t CubieCube222::getCOIndex() const {
+        return getNTwist(co, N_CORNER - 1);
     }
 
     void CubieCube222::move(uint16_t move) {
@@ -204,7 +204,7 @@ namespace cube_util {
                 c.setCP(i);
                 for (auto j = 0; j < N_MOVE; j++) {
                     cubeMult(c, getMoveCube(j), &d);
-                    ret[i][j] = d.getCP();
+                    ret[i][j] = d.getCPIndex();
                 }
             }
             return ret;
@@ -221,11 +221,16 @@ namespace cube_util {
                 c.setCO(i);
                 for (auto j = 0; j < N_MOVE; j++) {
                     cubeMult(c, getMoveCube(j), &d);
-                    ret[i][j] = d.getCO();
+                    ret[i][j] = d.getCOIndex();
                 }
             }
             return ret;
         }();
         return moveTable[twist][move];
+    }
+
+    bool CubieCube222::operator==(const CubieCube222 &that) const {
+        return getCPIndex() == that.getCPIndex() &&
+            getCOIndex() == that.getCOIndex();
     }
 }  // namespace cube_util

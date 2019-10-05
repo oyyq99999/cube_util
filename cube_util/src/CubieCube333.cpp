@@ -141,11 +141,11 @@ namespace cube_util {
         cubeMult(*this, getMoveCube(move), this);
     }
 
-    uint32_t CubieCube333::getEP() const {
+    uint32_t CubieCube333::getEPIndex() const {
         return getNPerm(ep, N_EDGE);
     }
 
-    uint16_t CubieCube333::getEO() const {
+    uint16_t CubieCube333::getEOIndex() const {
         return getNFlip(eo, N_EDGE);
     }
 
@@ -329,6 +329,13 @@ namespace cube_util {
             return ret;
         }();
         return moveCubeTable[move];
+    }
+
+    bool CubieCube333::operator==(const CubieCube333 &that) const {
+        return getCPIndex() == that.getCPIndex() &&
+            getCOIndex() == that.getCOIndex() &&
+            getEPIndex() == that.getEPIndex() &&
+            getEOIndex() == that.getEOIndex();
     }
 
 }  // namespace cube_util

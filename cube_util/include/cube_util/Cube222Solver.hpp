@@ -25,7 +25,7 @@ class Cube222Solver {
     int16_t solutionLength = -1;
 
     bool search(uint16_t perm, uint16_t twist, uint16_t moveCount,
-        int16_t lastAxis, uint16_t depth, bool saveSolution);
+        uint16_t lastAxis, uint16_t depth, bool saveSolution);
 
     void _solve(uint16_t minLength);
 

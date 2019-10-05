@@ -79,12 +79,12 @@ class CubieCube333: public CubieCubeNNN {
     /**
      * Calculate edge permutation index of current state.
      */
-    uint32_t getEP() const;
+    uint32_t getEPIndex() const;
 
     /**
      * Calculate edge orientation index of current state.
      */
-    uint16_t getEO() const;
+    uint16_t getEOIndex() const;
 
     string toString() const override;
 
@@ -107,7 +107,7 @@ class CubieCube333: public CubieCubeNNN {
 
     /**
      * Get a cube in random position.
-     * @returns a CubbieCube333 with random state
+     * @returns a CubieCube333 with random state
      */
     static CubieCube333 randomCube();
 
@@ -118,6 +118,13 @@ class CubieCube333: public CubieCubeNNN {
      * @returns the move cube
      */
     static CubieCube333 getMoveCube(uint16_t move);
+
+    /**
+     * Check if `this` is identical to `that`.
+     * @param that another CubieCube333
+     * @returns true if `this` is identical to `that`, false otherwise
+     */
+    bool operator==(const CubieCube333 &that) const;
 };
 }  // namespace cube_util
 

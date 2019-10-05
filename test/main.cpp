@@ -37,6 +37,7 @@ using cube_util::utils::getNTwist;
 using cube_util::utils::setNTwist;
 using cube_util::utils::cycle4;
 using cube_util::utils::scrambleString;
+using cube_util::utils::reverseMove;
 
 BOOST_AUTO_TEST_SUITE(cube_model)
 
@@ -70,12 +71,11 @@ BOOST_AUTO_TEST_CASE(test_cube222) {
     cc.move(Fx1);
     cc.move(Rx2);
     cc.move(Ux3);
-    BOOST_CHECK_EQUAL(ftc.getCP(), cc.getCP());
-    BOOST_CHECK_EQUAL(ftc.getCO(), cc.getCO());
+    BOOST_CHECK_EQUAL(ftc, cc);
 
     cc = CubieCube222();
     // test moves: U2 R U F U2 R2 U' F R'
-    auto moves = {Ux2, Rx1, Ux1, Fx1, Ux2, Rx2, Ux3, Fx1, Rx3};
+    vector<uint16_t> moves = {Ux2, Rx1, Ux1, Fx1, Ux2, Rx2, Ux3, Fx1, Rx3};
     for (auto move : moves) {
         cc.move(move);
     }
@@ -97,6 +97,16 @@ BOOST_AUTO_TEST_CASE(test_cube222) {
     BOOST_CHECK(!solver.isSolvableIn(8));
     BOOST_CHECK(solver.isSolvableIn(9));
     BOOST_CHECK(solver.isSolvableIn(11));
+
+    auto g = solver.generate();
+    auto gm = g->getMoves();
+    auto s = solver.solve();
+    auto sm = s->getMoves();
+    auto l = solver.getSolutionLength();
+    for (auto i = 0; i < l; i++) {
+        BOOST_CHECK_EQUAL(gm[i], moves[i]);
+        BOOST_CHECK_EQUAL(reverseMove(sm[l - i - 1]), moves[i]);
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

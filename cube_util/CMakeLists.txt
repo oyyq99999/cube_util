@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 3.8)
 
 project(cube_util VERSION 0.1.0 LANGUAGES CXX)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(CUBE_UTIL_SRC_FILES
   src/Utils.cpp
   src/FaceletCubeNNN.cpp

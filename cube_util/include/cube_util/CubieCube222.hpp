@@ -65,9 +65,9 @@ class CubieCube222: public CubieCubeNNN {
 
     void move(uint16_t move) override;  // NOLINT(build/include_what_you_use)
 
-    uint16_t getCP() const override;
+    uint16_t getCPIndex() const override;
 
-    uint16_t getCO() const override;
+    uint16_t getCOIndex() const override;
 
     string toString() const override;
 
@@ -82,7 +82,7 @@ class CubieCube222: public CubieCubeNNN {
 
     /**
      * Get a cube in random position.
-     * @returns a CubbieCube222 with random state
+     * @returns a CubieCube222 with random state
      */
     static CubieCube222 randomCube();
 
@@ -111,6 +111,13 @@ class CubieCube222: public CubieCubeNNN {
      * @returns new orientation coordinate
      */
     static uint16_t getTwistMove(uint16_t twist, uint16_t move);
+
+    /**
+     * Check if `this` is identical to `that`.
+     * @param that another CubieCube222
+     * @returns true if `this` is identical to `that`, false otherwise
+     */
+    bool operator==(const CubieCube222 &that) const;
 };
 }  // namespace cube_util
 

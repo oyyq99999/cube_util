@@ -61,12 +61,12 @@ class CubieCubeNNN {
     /**
      * Calculate corner permutation index of current state.
      */
-    virtual uint16_t getCP() const;
+    virtual uint16_t getCPIndex() const;
 
     /**
      * Calculate corner orientation index of current state.
      */
-    virtual uint16_t getCO() const;
+    virtual uint16_t getCOIndex() const;
 
     /**
      * Get a string representation of the cube state.

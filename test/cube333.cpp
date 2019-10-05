@@ -48,10 +48,7 @@ BOOST_AUTO_TEST_CASE(test_cube333) {
     cc.move(Rx2);
     cc.move(Fx1);
     cc.move(Lx2);
-    BOOST_CHECK_EQUAL(ftc.getCP(), cc.getCP());
-    BOOST_CHECK_EQUAL(ftc.getCO(), cc.getCO());
-    BOOST_CHECK_EQUAL(ftc.getEP(), cc.getEP());
-    BOOST_CHECK_EQUAL(ftc.getEO(), cc.getEO());
+    BOOST_CHECK_EQUAL(ftc, cc);
 
     cc = CubieCube333();
     // test moves: F' B U2 B R F U' F' U F' D2 B' L2 U2 R2 F L2 B L2
@@ -90,10 +87,8 @@ BOOST_AUTO_TEST_CASE(test_cube333) {
     cc.move(Dx2);
     cc.move(Lx3);
     cc.move(Bx2);
-    BOOST_CHECK_EQUAL(cc.getCP(), 13037);
-    BOOST_CHECK_EQUAL(cc.getCO(), 955);
-    BOOST_CHECK_EQUAL(cc.getEP(), 334956095U);
-    BOOST_CHECK_EQUAL(cc.getEO(), 1792);
+    auto expc = CubieCube333(13037, 955, 334956095U, 1792);
+    BOOST_CHECK_EQUAL(cc, expc);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

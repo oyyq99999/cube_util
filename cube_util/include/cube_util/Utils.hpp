@@ -13,7 +13,6 @@ namespace cube_util {
 /// Constants used in the project
 ////////////////////////////////////////////////////////////////////////////
 namespace constants {
-
     /** Max cube size limited to a reasonable number */
     const uint16_t MAX_SIZE = 33;
 
@@ -33,6 +32,9 @@ namespace constants {
     const uint16_t N_MOVE_PER_AXIS = 3;
     /** Possible move types for a fixed shift */
     const uint16_t N_MOVE_PER_SHIFT = N_MOVE_PER_AXIS * N_AXIS;
+
+    /** Non-existent axis */
+    const uint16_t INVALID_AXIS = 0xff;
 }  // namespace constants
 
 ////////////////////////////////////////////////////////////////////////////
@@ -200,7 +202,7 @@ namespace utils {
      * @returns index of the given permutation
      */
     template<size_t SIZE>
-    uint64_t getNPerm(array<uint16_t, SIZE> arr, uint16_t n) {
+    uint64_t getNPerm(const array<uint16_t, SIZE> &arr, uint16_t n) {
         uint64_t index = 0UL;
         uint64_t val = 0xFEDCBA9876543210UL;
         for (auto i = 0; i < n - 1; i++) {
@@ -242,7 +244,7 @@ namespace utils {
      * @returns index of the given orientation
      */
     template<size_t SIZE>
-    uint16_t getNTwist(array<uint16_t, SIZE> arr, uint16_t n) {
+    uint16_t getNTwist(const array<uint16_t, SIZE> &arr, uint16_t n) {
         uint16_t index = 0;
         for (auto i = 0; i < n - 1; i++) {
             index *= 3;
@@ -275,7 +277,7 @@ namespace utils {
      * @returns index of the given orientation
      */
     template<size_t SIZE>
-    uint16_t getNFlip(array<uint16_t, SIZE> arr, uint16_t n) {
+    uint16_t getNFlip(const array<uint16_t, SIZE> &arr, uint16_t n) {
         uint16_t index = 0;
         for (auto i = 0; i < n - 1; i++) {
             index <<= 1;
@@ -328,7 +330,7 @@ namespace utils {
      * @returns the pruning value
      */
     template<size_t SIZE>
-    uint16_t getPruning(array<uint16_t, SIZE> arr, uint32_t index) {
+    uint16_t getPruning(const array<uint16_t, SIZE> &arr, uint32_t index) {
         auto i = index >> 2;
         auto shift = (index & 0x3) << 2;
         return (arr[i] >> shift) & 0xf;
