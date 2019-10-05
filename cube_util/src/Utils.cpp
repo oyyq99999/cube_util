@@ -1,6 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
 #include<cube_util/Utils.hpp>
 #include<random>
+#include<array>
 #include<boost/algorithm/string/trim.hpp>
 #include<cube_util/Scrambler222.hpp>
 
@@ -12,11 +13,28 @@ namespace utils {
     using std::default_random_engine;
     using std::uniform_int_distribution;
     using std::to_string;
+    using std::array;
 
     using boost::trim;
 
+    using constants::N_CHOOSE_MAX;
     using constants::N_MOVE_PER_AXIS;
     using constants::N_MOVE_PER_SHIFT;
+
+    uint32_t choose(uint16_t n, uint16_t k) {
+        static const auto cnk = [] {
+            auto ret =
+                array<array<uint32_t, N_CHOOSE_MAX + 1>, N_CHOOSE_MAX + 1>();
+            for (auto i = 0; i <= N_CHOOSE_MAX; i++) {
+                ret[i][0] = ret[i][i] = 1;
+                for (auto j = 1; j < i; j++) {
+                    ret[i][j] = ret[i - 1][j - 1] + ret[i - 1][j];
+                }
+            }
+            return ret;
+        }();
+        return cnk[n][k];
+    }
 
     bool getNParity(uint64_t index, uint16_t n) {
         uint16_t p = 0;

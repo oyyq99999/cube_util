@@ -44,6 +44,23 @@ class CubieCube333: public CubieCubeNNN {
     void setEO(uint16_t index);
 
     /**
+     * Set first 8 edge permutation state according to given index.
+     * @param index specified index
+     */
+    void setUD8EP(uint16_t index);
+
+    /**
+     * Set E-slice edge permutation state according to given index.
+     * @param index specified index
+     */
+    void setSliceEP(uint16_t index);
+
+    /**
+     * Set E-slice edges positions according to given index.
+     */
+    void setSlicePosition(uint16_t index);
+
+    /**
      * Calculate product (_one_ * _another_) of two cubes.
      * @param[in] one the first cube
      * @param[in] another the second cube
@@ -86,6 +103,21 @@ class CubieCube333: public CubieCubeNNN {
      */
     uint16_t getEOIndex() const;
 
+    /**
+     * Calculate first 8 edge permutation index of current state.
+     */
+    uint16_t getUD8EPIndex() const;
+
+    /**
+     * Calculate E-slice edges positions combination index of current state.
+     */
+    uint16_t getSlicePositionIndex() const;
+
+    /**
+     * Calculate E-slice edges positions index of current state.
+     */
+    uint16_t getSliceEPIndex() const;
+
     string toString() const override;
 
     FaceletCubeNNN toFaceletCube() override;
@@ -112,12 +144,73 @@ class CubieCube333: public CubieCubeNNN {
     static CubieCube333 randomCube();
 
     /**
+     * Get a cube with phase1 solved in random position.
+     * @returns a random CubieCube333 with phase1 solved
+     */
+    static CubieCube333 randomDRCube();
+
+    /**
      * Get a new CubieCube333 model with specified move applied to
      * an identity cube. This is used to calculate new cube states.
      * @param move the move applied
      * @returns the move cube
      */
     static CubieCube333 getMoveCube(uint16_t move);
+
+    /**
+     * Get new twist coordinate by applying a move to
+     * specified twist coordinate.
+     * @param twist the original twist coordinate
+     * @param move the move to apply
+     * @returns new twist coordinate
+     */
+    static uint16_t getTwistMove(uint16_t twist, uint16_t move);
+
+    /**
+     * Get new flip coordinate by applying a move to
+     * specified flip coordinate.
+     * @param flip the original flip coordinate
+     * @param move the move to apply
+     * @returns new flip coordinate
+     */
+    static uint16_t getFlipMove(uint16_t flip, uint16_t move);
+
+    /**
+     * Get new E-slice edges positions coordinate by applying a move to
+     * specified original coordinate.
+     * @param slicePositionIndex the original E-slice edges positions coordinate
+     * @param move the move to apply
+     * @returns new E-slice edges positions coordinate
+     */
+    static uint16_t
+    getSlicePositionMove(uint16_t slicePositionIndex, uint16_t move);
+
+    /**
+     * Get new UD 8 edges positions coordinate by applying a move to
+     * specified original coordinate.
+     * @param ud8EP the original UD 8 edges positions coordinate
+     * @param index the index of phase2 move to apply
+     * @returns new UD 8 edges positions coordinate
+     */
+    static uint16_t getUD8EPMove(uint16_t ud8EP, uint16_t index);
+
+    /**
+     * Get new corner permutation coordinate by applying a move to
+     * specified corner permutation coordinate.
+     * @param cp the original corner permutation coordinate
+     * @param index the index of phase2 move to apply
+     * @returns new corner permutation coordinate
+     */
+    static uint16_t getCPMove(uint16_t cp, uint16_t index);
+
+    /**
+     * Get new slice edge permutation coordinate by applying a move to
+     * specified slice edge permutation coordinate.
+     * @param sliceEP the original slice edge permutation coordinate
+     * @param index the index of phase2 move to apply
+     * @returns new slice edge permutation coordinate
+     */
+    static uint16_t getSliceEPMove(uint16_t sliceEP, uint16_t index);
 
     /**
      * Check if `this` is identical to `that`.

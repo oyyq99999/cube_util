@@ -17,6 +17,7 @@ set(CUBE_UTIL_SRC_FILES
   src/CubieCube222.cpp
   src/Cube222Solver.cpp
   src/CubieCube333.cpp
+  src/Cube333Solver.cpp
   src/Scrambler.cpp
   src/Scrambler222.cpp
   src/MoveSequence.cpp

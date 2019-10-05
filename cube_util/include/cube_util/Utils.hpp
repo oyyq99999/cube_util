@@ -33,6 +33,9 @@ namespace constants {
     /** Possible move types for a fixed shift */
     const uint16_t N_MOVE_PER_SHIFT = N_MOVE_PER_AXIS * N_AXIS;
 
+    /** Max choose range */
+    const uint16_t N_CHOOSE_MAX = 24;
+
     /** Non-existent axis */
     const uint16_t INVALID_AXIS = 0xff;
 }  // namespace constants
@@ -112,6 +115,17 @@ namespace cube222 {
 ////////////////////////////////////////////////////////////////////////////
 namespace cube333 {
 
+    using enums::Moves::Ux1;
+    using enums::Moves::Ux2;
+    using enums::Moves::Ux3;
+    using enums::Moves::Rx2;
+    using enums::Moves::Fx2;
+    using enums::Moves::Dx1;
+    using enums::Moves::Dx2;
+    using enums::Moves::Dx3;
+    using enums::Moves::Lx2;
+    using enums::Moves::Bx2;
+
     /** Type of moves for a 3x3x3 cube */
     const uint16_t N_MOVE = 18;
     /** Total orientations count of first 7 corners of a 3x3x3 cube. */
@@ -122,14 +136,43 @@ namespace cube333 {
     const uint16_t N_EDGE_FLIP = 2048;  // 2 ^ 11
     /** Total permutations count of edges of a 3x3x3 cube. */
     const uint32_t N_EDGE_PERM = 479001600;  // 12!
+    /** Total permutations count of UD 8 edges of a 3x3x3 cube. */
+    const uint16_t N_UD8EDGE_PERM = 40320;  // 8!
+    /** Total E-slice edges positions count of a 3x3x3 cube. */
+    const uint16_t N_SLICE_POSITION = 495;  // C(12, 4)
+    /** Total permutations count of E-slice edges of a 3x3x3 cube. */
+    const uint16_t N_SLICE_EDGE_PERM = 24;  // 4!
 
     /** Number of edges in a 3x3x3 cube */
     const uint16_t N_EDGE = 12;
 
     /** Corner permutation index of solved state */
-    const uint16_t SOLVED_CORNER_PERM = 0;
+    const uint16_t SOLVED_CP = 0;
     /** Corner orientation index of solved state */
-    const uint16_t SOLVED_CORNER_TWIST = 0;
+    const uint16_t SOLVED_TWIST = 0;
+    /** Edge permutation index of solved state */
+    const uint32_t SOLVED_EP = 0;
+    /** Edge orientation index of solved state */
+    const uint16_t SOLVED_FLIP = 0;
+    /** E-slice edges choose index of solved state */
+    const uint16_t SOLVED_SLICE_POSITION = 494;  // C(12, 4) - 1;
+    /** UD 8 Edge permutation index of solved state */
+    const uint32_t SOLVED_UD8_EP = 0;
+    /** E-slice edges permutation index of solved state */
+    const uint16_t SOLVED_SLICE_EP = 0;
+    /** Max solution length for first phase of the two-phase algorithm. */
+    const uint16_t N_MAX_PHASE1_LENGTH = 20;
+    /** Max solution length for second phase of the two-phase algorithm. */
+    const uint16_t N_MAX_PHASE2_LENGTH = 18;
+    /** Max solution length for two-phase algorithm. */
+    const uint16_t N_MAX_LENGTH = 30;
+    /** Max solution length to check if a cube is solvable. */
+    const uint16_t N_MAX_CHECK_LENGTH = 11;
+    /** Different move types for phase 2 */
+    const uint16_t N_PHASE2_MOVE_COUNT = 10;
+    /** Possible moves in phase 2 */
+    const uint16_t PHASE2_MOVE[] = {Ux1, Ux2, Ux3, Rx2, Fx2,
+        Dx1, Dx2, Dx3, Lx2, Bx2};
 
     /** Number of stickers on a face */
     const uint16_t FACELET_PER_FACE = 9;
@@ -334,6 +377,61 @@ namespace utils {
         auto i = index >> 2;
         auto shift = (index & 0x3) << 2;
         return (arr[i] >> shift) & 0xf;
+    }
+
+    /**
+     * Get choose value for no more than constants::N_CHOOSE_MAX elements.
+     * @param n total element number
+     * @param k how many to choose
+     * @return choose value
+     */
+    uint32_t choose(uint16_t n, uint16_t k);
+
+    /**
+     * Calculate combination index of 4 elements position choose
+     * out of n in an array.
+     * @param arr array to calculate
+     * @param n number of array elements
+     * @param mask first element in the array, must be multiple of 4
+     * @returns index order of the combination
+     */
+    template<size_t SIZE>
+    uint16_t getNComb4(const array<uint16_t, SIZE> &arr, uint16_t n,
+        uint16_t mask) {
+        auto end = n - 1;
+        auto index = 0, r = 4;
+        for (auto i = end; i >= 0; i--) {
+            auto v = arr[i];
+            if ((v & 0xc) == mask) {
+                index += choose(i, r--);
+            }
+        }
+        return index;
+    }
+
+    /**
+     * Set choose of 4 elements out of n in an array based on combination index.
+     * @param[out] arr array to set
+     * @param index order of the combination
+     * @param n number of array elements
+     * @param mask first element in the array, must be multiple of 4
+     */
+    template<size_t SIZE>
+    void setNComb4(array<uint16_t, SIZE> *arr, uint16_t index, uint16_t n,
+        uint16_t mask) {
+        auto end = n - 1;
+        auto r = 4, fill = end;
+        for (auto i = end; i >= 0; i--) {
+            if (index >= choose(i, r)) {
+                index -= choose(i, r--);
+                (*arr)[i] = r | mask;
+            } else {
+                if ((fill & 0xc) == mask) {
+                    fill -= 4;
+                }
+                (*arr)[i] = fill--;
+            }
+        }
     }
 
     /**
