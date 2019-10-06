@@ -12,11 +12,11 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(CUBE_UTIL_SRC_FILES
   src/Utils.cpp
-  src/FaceletCubeNNN.cpp
-  src/CubieCubeNNN.cpp
-  src/CubieCube222.cpp
+  src/puzzle/FaceletCubeNNN.cpp
+  src/puzzle/CubieCubeNNN.cpp
+  src/puzzle/CubieCube222.cpp
+  src/puzzle/CubieCube333.cpp
   src/Cube222Solver.cpp
-  src/CubieCube333.cpp
   src/Cube333Solver.cpp
   src/Scrambler.cpp
   src/Scrambler222.cpp
@@ -27,7 +27,9 @@ set(CUBE_UTIL_SRC_FILES
 set(Boost_NO_BOOST_CMAKE ON)
 find_package(Boost REQUIRED regex)
 
-add_library(cube_util ${CUBE_UTIL_SRC_FILES})
+set(libraryName cube_util)
+
+add_library(${libraryName} ${CUBE_UTIL_SRC_FILES})
 target_include_directories(cube_util
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -35,8 +37,8 @@ target_include_directories(cube_util
   PRIVATE
     src
  )
-target_compile_features(cube_util PUBLIC cxx_std_14)
-target_link_libraries(cube_util PRIVATE Boost::regex)
+target_compile_features(${libraryName} PUBLIC cxx_std_14)
+target_link_libraries(${libraryName} PRIVATE Boost::regex)
 
 find_program(_cpplint cpplint)
 if (_cpplint)
@@ -45,17 +47,17 @@ if (_cpplint)
     src/*.hpp
     src/*.cpp
   )
-  add_custom_command(TARGET cube_util
+  add_custom_command(TARGET ${libraryName}
     PRE_BUILD COMMAND ${_cpplint} --quiet ${LINT_SRC_FILES}
-    COMMENT "linting code")
+    COMMENT "linting code for ${libraryName}")
 endif()
 
 find_program(_doxygen doxygen)
 if (_doxygen)
-  add_custom_command(TARGET cube_util
+  add_custom_command(TARGET ${libraryName}
     POST_BUILD COMMAND ${_doxygen} > /dev/null
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "generating documents")
 endif()
 
-export(TARGETS cube_util FILE CubeUtil.cmake)
+export(TARGETS ${libraryName} FILE CubeUtil.cmake)

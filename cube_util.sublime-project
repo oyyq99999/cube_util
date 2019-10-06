@@ -1,19 +1,25 @@
 {
+	"build_systems":
+	[
+		{
+			"auto_close": false,
+			"cmd":
+			[
+				"bash",
+				"-l",
+				"-c",
+				"make && make CTEST_OUTPUT_ON_FAILURE=1 test"
+			],
+			"name": "Run tests",
+			"panel_name": "cube_util_test",
+			"target": "terminus_open",
+			"working_dir": "${project_path}/build"
+		}
+	],
 	"folders":
 	[
 		{
 			"path": "."
-		}
-	],
-	"build_systems":
-	[
-		{
-			"name": "Run tests",
-			"working_dir": "${project_path}/build",
-			"cmd": ["bash", "-l", "-c", "make && make CTEST_OUTPUT_ON_FAILURE=1 test"],
-			"panel_name": "cube_util_test",
-			"target": "terminus_open",
-			"auto_close": false,
 		}
 	]
 }

@@ -3,7 +3,8 @@
 
 namespace cube_util {
 
-    Scrambler::Scrambler(bool wcaCheck) {
-        this->wcaCheck = wcaCheck;
-    }
+Scrambler::Scrambler(bool wcaCheck) {
+  this->wcaCheck = wcaCheck;
+}
+
 }
