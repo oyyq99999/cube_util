@@ -6,7 +6,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
@@ -25,7 +25,16 @@ set(CUBE_UTIL_SRC_FILES
 )
 
 set(Boost_NO_BOOST_CMAKE ON)
-find_package(Boost REQUIRED regex)
+if(IOS)
+  set(Boost_USE_STATIC_LIBS ON)
+  if(IOS_BOOST_PREFIX)
+    find_host_package(Boost REQUIRED regex PATHS ${IOS_BOOST_PREFIX} NO_DEFAULT_PATH)
+  else()
+    find_host_package(Boost REQUIRED regex)
+  endif()
+else()
+  find_package(Boost REQUIRED regex)
+endif()
 
 set(libraryName cube_util)
 
@@ -40,6 +49,9 @@ target_include_directories(cube_util
 target_compile_features(${libraryName} PUBLIC cxx_std_14)
 target_link_libraries(${libraryName} PRIVATE Boost::regex)
 
+if(NOT CPPLINT_ROOT)
+  set(CPPLINT_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
+endif()
 find_program(_cpplint cpplint)
 if (_cpplint)
   file(GLOB_RECURSE LINT_SRC_FILES
@@ -48,7 +60,7 @@ if (_cpplint)
     src/*.cpp
   )
   add_custom_command(TARGET ${libraryName}
-    PRE_BUILD COMMAND ${_cpplint} --quiet ${LINT_SRC_FILES}
+    PRE_BUILD COMMAND ${_cpplint} --quiet --root=${CPPLINT_ROOT} ${LINT_SRC_FILES}
     COMMENT "linting code for ${libraryName}")
 endif()
 
