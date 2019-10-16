@@ -7,6 +7,7 @@
 #include<boost/algorithm/string/trim.hpp>
 
 #include<cube_util/Scrambler222.hpp>
+#include<cube_util/Scrambler333.hpp>
 
 namespace cube_util {
 
@@ -57,10 +58,15 @@ function<int64_t()> randomizer(int64_t start, int64_t end) {
 
 string scrambleString(int cubeSize, int length) {
   using cube222::N_MAX_LENGTH;
+  using cube333::N_MAX_PHASE1_LENGTH;
 
   if (cubeSize == 2) {
     length = length > N_MAX_LENGTH ? N_MAX_LENGTH : length;
     return Scrambler222(length).scramble()->toString();
+  }
+  if (cubeSize == 3) {
+    length = length < N_MAX_PHASE1_LENGTH ? N_MAX_PHASE1_LENGTH : length;
+    return Scrambler333(length).scramble()->toString();
   }
   string scr;
   int count = 0;
@@ -90,7 +96,7 @@ string scrambleString(int cubeSize) {
     return scrambleString(2, cube222::N_MAX_LENGTH);
   }
   if (cubeSize == 3) {
-    return scrambleString(3, 25);
+    return scrambleString(3, 21);
   }
   return scrambleString(cubeSize, (cubeSize - 2) * 20);
 }

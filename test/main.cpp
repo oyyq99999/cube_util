@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(test_getSetNTwist) {
 
 BOOST_AUTO_TEST_CASE(test_scramble) {
   auto re2 = regex("^[URF][2']?( [URF][2']?){10}$");
-  auto re3 = regex("^[URFDLB][2']?( [URFDLB][2']?){24}$");
+  auto re3 = regex("^[URFDLB][2']?( [URFDLB][2']?){1,20}$");
   auto re4 = regex("^([URF]w?|[DLB])[2']?( ([URF]w?|[DLB])[2']?){39}$");
   auto re5 = regex("^[URFDLB]w?[2']?( ([URFDLB]w?[2']?)){59}$");
   auto re6 = regex(

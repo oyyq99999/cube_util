@@ -20,6 +20,7 @@ set(CUBE_UTIL_SRC_FILES
   src/Cube333Solver.cpp
   src/Scrambler.cpp
   src/Scrambler222.cpp
+  src/Scrambler333.cpp
   src/MoveSequence.cpp
   src/MoveSequenceNNN.cpp
 )
