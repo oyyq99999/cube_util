@@ -1,9 +1,9 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER333_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER333_HPP_
-#include<memory>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_333_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_333_HPP_
+#include <memory>
 
-#include<cube_util/Scrambler.hpp>
+#include "cube_util/scrambler.hpp"
 
 namespace cube_util {
 
@@ -28,9 +28,9 @@ class Scrambler333 : public Scrambler {
  private:
   /// Upper limit of the scramble sequence length, which is useful
   /// for bigger cubes
-  uint16_t maxScrambleLength = 21;
+  uint16_t max_scramble_length_ = 21;
 };
 
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER333_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_333_HPP_

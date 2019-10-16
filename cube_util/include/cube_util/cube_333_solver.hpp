@@ -1,16 +1,16 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE333SOLVER_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE333SOLVER_HPP_
-#include<memory>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_333_SOLVER_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_333_SOLVER_HPP_
+#include <memory>
 
-#include<cube_util/puzzle/CubieCube333.hpp>
-#include<cube_util/MoveSequence.hpp>
+#include "cube_util/puzzle/cubie_cube_333.hpp"
+#include "cube_util/move_sequence.hpp"
 
 namespace cube_util {
 
 using std::unique_ptr;
 
-using cube333::N_MAX_LENGTH;
+using cube333::kMaxLength;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// A 3x3x3 cube solver utilizing the two phase algorithm introduced by
@@ -18,16 +18,16 @@ using cube333::N_MAX_LENGTH;
 ////////////////////////////////////////////////////////////////////////////////
 class Cube333Solver {
   /** The cube to solve */
-  CubieCube333 cc;
+  CubieCube333 cc_;
 
   /** Array storing solution move sequences */
-  array<uint16_t, N_MAX_LENGTH> solution;
+  array<uint16_t, kMaxLength> solution_;
 
   /** Length of the solution */
-  int16_t solutionLength = -1;
+  int16_t solution_length_ = -1;
 
   /** Length of phase 1 of the solution */
-  int16_t phase1Length = -1;
+  int16_t phase1_length_ = -1;
 
   bool _solve(uint16_t maxLength);
 
@@ -60,14 +60,14 @@ class Cube333Solver {
    * @param maxLength maximal length of the solution
    * @returns a pointer to sequence to solve the cube
    */
-  unique_ptr<MoveSequence> solve(uint16_t maxLength = N_MAX_LENGTH);
+  unique_ptr<MoveSequence> solve(uint16_t maxLength = kMaxLength);
 
   /**
    * Get generator sequence of at most `maxLength` moves for the cube.
    * @param maxLength maximal length of the generator
    * @returns a pointer to sequence to generate the cube state
    */
-  unique_ptr<MoveSequence> generate(uint16_t maxLength = N_MAX_LENGTH);
+  unique_ptr<MoveSequence> generate(uint16_t maxLength = kMaxLength);
 
   /**
    * Check whether the cube is solvable within given length.
@@ -112,4 +112,4 @@ class Cube333Solver {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE333SOLVER_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_333_SOLVER_HPP_

@@ -1,13 +1,13 @@
 // Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE cube_util
-#include<boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include<boost/regex.hpp>
+#include <boost/regex.hpp>
 
-#include<cube_util/puzzle/CubieCube222.hpp>
-#include<cube_util/puzzle/FaceletCubeNNN.hpp>
-#include<cube_util/Cube222Solver.hpp>
-#include<cube_util/Utils.hpp>
+#include "cube_util/puzzle/cubie_cube_222.hpp"
+#include "cube_util/puzzle/facelet_cube_nnn.hpp"
+#include "cube_util/cube_222_solver.hpp"
+#include "cube_util/utils.hpp"
 
 using std::vector;
 using std::array;

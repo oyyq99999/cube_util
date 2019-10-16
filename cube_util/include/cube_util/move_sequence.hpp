@@ -1,9 +1,9 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_
-#include<iostream>
-#include<string>
-#include<vector>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_HPP_
+#include <iostream>
+#include <string>
+#include <vector>
 
 namespace cube_util {
 
@@ -23,10 +23,10 @@ class MoveSequence {
 
  protected:
   /** Move sequence in numbers */
-  vector<uint16_t> sequence;
+  vector<uint16_t> sequence_;
 
   /** Move Sequence length */
-  uint16_t length;
+  uint16_t length_;
 
   /**
    * Constructor of the class.
@@ -57,4 +57,4 @@ class MoveSequence {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCE_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_HPP_

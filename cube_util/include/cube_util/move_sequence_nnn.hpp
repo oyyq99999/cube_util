@@ -1,10 +1,10 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCENNN_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCENNN_HPP_
-#include<string>
-#include<vector>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_NNN_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_NNN_HPP_
+#include <string>
+#include <vector>
 
-#include<cube_util/MoveSequence.hpp>
+#include "cube_util/move_sequence.hpp"
 
 namespace cube_util {
 
@@ -13,7 +13,7 @@ namespace cube_util {
 ////////////////////////////////////////////////////////////////////////////////
 class MoveSequenceNNN : public MoveSequence {
   /** The cube size */
-  uint16_t size;
+  uint16_t size_;
 
  public:
   /**
@@ -41,4 +41,4 @@ class MoveSequenceNNN : public MoveSequence {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVESEQUENCENNN_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_MOVE_SEQUENCE_NNN_HPP_

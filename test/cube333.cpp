@@ -1,9 +1,9 @@
 // Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE cube333
-#include<boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include<cube_util/puzzle/CubieCube333.hpp>
-#include<cube_util/Cube333Solver.hpp>
+#include "cube_util/puzzle/cubie_cube_333.hpp"
+#include "cube_util/cube_333_solver.hpp"
 
 using cube_util::FaceletCubeNNN;
 using cube_util::CubieCube333;
@@ -28,8 +28,8 @@ using cube_util::enums::Moves::Bx1;
 using cube_util::enums::Moves::Bx2;
 using cube_util::enums::Moves::Bx3;
 
-using cube_util::cube333::N_PHASE2_MOVE_COUNT;
-using cube_util::cube333::PHASE2_MOVE;
+using cube_util::cube333::kPhase2MoveCount;
+using cube_util::cube333::kPhase2Move;
 
 BOOST_AUTO_TEST_SUITE(cube333)
 
@@ -104,9 +104,9 @@ BOOST_AUTO_TEST_CASE(test_333_phase2_move_tables) {
     auto cp1 = cc1.getCPIndex();
     auto ud8EP1 = cc1.getUD8EPIndex();
     auto sliceEP1 = cc1.getSliceEPIndex();
-    for (auto j = 0; j < N_PHASE2_MOVE_COUNT; j++) {
+    for (auto j = 0; j < kPhase2MoveCount; j++) {
       auto cc2 = CubieCube333(cc1);
-      cc2.move(PHASE2_MOVE[j]);
+      cc2.move(kPhase2Move[j]);
       BOOST_CHECK_EQUAL(CubieCube333::getCPMove(cp1, j), cc2.getCPIndex());
       BOOST_CHECK_EQUAL(CubieCube333::getUD8EPMove(ud8EP1, j),
                         cc2.getUD8EPIndex());

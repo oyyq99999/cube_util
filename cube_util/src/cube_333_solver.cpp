@@ -1,7 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/Cube333Solver.hpp>
+#include "cube_util/cube_333_solver.hpp"
 
-#include<cube_util/MoveSequenceNNN.hpp>
+#include "cube_util/move_sequence_nnn.hpp"
 
 namespace cube_util {
 
@@ -13,38 +13,38 @@ using std::to_string;
 using std::invalid_argument;
 using std::runtime_error;
 
-using cube333::N_MAX_PHASE1_LENGTH;
-using cube333::N_MAX_PHASE2_LENGTH;
-using cube333::N_MAX_CHECK_LENGTH;
-using cube333::N_EDGE_FLIP;
-using cube333::N_CORNER_TWIST;
-using cube333::N_SLICE_POSITION;
-using cube333::N_CORNER_PERM;
-using cube333::N_SLICE_EDGE_PERM;
-using cube333::N_UD8EDGE_PERM;
-using cube333::SOLVED_CP;
-using cube333::SOLVED_FLIP;
-using cube333::SOLVED_SLICE_POSITION;
-using cube333::SOLVED_TWIST;
-using cube333::SOLVED_UD8_EP;
-using cube333::SOLVED_SLICE_EP;
-using cube333::N_PHASE2_MOVE_COUNT;
-using cube333::PHASE2_MOVE;
+using cube333::kMaxPhase1Length;
+using cube333::kMaxPhase2Length;
+using cube333::kMaxCheckLength;
+using cube333::kNEdgeFlip;
+using cube333::kNCornerTwist;
+using cube333::kNSlicePosition;
+using cube333::kNCornerPerm;
+using cube333::kNSliceEdgePerm;
+using cube333::kNUd8EdgePerm;
+using cube333::kSolvedCp;
+using cube333::kSolvedFlip;
+using cube333::kSolvedSlicePosition;
+using cube333::kSolvedTwist;
+using cube333::kSolvedUd8Ep;
+using cube333::kSolvedSliceEp;
+using cube333::kPhase2MoveCount;
+using cube333::kPhase2Move;
 
-using constants::N_AXIS;
-using constants::N_MOVE_PER_AXIS;
-using constants::INVALID_AXIS;
+using constants::kNAxis;
+using constants::kMovePerAxis;
+using constants::kInvalidAxis;
 
 using utils::setPruning;
 using utils::getPruning;
 using utils::reverseMove;
 
 Cube333Solver::Cube333Solver(const CubieCube333 &c) {
-  cc = c;
+  cc_ = c;
 }
 
 int16_t Cube333Solver::getSolutionLength() const {
-  return solutionLength;
+  return solution_length_;
 }
 
 /**
@@ -55,19 +55,19 @@ int16_t Cube333Solver::getSolutionLength() const {
  */
 bool Cube333Solver::_solve(uint16_t maxLength) {
   // already solved and fulfills requirement
-  if (solutionLength >= 0 && solutionLength <= maxLength) {
+  if (solution_length_ >= 0 && solution_length_ <= maxLength) {
     return true;
   }
 
-  phase1Length = -1;
-  solutionLength = -1;
-  auto co = cc.getCOIndex();
-  auto eo = cc.getEOIndex();
-  auto slice = cc.getSlicePositionIndex();
+  phase1_length_ = -1;
+  solution_length_ = -1;
+  auto co = cc_.getCOIndex();
+  auto eo = cc_.getEOIndex();
+  auto slice = cc_.getSlicePositionIndex();
 
-  auto upperBound = min(maxLength, N_MAX_PHASE1_LENGTH);
+  auto upperBound = min(maxLength, kMaxPhase1Length);
   for (auto i = 0; i <= upperBound; i++) {
-    if (phase1(co, eo, slice, i, INVALID_AXIS, 0, maxLength)) {
+    if (phase1(co, eo, slice, i, kInvalidAxis, 0, maxLength)) {
       return true;
     }
   }
@@ -90,26 +90,26 @@ bool Cube333Solver::phase1(uint16_t co, uint16_t eo, uint16_t slice,
                            uint16_t moveCount, uint16_t lastAxis,
                            uint16_t depth, uint16_t maxLength, bool checkOnly) {
   if (moveCount == 0) {
-    if (co == SOLVED_CP && eo == SOLVED_FLIP &&
-        slice == SOLVED_SLICE_POSITION) {
+    if (co == kSolvedCp && eo == kSolvedFlip &&
+        slice == kSolvedSlicePosition) {
       if (checkOnly) {
-        auto c = CubieCube333(cc);
+        auto c = CubieCube333(cc_);
         for (auto i = 0; i < depth; i++) {
-          c.move(solution[i]);
+          c.move(solution_[i]);
         }
         return c == CubieCube333();
       }
       // phase1 solved
-      phase1Length = depth;
+      phase1_length_ = depth;
       return initPhase2(lastAxis, depth, maxLength);
     }
     return false;
   }
-  for (auto axis = 0; axis < N_AXIS; axis++) {
+  for (auto axis = 0; axis < kNAxis; axis++) {
     // we assume URF always show before DLB respectively
     if (axis != lastAxis && axis + 3 != lastAxis) {
-      for (auto power = 0; power < N_MOVE_PER_AXIS; power++) {
-        auto move = axis * N_MOVE_PER_AXIS + power;
+      for (auto power = 0; power < kMovePerAxis; power++) {
+        auto move = axis * kMovePerAxis + power;
 
         auto newCO = CubieCube333::getTwistMove(co, move);
         auto newEO = CubieCube333::getFlipMove(eo, move);
@@ -128,7 +128,7 @@ bool Cube333Solver::phase1(uint16_t co, uint16_t eo, uint16_t slice,
           continue;
         }
 
-        solution[depth] = move;
+        solution_[depth] = move;
         if (phase1(newCO, newEO, newSlice, moveCount - 1, axis, depth + 1,
                    maxLength, checkOnly)) {
           return true;
@@ -149,9 +149,9 @@ bool Cube333Solver::phase1(uint16_t co, uint16_t eo, uint16_t slice,
  */
 bool Cube333Solver::initPhase2(uint16_t lastAxis, uint16_t depth,
                                uint16_t maxLength) {
-  auto c = CubieCube333(cc);
+  auto c = CubieCube333(cc_);
   for (auto i = 0; i < depth; i++) {
-    c.move(solution[i]);
+    c.move(solution_[i]);
   }
 
   auto cp = c.getCPIndex();
@@ -161,11 +161,11 @@ bool Cube333Solver::initPhase2(uint16_t lastAxis, uint16_t depth,
   // we wouldn't try any phase1 ends with phase2 moves unless
   // it's already totally solved
   if (depth > 0) {
-    auto lastMove = solution[depth - 1];
-    for (auto i = 0; i < N_PHASE2_MOVE_COUNT; i++) {
-      if (lastMove == PHASE2_MOVE[i]) {
-        if (cp != SOLVED_CP || ud8EP != SOLVED_UD8_EP ||
-            sliceEP != SOLVED_SLICE_EP) {
+    auto lastMove = solution_[depth - 1];
+    for (auto i = 0; i < kPhase2MoveCount; i++) {
+      if (lastMove == kPhase2Move[i]) {
+        if (cp != kSolvedCp || ud8EP != kSolvedUd8Ep ||
+            sliceEP != kSolvedSliceEp) {
           return false;
         }
         break;
@@ -173,7 +173,7 @@ bool Cube333Solver::initPhase2(uint16_t lastAxis, uint16_t depth,
     }
   }
 
-  auto upperBound = min(uint16_t(maxLength - depth), N_MAX_PHASE2_LENGTH);
+  auto upperBound = min(uint16_t(maxLength - depth), kMaxPhase2Length);
   for (auto i = 0; i <= upperBound; i++) {
     if (phase2(cp, ud8EP, sliceEP, i, lastAxis, depth)) {
       return true;
@@ -196,16 +196,15 @@ bool Cube333Solver::phase2(
     uint16_t cp, uint16_t ud8EP, uint16_t sliceEP,
     uint16_t moveCount, uint16_t lastAxis, uint16_t depth) {
   if (moveCount == 0) {
-    if (cp == SOLVED_CP && ud8EP == SOLVED_UD8_EP &&
-        sliceEP == SOLVED_SLICE_EP) {
-      solutionLength = depth;
+    if (cp == kSolvedCp && ud8EP == kSolvedUd8Ep && sliceEP == kSolvedSliceEp) {
+      solution_length_ = depth;
       return true;
     }
     return false;
   }
-  for (auto i = 0; i < N_PHASE2_MOVE_COUNT; i++) {
-    auto move = PHASE2_MOVE[i];
-    auto axis = move / N_MOVE_PER_AXIS;
+  for (auto i = 0; i < kPhase2MoveCount; i++) {
+    auto move = kPhase2Move[i];
+    auto axis = move / kMovePerAxis;
     // we assume URF always show before DLB respectively
     if (axis != lastAxis && axis + 3 != lastAxis) {
       auto newCP = CubieCube333::getCPMove(cp, i);
@@ -222,7 +221,7 @@ bool Cube333Solver::phase2(
         continue;
       }
 
-      solution[depth] = move;
+      solution_[depth] = move;
       if (phase2(newCP, newUD8EP, newSliceEP, moveCount - 1, axis, depth + 1)) {
         return true;
       }
@@ -232,45 +231,44 @@ bool Cube333Solver::phase2(
 }
 
 unique_ptr<MoveSequence> Cube333Solver::solve(uint16_t maxLength) {
-  if (!this->_solve(maxLength)) {
+  if (!_solve(maxLength)) {
     throw runtime_error("not solved!");
   }
   vector<uint16_t> moves;
-  for (auto i = 0; i < this->solutionLength; i++) {
-    moves.push_back(solution[i]);
+  for (auto i = 0; i < solution_length_; i++) {
+    moves.push_back(solution_[i]);
   }
   return make_unique<MoveSequenceNNN>(3, moves);
 }
 
 unique_ptr<MoveSequence> Cube333Solver::generate(uint16_t maxLength) {
-  if (!this->_solve(maxLength)) {
+  if (!_solve(maxLength)) {
     throw runtime_error("not solved!");
   }
   vector<uint16_t> moves;
-  for (auto i = this->solutionLength - 1; i >= 0; i--) {
-    moves.push_back(reverseMove(solution[i]));
+  for (auto i = solution_length_ - 1; i >= 0; i--) {
+    moves.push_back(reverseMove(solution_[i]));
   }
   return make_unique<MoveSequenceNNN>(3, moves);
 }
 
 bool Cube333Solver::isSolvableIn(uint16_t maxLength) {
-  if (maxLength > N_MAX_CHECK_LENGTH) {
-    throw invalid_argument("max check length is " +
-                           to_string(N_MAX_CHECK_LENGTH));
+  if (maxLength > kMaxCheckLength) {
+    throw invalid_argument("max check length is " + to_string(kMaxCheckLength));
   }
-  if (solutionLength >= 0 && solutionLength <= maxLength) {
+  if (solution_length_ >= 0 && solution_length_ <= maxLength) {
     return true;
   }
 
-  auto coIndex = cc.getCOIndex();
-  auto eoIndex = cc.getEOIndex();
-  auto slicePositionIndex = cc.getSlicePositionIndex();
+  auto coIndex = cc_.getCOIndex();
+  auto eoIndex = cc_.getEOIndex();
+  auto slicePositionIndex = cc_.getSlicePositionIndex();
 
   auto lowerBound = max(getTwistSlicePruning(coIndex, slicePositionIndex),
                         getFlipSlicePruning(eoIndex, slicePositionIndex));
   auto upperBound = maxLength;
   for (auto i = lowerBound; i <= upperBound; i++) {
-    if (phase1(coIndex, eoIndex, slicePositionIndex, i, INVALID_AXIS, 0,
+    if (phase1(coIndex, eoIndex, slicePositionIndex, i, kInvalidAxis, 0,
                maxLength, true)) {
       return true;
     }
@@ -280,25 +278,25 @@ bool Cube333Solver::isSolvableIn(uint16_t maxLength) {
 
 uint16_t Cube333Solver::getFlipSlicePruning(uint16_t flip, uint16_t slice) {
   static auto pruningTable = [] {
-    const uint32_t totalCount = N_EDGE_FLIP * N_SLICE_POSITION;
+    const uint32_t totalCount = kNEdgeFlip * kNSlicePosition;
     auto ret = array<uint16_t, ((totalCount + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     uint32_t count = 0;
     for (auto depth = 0; count < totalCount; depth++) {
       if (depth == 0) {
-        setPruning(&ret, SOLVED_FLIP * N_SLICE_POSITION + SOLVED_SLICE_POSITION,
+        setPruning(&ret, kSolvedFlip * kNSlicePosition + kSolvedSlicePosition,
                    depth);
         count++;
         continue;
       }
-      for (auto flip = 0; flip < N_EDGE_FLIP; flip++) {
-        for (auto slice = 0; slice < N_SLICE_POSITION; slice++) {
-          auto index = flip * N_SLICE_POSITION + slice;
+      for (auto flip = 0; flip < kNEdgeFlip; flip++) {
+        for (auto slice = 0; slice < kNSlicePosition; slice++) {
+          auto index = flip * kNSlicePosition + slice;
           if (getPruning(ret, index) == depth - 1) {
-            for (auto move = 0; move < N_MOVE; move++) {
+            for (auto move = 0; move < kNMove; move++) {
               auto newFlip = CubieCube333::getFlipMove(flip, move);
               auto newSlice = CubieCube333::getSlicePositionMove(slice, move);
-              auto newIndex = newFlip * N_SLICE_POSITION + newSlice;
+              auto newIndex = newFlip * kNSlicePosition + newSlice;
               if (getPruning(ret, newIndex) == 0xf) {
                 setPruning(&ret, newIndex, depth);
                 count++;
@@ -310,31 +308,30 @@ uint16_t Cube333Solver::getFlipSlicePruning(uint16_t flip, uint16_t slice) {
     }
     return ret;
   }();
-  return getPruning(pruningTable, flip * N_SLICE_POSITION + slice);
+  return getPruning(pruningTable, flip * kNSlicePosition + slice);
 }
 
 uint16_t Cube333Solver::getTwistSlicePruning(uint16_t twist, uint16_t slice) {
   static auto pruningTable = [] {
-    const uint32_t totalCount = N_CORNER_TWIST * N_SLICE_POSITION;
+    const uint32_t totalCount = kNCornerTwist * kNSlicePosition;
     auto ret = array<uint16_t, ((totalCount + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     uint32_t count = 0;
     for (auto depth = 0; count < totalCount; depth++) {
       if (depth == 0) {
-        setPruning(&ret,
-                   SOLVED_TWIST * N_SLICE_POSITION + SOLVED_SLICE_POSITION,
+        setPruning(&ret, kSolvedTwist * kNSlicePosition + kSolvedSlicePosition,
                    depth);
         count++;
         continue;
       }
-      for (auto twist = 0; twist < N_CORNER_TWIST; twist++) {
-        for (auto slice = 0; slice < N_SLICE_POSITION; slice++) {
-          auto index = twist * N_SLICE_POSITION + slice;
+      for (auto twist = 0; twist < kNCornerTwist; twist++) {
+        for (auto slice = 0; slice < kNSlicePosition; slice++) {
+          auto index = twist * kNSlicePosition + slice;
           if (getPruning(ret, index) == depth - 1) {
-            for (auto move = 0; move < N_MOVE; move++) {
+            for (auto move = 0; move < kNMove; move++) {
               auto newTwist = CubieCube333::getTwistMove(twist, move);
               auto newSlice = CubieCube333::getSlicePositionMove(slice, move);
-              auto newIndex = newTwist * N_SLICE_POSITION + newSlice;
+              auto newIndex = newTwist * kNSlicePosition + newSlice;
               if (getPruning(ret, newIndex) == 0xf) {
                 setPruning(&ret, newIndex, depth);
                 count++;
@@ -346,30 +343,30 @@ uint16_t Cube333Solver::getTwistSlicePruning(uint16_t twist, uint16_t slice) {
     }
     return ret;
   }();
-  return getPruning(pruningTable, twist * N_SLICE_POSITION + slice);
+  return getPruning(pruningTable, twist * kNSlicePosition + slice);
 }
 
 uint16_t Cube333Solver::getCPSliceEPPruning(uint16_t cp, uint16_t sliceEP) {
   static auto pruningTable = [] {
-    const uint32_t totalCount = N_CORNER_PERM * N_SLICE_EDGE_PERM;
+    const uint32_t totalCount = kNCornerPerm * kNSliceEdgePerm;
     auto ret = array<uint16_t, ((totalCount + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     uint32_t count = 0;
     for (auto depth = 0; count < totalCount; depth++) {
       if (depth == 0) {
-        setPruning(&ret, SOLVED_CP * N_SLICE_EDGE_PERM + SOLVED_SLICE_EP,
+        setPruning(&ret, kSolvedCp * kNSliceEdgePerm + kSolvedSliceEp,
                    depth);
         count++;
         continue;
       }
-      for (auto cp = 0; cp < N_CORNER_PERM; cp++) {
-        for (auto sliceEP = 0; sliceEP < N_SLICE_EDGE_PERM; sliceEP++) {
-          auto index = cp * N_SLICE_EDGE_PERM + sliceEP;
+      for (auto cp = 0; cp < kNCornerPerm; cp++) {
+        for (auto sliceEP = 0; sliceEP < kNSliceEdgePerm; sliceEP++) {
+          auto index = cp * kNSliceEdgePerm + sliceEP;
           if (getPruning(ret, index) == depth - 1) {
-            for (auto i = 0; i < N_PHASE2_MOVE_COUNT; i++) {
+            for (auto i = 0; i < kPhase2MoveCount; i++) {
               auto newCP = CubieCube333::getCPMove(cp, i);
               auto newSliceEP = CubieCube333::getSliceEPMove(sliceEP, i);
-              auto newIndex = newCP * N_SLICE_EDGE_PERM + newSliceEP;
+              auto newIndex = newCP * kNSliceEdgePerm + newSliceEP;
               if (getPruning(ret, newIndex) == 0xf) {
                 setPruning(&ret, newIndex, depth);
                 count++;
@@ -381,31 +378,31 @@ uint16_t Cube333Solver::getCPSliceEPPruning(uint16_t cp, uint16_t sliceEP) {
     }
     return ret;
   }();
-  return getPruning(pruningTable, cp * N_SLICE_EDGE_PERM + sliceEP);
+  return getPruning(pruningTable, cp * kNSliceEdgePerm + sliceEP);
 }
 
 uint16_t Cube333Solver::getUD8EPSliceEPPruning(uint16_t ud8EP,
                                                uint16_t sliceEP) {
   static auto pruningTable = [] {
-    const uint32_t totalCount = N_UD8EDGE_PERM * N_SLICE_EDGE_PERM;
+    const uint32_t totalCount = kNUd8EdgePerm * kNSliceEdgePerm;
     auto ret = array<uint16_t, ((totalCount + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     uint32_t count = 0;
     for (auto depth = 0; count < totalCount; depth++) {
       if (depth == 0) {
-        setPruning(&ret, SOLVED_UD8_EP * N_SLICE_EDGE_PERM + SOLVED_SLICE_EP,
+        setPruning(&ret, kSolvedUd8Ep * kNSliceEdgePerm + kSolvedSliceEp,
                    depth);
         count++;
         continue;
       }
-      for (auto ud8EP = 0; ud8EP < N_UD8EDGE_PERM; ud8EP++) {
-        for (auto sliceEP = 0; sliceEP < N_SLICE_EDGE_PERM; sliceEP++) {
-          auto index = ud8EP * N_SLICE_EDGE_PERM + sliceEP;
+      for (auto ud8EP = 0; ud8EP < kNUd8EdgePerm; ud8EP++) {
+        for (auto sliceEP = 0; sliceEP < kNSliceEdgePerm; sliceEP++) {
+          auto index = ud8EP * kNSliceEdgePerm + sliceEP;
           if (getPruning(ret, index) == depth - 1) {
-            for (auto i = 0; i < N_PHASE2_MOVE_COUNT; i++) {
+            for (auto i = 0; i < kPhase2MoveCount; i++) {
               auto newUD8EP = CubieCube333::getUD8EPMove(ud8EP, i);
               auto newSliceEP = CubieCube333::getSliceEPMove(sliceEP, i);
-              auto newIndex = newUD8EP * N_SLICE_EDGE_PERM + newSliceEP;
+              auto newIndex = newUD8EP * kNSliceEdgePerm + newSliceEP;
               if (getPruning(ret, newIndex) == 0xf) {
                 setPruning(&ret, newIndex, depth);
                 count++;
@@ -417,7 +414,7 @@ uint16_t Cube333Solver::getUD8EPSliceEPPruning(uint16_t ud8EP,
     }
     return ret;
   }();
-  return getPruning(pruningTable, ud8EP * N_SLICE_EDGE_PERM + sliceEP);
+  return getPruning(pruningTable, ud8EP * kNSliceEdgePerm + sliceEP);
 }
 
 }  // namespace cube_util

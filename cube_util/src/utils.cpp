@@ -1,13 +1,13 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/Utils.hpp>
+#include "cube_util/utils.hpp"
 
-#include<array>
-#include<random>
+#include <array>
+#include <random>
 
-#include<boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/trim.hpp>
 
-#include<cube_util/Scrambler222.hpp>
-#include<cube_util/Scrambler333.hpp>
+#include "cube_util/scrambler_222.hpp"
+#include "cube_util/scrambler_333.hpp"
 
 namespace cube_util {
 
@@ -21,15 +21,14 @@ using std::array;
 
 using boost::trim;
 
-using constants::N_CHOOSE_MAX;
-using constants::N_MOVE_PER_AXIS;
-using constants::N_MOVE_PER_SHIFT;
+using constants::kNChooseMax;
+using constants::kMovePerAxis;
+using constants::kMovePerShift;
 
 uint32_t choose(uint16_t n, uint16_t k) {
   static const auto cnk = [] {
-    auto ret =
-      array<array<uint32_t, N_CHOOSE_MAX + 1>, N_CHOOSE_MAX + 1>();
-    for (auto i = 0; i <= N_CHOOSE_MAX; i++) {
+    auto ret = array<array<uint32_t, kNChooseMax + 1>, kNChooseMax + 1>();
+    for (auto i = 0; i <= kNChooseMax; i++) {
       ret[i][0] = ret[i][i] = 1;
       for (auto j = 1; j < i; j++) {
         ret[i][j] = ret[i - 1][j - 1] + ret[i - 1][j];
@@ -57,26 +56,26 @@ function<int64_t()> randomizer(int64_t start, int64_t end) {
 }
 
 string scrambleString(int cubeSize, int length) {
-  using cube222::N_MAX_LENGTH;
-  using cube333::N_MAX_PHASE1_LENGTH;
+  using cube222::kMaxLength;
+  using cube333::kMaxPhase1Length;
 
   if (cubeSize == 2) {
-    length = length > N_MAX_LENGTH ? N_MAX_LENGTH : length;
+    length = length > kMaxLength ? kMaxLength : length;
     return Scrambler222(length).scramble()->toString();
   }
   if (cubeSize == 3) {
-    length = length < N_MAX_PHASE1_LENGTH ? N_MAX_PHASE1_LENGTH : length;
+    length = length < kMaxPhase1Length ? kMaxPhase1Length : length;
     return Scrambler333(length).scramble()->toString();
   }
   string scr;
   int count = 0;
   int lastAxis = -1;
   auto turned = vector<bool>(cubeSize - 1, false);
-  auto r = randomizer(0, 3 * N_MOVE_PER_AXIS * (cubeSize - 1) - 1);
+  auto r = randomizer(0, 3 * kMovePerAxis * (cubeSize - 1) - 1);
   while (count < length) {
     auto move = r();
-    auto axis = (move / N_MOVE_PER_AXIS) % 3;
-    auto shift = move / N_MOVE_PER_SHIFT;
+    auto axis = (move / kMovePerAxis) % 3;
+    auto shift = move / kMovePerShift;
     if (axis != lastAxis) {
       fill(turned.begin(), turned.end(), false);
     } else if (turned[shift] == true) {
@@ -93,7 +92,7 @@ string scrambleString(int cubeSize, int length) {
 
 string scrambleString(int cubeSize) {
   if (cubeSize == 2) {
-    return scrambleString(2, cube222::N_MAX_LENGTH);
+    return scrambleString(2, cube222::kMaxLength);
   }
   if (cubeSize == 3) {
     return scrambleString(3, 21);
@@ -102,27 +101,27 @@ string scrambleString(int cubeSize) {
 }
 
 uint16_t reverseMove(uint16_t move) {
-  auto amount = move % N_MOVE_PER_AXIS;
-  move /= N_MOVE_PER_AXIS;
-  move *= N_MOVE_PER_AXIS;
-  return move + (N_MOVE_PER_AXIS - 1 - amount);
+  auto amount = move % kMovePerAxis;
+  move /= kMovePerAxis;
+  move *= kMovePerAxis;
+  return move + (kMovePerAxis - 1 - amount);
 }
 
 string move2Str(uint16_t move) {
-  using constants::FACE_NAMES;
+  using constants::kFaceNames;
 
-  auto shift = move / N_MOVE_PER_SHIFT;
+  auto shift = move / kMovePerShift;
   shift++;
 
-  move %= N_MOVE_PER_SHIFT;
-  int axis = move / N_MOVE_PER_AXIS;
-  int amount = move % N_MOVE_PER_AXIS;
+  move %= kMovePerShift;
+  int axis = move / kMovePerAxis;
+  int amount = move % kMovePerAxis;
   string m;
 
   if (shift > 2) {
     m.append(to_string(shift));
   }
-  m.append(&FACE_NAMES[axis], 1);
+  m.append(&kFaceNames[axis], 1);
   if (shift >= 2) {
     m.append("w");
   }

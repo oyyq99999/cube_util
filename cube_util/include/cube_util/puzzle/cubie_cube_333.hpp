@@ -1,14 +1,14 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE333_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE333_HPP_
-#include<string>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_333_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_333_HPP_
+#include <string>
 
-#include<cube_util/puzzle/CubieCubeNNN.hpp>
+#include "cube_util/puzzle/cubie_cube_nnn.hpp"
 
 namespace cube_util {
 
-using cube333::N_EDGE;
-using cube333::N_MOVE;
+using cube333::kNEdge;
+using cube333::kNMove;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// A class representing a 3x3x3 cube model by cubie level.
@@ -27,10 +27,10 @@ using cube333::N_MOVE;
 ////////////////////////////////////////////////////////////////////////////////
 class CubieCube333 : public CubieCubeNNN {
   /** Permutations of the edges. */
-  array<uint16_t, N_EDGE> ep;
+  array<uint16_t, kNEdge> ep_;
 
   /** Orientations of the edges. */
-  array<uint16_t, N_EDGE> eo;
+  array<uint16_t, kNEdge> eo_;
 
   /**
    * Set edge permutation state according to given index.
@@ -80,10 +80,10 @@ class CubieCube333 : public CubieCubeNNN {
    * @param ep edge permutations to initialize with
    * @param eo edge orientations to initialize with
    */
-  CubieCube333(const array<uint16_t, N_CORNER> &cp,
-               const array<uint16_t, N_CORNER> &co,
-               const array<uint16_t, N_EDGE> &ep,
-               const array<uint16_t, N_EDGE> &eo);
+  CubieCube333(const array<uint16_t, kNCorner> &cp,
+               const array<uint16_t, kNCorner> &co,
+               const array<uint16_t, kNEdge> &ep,
+               const array<uint16_t, kNEdge> &eo);
 
   /**
    * Constructor of the class.
@@ -222,4 +222,4 @@ class CubieCube333 : public CubieCubeNNN {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE333_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_333_HPP_

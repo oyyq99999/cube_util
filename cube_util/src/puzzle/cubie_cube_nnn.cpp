@@ -1,5 +1,5 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/puzzle/CubieCubeNNN.hpp>
+#include "cube_util/puzzle/cubie_cube_nnn.hpp"
 
 namespace cube_util {
 
@@ -19,25 +19,25 @@ using enums::Corners::DFR;
 using enums::Corners::DRB;
 using enums::Corners::DBL;
 
-using enums::CornerTwists::ORIENTED;
+using enums::CornerTwists::kOriented;
 
 CubieCubeNNN::CubieCubeNNN()
-    : cp {URF, UFL, ULB, UBR, DLF, DFR, DRB, DBL}, co {ORIENTED} {}
+    : cp_ {URF, UFL, ULB, UBR, DLF, DFR, DRB, DBL}, co_ {kOriented} {}
 
 void CubieCubeNNN::setCP(uint16_t index) {
-  setNPerm(&cp, index, N_CORNER);
+  setNPerm(&cp_, index, kNCorner);
 }
 
 void CubieCubeNNN::setCO(uint16_t index) {
-  setNTwist(&co, index, N_CORNER);
+  setNTwist(&co_, index, kNCorner);
 }
 
 uint16_t CubieCubeNNN::getCPIndex() const {
-  return getNPerm(cp, N_CORNER);
+  return getNPerm(cp_, kNCorner);
 }
 
 uint16_t CubieCubeNNN::getCOIndex() const {
-  return getNTwist(co, N_CORNER);
+  return getNTwist(co_, kNCorner);
 }
 
 ostream& operator<<(ostream &os, const CubieCubeNNN &cc) {

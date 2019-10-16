@@ -1,7 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/puzzle/CubieCube222.hpp>
+#include "cube_util/puzzle/cubie_cube_222.hpp"
 
-#include<sstream>
+#include <sstream>
 
 namespace cube_util {
 
@@ -9,8 +9,8 @@ using std::invalid_argument;
 using std::ostringstream;
 using std::endl;
 
-using constants::N_FACE;
-using constants::N_MOVE_PER_AXIS;
+using constants::kNFace;
+using constants::kMovePerAxis;
 
 using enums::Colors::U;
 using enums::Colors::D;
@@ -28,12 +28,12 @@ using enums::Corners::DFR;
 using enums::Corners::DRB;
 using enums::Corners::DBL;
 
-using enums::CornerTwists::ORIENTED;
-using enums::CornerTwists::CLOCKWISE;
-using enums::CornerTwists::COUNTER_CLOCKWISE;
+using enums::CornerTwists::kOriented;
+using enums::CornerTwists::kClockwise;
+using enums::CornerTwists::kCounterClockwise;
 
-using cube222::FACELET_PER_FACE;
-using cube222::FACELET_MAP;
+using cube222::kFaceletPerFace;
+using cube222::kFaceletMap;
 
 using utils::setNPerm;
 using utils::getNPerm;
@@ -41,26 +41,26 @@ using utils::setNTwist;
 using utils::getNTwist;
 using utils::randomizer;
 
-CubieCube222::CubieCube222(const array<uint16_t, N_CORNER> &perm,
-                           const array<uint16_t, N_CORNER> &twist) {
+CubieCube222::CubieCube222(const array<uint16_t, kNCorner> &perm,
+                           const array<uint16_t, kNCorner> &twist) {
   int twistsTotal = 0;
   uint16_t mask = 0;
 
-  for (auto i = 0; i < N_CORNER; i++) {
+  for (auto i = 0; i < kNCorner; i++) {
     // (a & 0xfff8) != 0 is equivalent to a > 7 for uint16_t
     if ((perm[i] & 0xfff8) != 0 || (mask & (1 << perm[i])) != 0) {
       throw invalid_argument("invalid permutation!");
     }
     mask |= 1 << perm[i];
-    if (twist[i] < ORIENTED || twist[i] > COUNTER_CLOCKWISE) {
+    if (twist[i] < kOriented || twist[i] > kCounterClockwise) {
       throw invalid_argument("invalid orientation!");
     }
     twistsTotal += twist[i];
 
     // assume all things are good, if we find something is wrong later,
     // we throw an exception
-    cp[i] = perm[i];
-    co[i] = twist[i];
+    cp_[i] = perm[i];
+    co_[i] = twist[i];
   }
 
   if (twistsTotal % 3 != 0) {
@@ -69,7 +69,7 @@ CubieCube222::CubieCube222(const array<uint16_t, N_CORNER> &perm,
 }
 
 CubieCube222::CubieCube222(uint16_t perm, uint16_t twist) {
-  if (perm >= N_PERM || twist >= N_TWIST) {
+  if (perm >= kNPerm || twist >= kNTwist) {
     throw invalid_argument("invalid parameters!");
   }
   setCP(perm);
@@ -77,64 +77,64 @@ CubieCube222::CubieCube222(uint16_t perm, uint16_t twist) {
 }
 
 CubieCube222::CubieCube222(uint32_t index)
-    : CubieCube222(index / N_TWIST, index % N_TWIST) {}
+    : CubieCube222(index / kNTwist, index % kNTwist) {}
 
 void CubieCube222::setCP(uint16_t index) {
-  setNPerm(&cp, index, N_CORNER - 1);
+  setNPerm(&cp_, index, kNCorner - 1);
 }
 
 void CubieCube222::setCO(uint16_t index) {
-  setNTwist(&co, index, N_CORNER - 1);
+  setNTwist(&co_, index, kNCorner - 1);
 }
 
 uint16_t CubieCube222::getCPIndex() const {
-  return getNPerm(cp, N_CORNER - 1);
+  return getNPerm(cp_, kNCorner - 1);
 }
 
 uint16_t CubieCube222::getCOIndex() const {
-  return getNTwist(co, N_CORNER - 1);
+  return getNTwist(co_, kNCorner - 1);
 }
 
 void CubieCube222::move(uint16_t move) {
-  move %= N_MOVE;
+  move %= kNMove;
   cubeMult(*this, getMoveCube(move), this);
 }
 
 void CubieCube222::cubeMult(const CubieCube222 &one,
                             const CubieCube222 &another,
                             CubieCube222 *result) {
-  auto perm = array<uint16_t, N_CORNER>();
-  auto twist = array<uint16_t, N_CORNER>();
-  for (auto i = 0; i < N_CORNER; i++) {
-    perm[i] = one.cp[another.cp[i]];
-    twist[i] = (one.co[another.cp[i]] + another.co[i]) % 3;
+  auto perm = array<uint16_t, kNCorner>();
+  auto twist = array<uint16_t, kNCorner>();
+  for (auto i = 0; i < kNCorner; i++) {
+    perm[i] = one.cp_[another.cp_[i]];
+    twist[i] = (one.co_[another.cp_[i]] + another.co_[i]) % 3;
   }
-  result->cp = perm;
-  result->co = twist;
+  result->cp_ = perm;
+  result->co_ = twist;
 }
 
 string CubieCube222::toString() const {
   ostringstream os;
   os << "Perms:";
-  for (auto i = 0; i < N_CORNER; i++) {
-    os << " " << cp[i];
+  for (auto i = 0; i < kNCorner; i++) {
+    os << " " << cp_[i];
   }
   os << endl << "Twists:";
-  for (auto i = 0; i < N_CORNER; i++) {
-    os << " " << co[i];
+  for (auto i = 0; i < kNCorner; i++) {
+    os << " " << co_[i];
   }
   os << endl;
   return os.str();
 }
 
 FaceletCubeNNN CubieCube222::toFaceletCube() const {
-  auto f = vector<uint16_t>(N_FACE * FACELET_PER_FACE);
-  for (auto i = 0; i < N_CORNER; i++) {
-    auto piece = cp[i];
-    auto orient = co[i];
+  auto f = vector<uint16_t>(kNFace * kFaceletPerFace);
+  for (auto i = 0; i < kNCorner; i++) {
+    auto piece = cp_[i];
+    auto orient = co_[i];
     for (auto j = 0; j < 3; j++) {
-      f[FACELET_MAP[i][(j + orient) % 3]] =
-          FACELET_MAP[piece][j] / FACELET_PER_FACE;
+      f[kFaceletMap[i][(j + orient) % 3]] =
+          kFaceletMap[piece][j] / kFaceletPerFace;
     }
   }
   return FaceletCubeNNN(2, f);
@@ -145,20 +145,20 @@ CubieCube222 CubieCube222::fromFaceletCube(const FaceletCubeNNN &fc) {
     throw invalid_argument("needs a 2x2x2 cube!");
   }
   auto f = fc.getFacelets();
-  array<uint16_t, N_CORNER> perm;
-  array<uint16_t, N_CORNER> twist;
+  array<uint16_t, kNCorner> perm;
+  array<uint16_t, kNCorner> twist;
   uint16_t color1, color2, ori;
-  for (auto i = 0; i < N_CORNER; i++) {
+  for (auto i = 0; i < kNCorner; i++) {
     for (ori = 0; ori < 3; ori++) {
-      if (f[FACELET_MAP[i][ori]] == U || f[FACELET_MAP[i][ori]] == D) {
+      if (f[kFaceletMap[i][ori]] == U || f[kFaceletMap[i][ori]] == D) {
         break;
       }
     }
-    color1 = f[FACELET_MAP[i][(ori + 1) % 3]];
-    color2 = f[FACELET_MAP[i][(ori + 2) % 3]];
-    for (auto j = 0; j < N_CORNER; j++) {
-      if (color1 == FACELET_MAP[j][1] / FACELET_PER_FACE &&
-          color2 == FACELET_MAP[j][2] / FACELET_PER_FACE) {
+    color1 = f[kFaceletMap[i][(ori + 1) % 3]];
+    color2 = f[kFaceletMap[i][(ori + 2) % 3]];
+    for (auto j = 0; j < kNCorner; j++) {
+      if (color1 == kFaceletMap[j][1] / kFaceletPerFace &&
+          color2 == kFaceletMap[j][2] / kFaceletPerFace) {
         perm[i] = j;
         twist[i] = ori;
         break;
@@ -169,26 +169,26 @@ CubieCube222 CubieCube222::fromFaceletCube(const FaceletCubeNNN &fc) {
 }
 
 CubieCube222 CubieCube222::randomCube() {
-  auto r = randomizer(0, N_TWIST * N_PERM - 1);
+  auto r = randomizer(0, kNTwist * kNPerm - 1);
   return CubieCube222(r());
 }
 
 CubieCube222 CubieCube222::getMoveCube(uint16_t move) {
   static auto moveCubeTable = [] {
-    auto ret = array<CubieCube222, N_MOVE>();
+    auto ret = array<CubieCube222, kNMove>();
     ret[Ux1] = CubieCube222({UBR, URF, UFL, ULB, DLF, DFR, DRB, DBL},
-                            {ORIENTED});
+                            {kOriented});
     ret[Rx1] = CubieCube222(
         {DFR, UFL, ULB, URF, DLF, DRB, UBR, DBL},
-        {COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE,
-            ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED});
+        {kCounterClockwise, kOriented, kOriented, kClockwise,
+            kOriented, kClockwise, kCounterClockwise, kOriented});
     ret[Fx1] = CubieCube222(
         {UFL, DLF, ULB, UBR, DFR, URF, DRB, DBL},
-        {CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED,
-            CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED});
+        {kClockwise, kCounterClockwise, kOriented, kOriented,
+            kClockwise, kCounterClockwise, kOriented, kOriented});
 
-    for (auto i = 0; i < N_MOVE; i += N_MOVE_PER_AXIS) {
-      for (auto j = 1; j < N_MOVE_PER_AXIS; j++) {
+    for (auto i = 0; i < kNMove; i += kMovePerAxis) {
+      for (auto j = 1; j < kMovePerAxis; j++) {
         ret[i + j] = CubieCube222();
         cubeMult(ret[i + j - 1], ret[i], &ret[i + j]);
       }
@@ -200,12 +200,12 @@ CubieCube222 CubieCube222::getMoveCube(uint16_t move) {
 
 uint16_t CubieCube222::getPermMove(uint16_t perm, uint16_t move) {
   static auto moveTable = [] {
-    auto ret = array<array<uint16_t, N_MOVE>, N_PERM>();
+    auto ret = array<array<uint16_t, kNMove>, kNPerm>();
     CubieCube222 c = CubieCube222();
     CubieCube222 d = CubieCube222();
-    for (auto i = 0; i < N_PERM; i++) {
+    for (auto i = 0; i < kNPerm; i++) {
       c.setCP(i);
-      for (auto j = 0; j < N_MOVE; j++) {
+      for (auto j = 0; j < kNMove; j++) {
         cubeMult(c, getMoveCube(j), &d);
         ret[i][j] = d.getCPIndex();
       }
@@ -217,12 +217,12 @@ uint16_t CubieCube222::getPermMove(uint16_t perm, uint16_t move) {
 
 uint16_t CubieCube222::getTwistMove(uint16_t twist, uint16_t move) {
   static auto moveTable = [] {
-    auto ret = array<array<uint16_t, N_MOVE>, N_TWIST>();
+    auto ret = array<array<uint16_t, kNMove>, kNTwist>();
     CubieCube222 c = CubieCube222();
     CubieCube222 d = CubieCube222();
-    for (auto i = 0; i < N_TWIST; i++) {
+    for (auto i = 0; i < kNTwist; i++) {
       c.setCO(i);
-      for (auto j = 0; j < N_MOVE; j++) {
+      for (auto j = 0; j < kNMove; j++) {
         cubeMult(c, getMoveCube(j), &d);
         ret[i][j] = d.getCOIndex();
       }

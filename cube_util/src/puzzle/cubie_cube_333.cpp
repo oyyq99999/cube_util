@@ -1,7 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/puzzle/CubieCube333.hpp>
+#include "cube_util/puzzle/cubie_cube_333.hpp"
 
-#include<sstream>
+#include <sstream>
 
 namespace cube_util {
 
@@ -9,8 +9,8 @@ using std::invalid_argument;
 using std::ostringstream;
 using std::endl;
 
-using constants::N_FACE;
-using constants::N_MOVE_PER_AXIS;
+using constants::kNFace;
+using constants::kMovePerAxis;
 
 using enums::Moves::Ux1;
 using enums::Moves::Rx1;
@@ -28,26 +28,26 @@ using enums::Corners::DFR;
 using enums::Corners::DRB;
 using enums::Corners::DBL;
 
-using enums::CornerTwists::ORIENTED;
-using enums::CornerTwists::CLOCKWISE;
-using enums::CornerTwists::COUNTER_CLOCKWISE;
+using enums::CornerTwists::kOriented;
+using enums::CornerTwists::kClockwise;
+using enums::CornerTwists::kCounterClockwise;
 
 using enums::Colors::U;
 using enums::Colors::D;
 
-using cube333::N_MOVE;
-using cube333::N_CORNER_PERM;
-using cube333::N_CORNER_TWIST;
-using cube333::N_EDGE_PERM;
-using cube333::N_EDGE_FLIP;
-using cube333::N_SLICE_POSITION;
-using cube333::CORNER_FACELET_MAP;
-using cube333::EDGE_FACELET_MAP;
-using cube333::FACELET_PER_FACE;
-using cube333::N_PHASE2_MOVE_COUNT;
-using cube333::PHASE2_MOVE;
-using cube333::N_UD8EDGE_PERM;
-using cube333::N_SLICE_EDGE_PERM;
+using cube333::kNMove;
+using cube333::kNCornerPerm;
+using cube333::kNCornerTwist;
+using cube333::kNEdgePerm;
+using cube333::kNEdgeFlip;
+using cube333::kNSlicePosition;
+using cube333::kCornerFaceletMap;
+using cube333::kEdgeFaceletMap;
+using cube333::kFaceletPerFace;
+using cube333::kPhase2MoveCount;
+using cube333::kPhase2Move;
+using cube333::kNUd8EdgePerm;
+using cube333::kNSliceEdgePerm;
 
 using cube333::Edges::UF;
 using cube333::Edges::UL;
@@ -62,8 +62,8 @@ using cube333::Edges::BL;
 using cube333::Edges::BR;
 using cube333::Edges::FR;
 
-using cube333::EdgeFlips::NOT_FLIPPED;
-using cube333::EdgeFlips::FLIPPED;
+using cube333::EdgeFlips::kNotFlipped;
+using cube333::EdgeFlips::kFlipped;
 
 using utils::getNPerm;
 using utils::setNPerm;
@@ -75,19 +75,19 @@ using utils::getNComb4;
 using utils::randomizer;
 
 CubieCube333::CubieCube333()
-    : ep {UF, UL, UB, UR, DF, DR, DB, DL, FL, BL, BR, FR},
-      eo {NOT_FLIPPED} {}
+    : ep_ {UF, UL, UB, UR, DF, DR, DB, DL, FL, BL, BR, FR},
+      eo_ {kNotFlipped} {}
 
-CubieCube333::CubieCube333(const array<uint16_t, N_CORNER> &cp,
-                           const array<uint16_t, N_CORNER> &co,
-                           const array<uint16_t, N_EDGE> &ep,
-                           const array<uint16_t, N_EDGE> &eo) {
+CubieCube333::CubieCube333(const array<uint16_t, kNCorner> &cp,
+                           const array<uint16_t, kNCorner> &co,
+                           const array<uint16_t, kNEdge> &ep,
+                           const array<uint16_t, kNEdge> &eo) {
   int twistsTotal = 0;
   int flipTotal = 0;
   uint16_t maskCorner = 0;
   uint16_t maskEdge = 0;
 
-  for (auto i = 0; i < N_EDGE; i++) {
+  for (auto i = 0; i < kNEdge; i++) {
     if (ep[i] > FR || (maskEdge & (1 << ep[i])) != 0) {
       throw invalid_argument("invalid edge permutation!");
     }
@@ -97,24 +97,24 @@ CubieCube333::CubieCube333(const array<uint16_t, N_CORNER> &cp,
     }
     flipTotal ^= eo[i];
 
-    if (i < N_CORNER) {
+    if (i < kNCorner) {
       // (a & 0xfff8) != 0 is equivalent to a > 7 for uint16_t
       if ((cp[i] & 0xfff8) != 0 || (maskCorner & (1 << cp[i])) != 0) {
         throw invalid_argument("invalid corner permutation!");
       }
       maskCorner |= 1 << cp[i];
-      if (co[i] < ORIENTED || co[i] > COUNTER_CLOCKWISE) {
+      if (co[i] < kOriented || co[i] > kCounterClockwise) {
         throw invalid_argument("invalid corner orientation!");
       }
       twistsTotal += co[i];
-      this->cp[i] = cp[i];
-      this->co[i] = co[i];
+      cp_[i] = cp[i];
+      co_[i] = co[i];
     }
 
     // assume all things are good, if we find something is wrong later,
     // we throw an exception
-    this->ep[i] = ep[i];
-    this->eo[i] = eo[i];
+    ep_[i] = ep[i];
+    eo_[i] = eo[i];
   }
 
   if ((flipTotal & 1) != 0) {
@@ -127,106 +127,106 @@ CubieCube333::CubieCube333(const array<uint16_t, N_CORNER> &cp,
 }
 
 CubieCube333::CubieCube333(uint16_t cp, uint16_t co, uint32_t ep, uint16_t eo) {
-  if (cp >= N_CORNER_PERM || co >= N_CORNER_TWIST ||
-      ep >= N_EDGE_PERM || eo >= N_EDGE_FLIP) {
+  if (cp >= kNCornerPerm || co >= kNCornerTwist ||
+      ep >= kNEdgePerm || eo >= kNEdgeFlip) {
     throw invalid_argument("invalid parameters!");
   }
-  this->setCP(cp);
-  this->setCO(co);
-  this->setEP(ep);
-  this->setEO(eo);
+  setCP(cp);
+  setCO(co);
+  setEP(ep);
+  setEO(eo);
 }
 
 void CubieCube333::setEP(uint32_t index) {
-  setNPerm(&ep, index, N_EDGE);
+  setNPerm(&ep_, index, kNEdge);
 }
 
 void CubieCube333::setEO(uint16_t index) {
-  setNFlip(&eo, index, N_EDGE);
+  setNFlip(&eo_, index, kNEdge);
 }
 
 void CubieCube333::setUD8EP(uint16_t index) {
   // we only care about the first 8 edges
-  setNPerm(&ep, index, 8);
-  for (auto i = 8; i < N_EDGE; i++) {
-    ep[i] = i;
+  setNPerm(&ep_, index, 8);
+  for (auto i = 8; i < kNEdge; i++) {
+    ep_[i] = i;
   }
 }
 
 void CubieCube333::setSliceEP(uint16_t index) {
   // we only care about the last 4 edges
-  setNPerm(&ep, index, N_EDGE);
+  setNPerm(&ep_, index, kNEdge);
 }
 
 void CubieCube333::setSlicePosition(uint16_t index) {
-  setNComb4(&ep, index, N_EDGE, 0x8);
+  setNComb4(&ep_, index, kNEdge, 0x8);
 }
 
 void CubieCube333::move(uint16_t move) {
-  move %= N_MOVE;
+  move %= kNMove;
   cubeMult(*this, getMoveCube(move), this);
 }
 
 uint32_t CubieCube333::getEPIndex() const {
-  return getNPerm(ep, N_EDGE);
+  return getNPerm(ep_, kNEdge);
 }
 
 uint16_t CubieCube333::getEOIndex() const {
-  return getNFlip(eo, N_EDGE);
+  return getNFlip(eo_, kNEdge);
 }
 
 uint16_t CubieCube333::getUD8EPIndex() const {
-  return getNPerm(ep, 8);
+  return getNPerm(ep_, 8);
 }
 
 uint16_t CubieCube333::getSlicePositionIndex() const {
-  return getNComb4(ep, N_EDGE, 0x8);
+  return getNComb4(ep_, kNEdge, 0x8);
 }
 
 uint16_t CubieCube333::getSliceEPIndex() const {
-  return getNPerm(ep, N_EDGE) % 24;
+  return getNPerm(ep_, kNEdge) % 24;
 }
 
 void CubieCube333::cubeMult(const CubieCube333 &one,
                             const CubieCube333 &another,
                             CubieCube333 *result) {
-  auto cp = array<uint16_t, N_CORNER>();
-  auto co = array<uint16_t, N_CORNER>();
-  auto ep = array<uint16_t, N_EDGE>();
-  auto eo = array<uint16_t, N_EDGE>();
-  for (auto i = 0; i < N_CORNER; i++) {
-    cp[i] = one.cp[another.cp[i]];
-    co[i] = (one.co[another.cp[i]] + another.co[i]) % 3;
+  auto cp = array<uint16_t, kNCorner>();
+  auto co = array<uint16_t, kNCorner>();
+  auto ep = array<uint16_t, kNEdge>();
+  auto eo = array<uint16_t, kNEdge>();
+  for (auto i = 0; i < kNCorner; i++) {
+    cp[i] = one.cp_[another.cp_[i]];
+    co[i] = (one.co_[another.cp_[i]] + another.co_[i]) % 3;
   }
-  for (auto i = 0; i < N_EDGE; i++) {
-    ep[i] = one.ep[another.ep[i]];
-    eo[i] = one.eo[another.ep[i]] ^ another.eo[i];
+  for (auto i = 0; i < kNEdge; i++) {
+    ep[i] = one.ep_[another.ep_[i]];
+    eo[i] = one.eo_[another.ep_[i]] ^ another.eo_[i];
   }
-  result->cp = cp;
-  result->co = co;
-  result->ep = ep;
-  result->eo = eo;
+  result->cp_ = cp;
+  result->co_ = co;
+  result->ep_ = ep;
+  result->eo_ = eo;
 }
 
 FaceletCubeNNN CubieCube333::toFaceletCube() const {
-  auto f = vector<uint16_t>(N_FACE * FACELET_PER_FACE);
-  for (auto i = 0; i < N_FACE; i++) {
-    f[i * FACELET_PER_FACE + 4] = i;
+  auto f = vector<uint16_t>(kNFace * kFaceletPerFace);
+  for (auto i = 0; i < kNFace; i++) {
+    f[i * kFaceletPerFace + 4] = i;
   }
-  for (auto i = 0; i < N_CORNER; i++) {
-    auto piece = cp[i];
-    auto orient = co[i];
+  for (auto i = 0; i < kNCorner; i++) {
+    auto piece = cp_[i];
+    auto orient = co_[i];
     for (auto j = 0; j < 3; j++) {
-      f[CORNER_FACELET_MAP[i][(j + orient) % 3]] =
-          CORNER_FACELET_MAP[piece][j] / FACELET_PER_FACE;
+      f[kCornerFaceletMap[i][(j + orient) % 3]] =
+          kCornerFaceletMap[piece][j] / kFaceletPerFace;
     }
   }
-  for (auto i = 0; i < N_EDGE; i++) {
-    auto piece = ep[i];
-    auto orient = eo[i];
+  for (auto i = 0; i < kNEdge; i++) {
+    auto piece = ep_[i];
+    auto orient = eo_[i];
     for (auto j = 0; j < 2; j++) {
-      f[EDGE_FACELET_MAP[i][(j + orient) & 1]] =
-          EDGE_FACELET_MAP[piece][j] / FACELET_PER_FACE;
+      f[kEdgeFaceletMap[i][(j + orient) & 1]] =
+          kEdgeFaceletMap[piece][j] / kFaceletPerFace;
     }
   }
   return FaceletCubeNNN(3, f);
@@ -237,23 +237,23 @@ CubieCube333 CubieCube333::fromFaceletCube(const FaceletCubeNNN &fc) {
     throw invalid_argument("needs a 3x3x3 cube!");
   }
   auto f = fc.getFacelets();
-  array<uint16_t, N_CORNER> cp;
-  array<uint16_t, N_CORNER> co;
-  array<uint16_t, N_EDGE> ep;
-  array<uint16_t, N_EDGE> eo;
+  array<uint16_t, kNCorner> cp;
+  array<uint16_t, kNCorner> co;
+  array<uint16_t, kNEdge> ep;
+  array<uint16_t, kNEdge> eo;
   uint16_t color1, color2, ori;
-  for (auto i = 0; i < N_CORNER; i++) {
+  for (auto i = 0; i < kNCorner; i++) {
     for (ori = 0; ori < 3; ori++) {
-      if (f[CORNER_FACELET_MAP[i][ori]] == U ||
-          f[CORNER_FACELET_MAP[i][ori]] == D) {
+      if (f[kCornerFaceletMap[i][ori]] == U ||
+          f[kCornerFaceletMap[i][ori]] == D) {
         break;
       }
     }
-    color1 = f[CORNER_FACELET_MAP[i][(ori + 1) % 3]];
-    color2 = f[CORNER_FACELET_MAP[i][(ori + 2) % 3]];
-    for (auto j = 0; j < N_CORNER; j++) {
-      if (color1 == CORNER_FACELET_MAP[j][1] / FACELET_PER_FACE &&
-          color2 == CORNER_FACELET_MAP[j][2] / FACELET_PER_FACE) {
+    color1 = f[kCornerFaceletMap[i][(ori + 1) % 3]];
+    color2 = f[kCornerFaceletMap[i][(ori + 2) % 3]];
+    for (auto j = 0; j < kNCorner; j++) {
+      if (color1 == kCornerFaceletMap[j][1] / kFaceletPerFace &&
+          color2 == kCornerFaceletMap[j][2] / kFaceletPerFace) {
         cp[i] = j;
         co[i] = ori;
         break;
@@ -261,21 +261,21 @@ CubieCube333 CubieCube333::fromFaceletCube(const FaceletCubeNNN &fc) {
     }
   }
 
-  for (auto i = 0; i < N_EDGE; i++) {
-    for (auto j = 0; j < N_EDGE; j++) {
-      if ((f[EDGE_FACELET_MAP[i][0]] ==
-              EDGE_FACELET_MAP[j][0] / FACELET_PER_FACE) &&
-          (f[EDGE_FACELET_MAP[i][1]] ==
-              EDGE_FACELET_MAP[j][1] / FACELET_PER_FACE)) {
+  for (auto i = 0; i < kNEdge; i++) {
+    for (auto j = 0; j < kNEdge; j++) {
+      if ((f[kEdgeFaceletMap[i][0]] ==
+              kEdgeFaceletMap[j][0] / kFaceletPerFace) &&
+          (f[kEdgeFaceletMap[i][1]] ==
+              kEdgeFaceletMap[j][1] / kFaceletPerFace)) {
         ep[i] = j;
-        eo[i] = NOT_FLIPPED;
+        eo[i] = kNotFlipped;
       }
-      if ((f[EDGE_FACELET_MAP[i][0]] ==
-              EDGE_FACELET_MAP[j][1] / FACELET_PER_FACE) &&
-          (f[EDGE_FACELET_MAP[i][1]] ==
-              EDGE_FACELET_MAP[j][0] / FACELET_PER_FACE)) {
+      if ((f[kEdgeFaceletMap[i][0]] ==
+              kEdgeFaceletMap[j][1] / kFaceletPerFace) &&
+          (f[kEdgeFaceletMap[i][1]] ==
+              kEdgeFaceletMap[j][0] / kFaceletPerFace)) {
         ep[i] = j;
-        eo[i] = FLIPPED;
+        eo[i] = kFlipped;
       }
     }
   }
@@ -283,33 +283,33 @@ CubieCube333 CubieCube333::fromFaceletCube(const FaceletCubeNNN &fc) {
 }
 
 bool CubieCube333::isSolvable(uint16_t cpi, uint32_t epi) {
-  uint16_t parity = getNParity(cpi, N_CORNER);
-  parity ^= getNParity(epi, N_EDGE);
+  uint16_t parity = getNParity(cpi, kNCorner);
+  parity ^= getNParity(epi, kNEdge);
   return parity == 0;
 }
 
 CubieCube333 CubieCube333::randomCube() {
-  auto rcp = randomizer(0, N_CORNER_PERM - 1);
-  auto rep = randomizer(0, N_EDGE_PERM - 1);
+  auto rcp = randomizer(0, kNCornerPerm - 1);
+  auto rep = randomizer(0, kNEdgePerm - 1);
   uint16_t cp;
   uint32_t ep;
   do {
     cp = rcp();
     ep = rep();
   } while (!isSolvable(cp, ep));
-  auto r = randomizer(0, N_EDGE_FLIP * N_CORNER_TWIST - 1);
+  auto r = randomizer(0, kNEdgeFlip * kNCornerTwist - 1);
   auto orient = r();
-  return CubieCube333(cp, orient % N_CORNER_TWIST,
-    ep, orient / N_CORNER_TWIST);
+  return CubieCube333(cp, orient % kNCornerTwist,
+    ep, orient / kNCornerTwist);
 }
 
 CubieCube333 CubieCube333::randomDRCube() {
-  auto rcp = randomizer(0, N_CORNER_PERM - 1);
-  auto rep1 = randomizer(0, N_UD8EDGE_PERM - 1);
-  auto rep2 = randomizer(0, N_SLICE_EDGE_PERM - 1);
+  auto rcp = randomizer(0, kNCornerPerm - 1);
+  auto rep1 = randomizer(0, kNUd8EdgePerm - 1);
+  auto rep2 = randomizer(0, kNSliceEdgePerm - 1);
   array<uint16_t, 8> epArr1;
   array<uint16_t, 4> epArr2;
-  array<uint16_t, N_EDGE> epArr;
+  array<uint16_t, kNEdge> epArr;
   uint16_t cp, ep1, ep2;
   uint32_t ep;
   do {
@@ -318,14 +318,14 @@ CubieCube333 CubieCube333::randomDRCube() {
     ep2 = rep2();
     setNPerm(&epArr1, ep1, 8);
     setNPerm(&epArr2, ep2, 4);
-    for (auto i = 0; i < N_EDGE; i++) {
+    for (auto i = 0; i < kNEdge; i++) {
       if (i < 8) {
         epArr[i] = epArr1[i];
       } else {
         epArr[i] = epArr2[i - 8] + 8;
       }
     }
-    ep = getNPerm(epArr, N_EDGE);
+    ep = getNPerm(epArr, kNEdge);
   } while (!isSolvable(cp, ep));
   return CubieCube333(cp, 0, ep, 0);
 }
@@ -333,20 +333,20 @@ CubieCube333 CubieCube333::randomDRCube() {
 string CubieCube333::toString() const {
   ostringstream os;
   os << "Corner Perms:";
-  for (auto i = 0; i < N_CORNER; i++) {
-    os << " " << cp[i];
+  for (auto i = 0; i < kNCorner; i++) {
+    os << " " << cp_[i];
   }
   os << endl << "Corner Twists:";
-  for (auto i = 0; i < N_CORNER; i++) {
-    os << " " << co[i];
+  for (auto i = 0; i < kNCorner; i++) {
+    os << " " << co_[i];
   }
   os << endl << "Edge Perms:";
-  for (auto i = 0; i < N_EDGE; i++) {
-    os << " " << ep[i];
+  for (auto i = 0; i < kNEdge; i++) {
+    os << " " << ep_[i];
   }
   os << endl << "Edge Flips:";
-  for (auto i = 0; i < N_EDGE; i++) {
-    os << " " << eo[i];
+  for (auto i = 0; i < kNEdge; i++) {
+    os << " " << eo_[i];
   }
   os << endl;
   return os.str();
@@ -354,48 +354,48 @@ string CubieCube333::toString() const {
 
 CubieCube333 CubieCube333::getMoveCube(uint16_t move) {
   static auto moveCubeTable = [] {
-    auto ret = array<CubieCube333, N_MOVE>();
+    auto ret = array<CubieCube333, kNMove>();
     ret[Ux1] = CubieCube333(
         {UBR, URF, UFL, ULB, DLF, DFR, DRB, DBL},
-        {ORIENTED},
+        {kOriented},
         {UR, UF, UL, UB, DF, DR, DB, DL, FL, BL, BR, FR},
-        {NOT_FLIPPED});
+        {kNotFlipped});
     ret[Rx1] = CubieCube333(
         {DFR, UFL, ULB, URF, DLF, DRB, UBR, DBL},
-        {COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE,
-            ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED},
+        {kCounterClockwise, kOriented, kOriented, kClockwise,
+            kOriented, kClockwise, kCounterClockwise, kOriented},
         {UF, UL, UB, FR, DF, BR, DB, DL, FL, BL, UR, DR},
-        {NOT_FLIPPED});
+        {kNotFlipped});
     ret[Fx1] = CubieCube333(
         {UFL, DLF, ULB, UBR, DFR, URF, DRB, DBL},
-        {CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED,
-            CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED, ORIENTED},
+        {kClockwise, kCounterClockwise, kOriented, kOriented,
+            kClockwise, kCounterClockwise, kOriented, kOriented},
         {FL, UL, UB, UR, FR, DR, DB, DL, DF, BL, BR, UF},
-        {FLIPPED, NOT_FLIPPED, NOT_FLIPPED, NOT_FLIPPED,
-            FLIPPED, NOT_FLIPPED, NOT_FLIPPED, NOT_FLIPPED,
-            FLIPPED, NOT_FLIPPED, NOT_FLIPPED, FLIPPED});
+        {kFlipped, kNotFlipped, kNotFlipped, kNotFlipped,
+            kFlipped, kNotFlipped, kNotFlipped, kNotFlipped,
+            kFlipped, kNotFlipped, kNotFlipped, kFlipped});
     ret[Dx1] = CubieCube333(
         {URF, UFL, ULB, UBR, DBL, DLF, DFR, DRB},
-        {ORIENTED},
+        {kOriented},
         {UF, UL, UB, UR, DL, DF, DR, DB, FL, BL, BR, FR},
-        {NOT_FLIPPED});
+        {kNotFlipped});
     ret[Lx1] = CubieCube333(
         {URF, ULB, DBL, UBR, UFL, DFR, DRB, DLF},
-        {ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE, ORIENTED,
-            COUNTER_CLOCKWISE, ORIENTED, ORIENTED, CLOCKWISE},
+        {kOriented, kClockwise, kCounterClockwise, kOriented,
+            kCounterClockwise, kOriented, kOriented, kClockwise},
         {UF, BL, UB, UR, DF, DR, DB, FL, UL, DL, BR, FR},
-        {NOT_FLIPPED});
+        {kNotFlipped});
     ret[Bx1] = CubieCube333(
         {URF, UFL, UBR, DRB, DLF, DFR, DBL, ULB},
-        {ORIENTED, ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE,
-            ORIENTED, ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE},
+        {kOriented, kOriented, kClockwise, kCounterClockwise,
+            kOriented, kOriented, kClockwise, kCounterClockwise},
         {UF, UL, BR, UR, DF, DR, BL, DL, FL, UB, DB, FR},
-        {NOT_FLIPPED, NOT_FLIPPED, FLIPPED, NOT_FLIPPED,
-            NOT_FLIPPED, NOT_FLIPPED, FLIPPED, NOT_FLIPPED,
-            NOT_FLIPPED, FLIPPED, FLIPPED, NOT_FLIPPED});
+        {kNotFlipped, kNotFlipped, kFlipped, kNotFlipped,
+            kNotFlipped, kNotFlipped, kFlipped, kNotFlipped,
+            kNotFlipped, kFlipped, kFlipped, kNotFlipped});
 
-    for (auto i = 0; i < N_MOVE; i += N_MOVE_PER_AXIS) {
-      for (auto j = 1; j < N_MOVE_PER_AXIS; j++) {
+    for (auto i = 0; i < kNMove; i += kMovePerAxis) {
+      for (auto j = 1; j < kMovePerAxis; j++) {
         ret[i + j] = CubieCube333();
         cubeMult(ret[i + j - 1], ret[i], &ret[i + j]);
       }
@@ -407,12 +407,12 @@ CubieCube333 CubieCube333::getMoveCube(uint16_t move) {
 
 uint16_t CubieCube333::getFlipMove(uint16_t flip, uint16_t move) {
   static auto moveTable = [] {
-    auto ret = array<array<uint16_t, N_MOVE>, N_EDGE_FLIP>();
+    auto ret = array<array<uint16_t, kNMove>, kNEdgeFlip>();
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_EDGE_FLIP; i++) {
+    for (auto i = 0; i < kNEdgeFlip; i++) {
       c.setEO(i);
-      for (auto j = 0; j < N_MOVE; j++) {
+      for (auto j = 0; j < kNMove; j++) {
         cubeMult(c, getMoveCube(j), &d);
         ret[i][j] = d.getEOIndex();
       }
@@ -424,12 +424,12 @@ uint16_t CubieCube333::getFlipMove(uint16_t flip, uint16_t move) {
 
 uint16_t CubieCube333::getTwistMove(uint16_t twist, uint16_t move) {
   static auto moveTable = [] {
-    auto ret = array<array<uint16_t, N_MOVE>, N_CORNER_TWIST>();
+    auto ret = array<array<uint16_t, kNMove>, kNCornerTwist>();
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_CORNER_TWIST; i++) {
+    for (auto i = 0; i < kNCornerTwist; i++) {
       c.setCO(i);
-      for (auto j = 0; j < N_MOVE; j++) {
+      for (auto j = 0; j < kNMove; j++) {
         cubeMult(c, getMoveCube(j), &d);
         ret[i][j] = d.getCOIndex();
       }
@@ -442,12 +442,12 @@ uint16_t CubieCube333::getTwistMove(uint16_t twist, uint16_t move) {
 uint16_t CubieCube333::getSlicePositionMove(uint16_t slicePositionIndex,
   uint16_t move) {
   static auto moveTable = [] {
-    auto ret = array<array<uint16_t, N_MOVE>, N_SLICE_POSITION>();
+    auto ret = array<array<uint16_t, kNMove>, kNSlicePosition>();
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_SLICE_POSITION; i++) {
+    for (auto i = 0; i < kNSlicePosition; i++) {
       c.setSlicePosition(i);
-      for (auto j = 0; j < N_MOVE; j++) {
+      for (auto j = 0; j < kNMove; j++) {
         cubeMult(c, getMoveCube(j), &d);
         ret[i][j] = d.getSlicePositionIndex();
       }
@@ -460,13 +460,13 @@ uint16_t CubieCube333::getSlicePositionMove(uint16_t slicePositionIndex,
 uint16_t CubieCube333::getUD8EPMove(uint16_t ud8EP, uint16_t index) {
   static auto moveTable = [] {
     auto ret =
-      array<array<uint16_t, N_PHASE2_MOVE_COUNT>, N_UD8EDGE_PERM>();
+      array<array<uint16_t, kPhase2MoveCount>, kNUd8EdgePerm>();
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_UD8EDGE_PERM; i++) {
+    for (auto i = 0; i < kNUd8EdgePerm; i++) {
       c.setUD8EP(i);
-      for (auto j = 0; j < N_PHASE2_MOVE_COUNT; j++) {
-        cubeMult(c, getMoveCube(PHASE2_MOVE[j]), &d);
+      for (auto j = 0; j < kPhase2MoveCount; j++) {
+        cubeMult(c, getMoveCube(kPhase2Move[j]), &d);
         ret[i][j] = d.getUD8EPIndex();
       }
     }
@@ -477,13 +477,13 @@ uint16_t CubieCube333::getUD8EPMove(uint16_t ud8EP, uint16_t index) {
 
 uint16_t CubieCube333::getSliceEPMove(uint16_t sliceEP, uint16_t index) {
   static auto moveTable = [] {
-    array<array<uint16_t, N_PHASE2_MOVE_COUNT>, N_SLICE_EDGE_PERM> ret;
+    array<array<uint16_t, kPhase2MoveCount>, kNSliceEdgePerm> ret;
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_SLICE_EDGE_PERM; i++) {
+    for (auto i = 0; i < kNSliceEdgePerm; i++) {
       c.setSliceEP(i);
-      for (auto j = 0; j < N_PHASE2_MOVE_COUNT; j++) {
-        cubeMult(c, getMoveCube(PHASE2_MOVE[j]), &d);
+      for (auto j = 0; j < kPhase2MoveCount; j++) {
+        cubeMult(c, getMoveCube(kPhase2Move[j]), &d);
         ret[i][j] = d.getSliceEPIndex();
       }
     }
@@ -495,13 +495,13 @@ uint16_t CubieCube333::getSliceEPMove(uint16_t sliceEP, uint16_t index) {
 uint16_t CubieCube333::getCPMove(uint16_t cp, uint16_t index) {
   static auto moveTable = [] {
     auto ret =
-      array<array<uint16_t, N_PHASE2_MOVE_COUNT>, N_CORNER_PERM>();
+      array<array<uint16_t, kPhase2MoveCount>, kNCornerPerm>();
     CubieCube333 c = CubieCube333();
     CubieCube333 d = CubieCube333();
-    for (auto i = 0; i < N_CORNER_PERM; i++) {
+    for (auto i = 0; i < kNCornerPerm; i++) {
       c.setCP(i);
-      for (auto j = 0; j < N_PHASE2_MOVE_COUNT; j++) {
-        cubeMult(c, getMoveCube(PHASE2_MOVE[j]), &d);
+      for (auto j = 0; j < kPhase2MoveCount; j++) {
+        cubeMult(c, getMoveCube(kPhase2Move[j]), &d);
         ret[i][j] = d.getCPIndex();
       }
     }

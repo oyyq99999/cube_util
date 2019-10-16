@@ -1,17 +1,17 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE222_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE222_HPP_
-#include<string>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_222_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_222_HPP_
+#include <string>
 
-#include<cube_util/puzzle/CubieCubeNNN.hpp>
+#include "cube_util/puzzle/cubie_cube_nnn.hpp"
 
 namespace cube_util {
 
 using std::array;
 
-using cube222::N_MOVE;
-using cube222::N_PERM;
-using cube222::N_TWIST;
+using cube222::kNMove;
+using cube222::kNPerm;
+using cube222::kNTwist;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// A class representing a 2x2x2 cube model by cubie level.
@@ -47,8 +47,8 @@ class CubieCube222 : public CubieCubeNNN {
    * @param perm permutations to initialize with
    * @param twist orientations to initialize with
    */
-  CubieCube222(const array<uint16_t, N_CORNER> &perm,
-               const array<uint16_t, N_CORNER> &twist);
+  CubieCube222(const array<uint16_t, kNCorner> &perm,
+               const array<uint16_t, kNCorner> &twist);
 
   /**
    * Constructor of the class.
@@ -59,7 +59,7 @@ class CubieCube222 : public CubieCubeNNN {
 
   /**
    * Constructor of the class.
-   * `index` = `perm` * `N_TWIST` + `twist`
+   * `index` = `perm` * `kNTwist` + `twist`
    * @param index index to initialize with
    */
   explicit CubieCube222(uint32_t index);
@@ -122,4 +122,4 @@ class CubieCube222 : public CubieCubeNNN {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBE222_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_222_HPP_

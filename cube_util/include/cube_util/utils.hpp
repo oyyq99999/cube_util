@@ -1,10 +1,10 @@
 // Copyright 2019 Yunqi Ouyang
 #ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_UTILS_HPP_
 #define CUBE_UTIL_INCLUDE_CUBE_UTIL_UTILS_HPP_
-#include<cstdint>
+#include <cstdint>
 
-#include<string>
-#include<vector>
+#include <string>
+#include <vector>
 
 namespace cube_util {
 
@@ -16,30 +16,30 @@ using std::string;
 namespace constants {
 
 /** Max cube size limited to a reasonable number */
-const uint16_t MAX_SIZE = 33;
+const uint16_t kMaxSize = 33;
 
 /** Number of axis in a cube */
-const uint16_t N_AXIS = 6;
+const uint16_t kNAxis = 6;
 
 /** Number of face in a cube */
-const uint16_t N_FACE = 6;
+const uint16_t kNFace = 6;
 
 /** Facelet names in order */
-const char FACE_NAMES[] = {'U', 'R', 'F', 'D', 'L', 'B'};
+const char kFaceNames[] = {'U', 'R', 'F', 'D', 'L', 'B'};
 
 /** Number of corners in a cube */
-const uint16_t N_CORNER = 8;
+const uint16_t kNCorner = 8;
 
 /** Possible move amount types for an axis */
-const uint16_t N_MOVE_PER_AXIS = 3;
+const uint16_t kMovePerAxis = 3;
 /** Possible move types for a fixed shift */
-const uint16_t N_MOVE_PER_SHIFT = N_MOVE_PER_AXIS * N_AXIS;
+const uint16_t kMovePerShift = kMovePerAxis * kNAxis;
 
 /** Max choose range */
-const uint16_t N_CHOOSE_MAX = 24;
+const uint16_t kNChooseMax = 24;
 
 /** Non-existent axis */
-const uint16_t INVALID_AXIS = 0xff;
+const uint16_t kInvalidAxis = 0xff;
 
 }  // namespace constants
 
@@ -60,7 +60,7 @@ enum Corners {
 
 /** Corner orientation representations */
 enum CornerTwists {
-  ORIENTED, CLOCKWISE, COUNTER_CLOCKWISE,
+  kOriented, kClockwise, kCounterClockwise,
 };
 
 /** Part of applicable moves */
@@ -81,21 +81,21 @@ enum Moves {
 namespace cube222 {
 
 /** Type of moves for a 2x2x2 cube */
-const uint16_t N_MOVE = 9;
+const uint16_t kNMove = 9;
 /** Total orientations count of first 6 cubies of a 2x2x2 cube. */
-const uint16_t N_TWIST = 729;  // 3 ^ 6
+const uint16_t kNTwist = 729;  // 3 ^ 6
 /** Total permutations count of first 7 cubies of a 2x2x2 cube. */
-const uint16_t N_PERM = 5040;  // 7!
+const uint16_t kNPerm = 5040;  // 7!
 /** God's number of a 2x2x2 cube */
-const uint16_t N_MAX_LENGTH = 11;
+const uint16_t kMaxLength = 11;
 
 /** Permutation index of solved permutation */
-const uint16_t SOLVED_PERM = 0;
+const uint16_t kSolvedPerm = 0;
 /** Orientation index of solved orientation */
-const uint16_t SOLVED_TWIST = 0;
+const uint16_t kSolvedTwist = 0;
 
 /** Number of stickers on a face */
-const uint16_t FACELET_PER_FACE = 4;
+const uint16_t kFaceletPerFace = 4;
 
 /** Facelets on each face */
 enum Facelets {
@@ -108,7 +108,7 @@ enum Facelets {
 };
 
 /** Facelet mapping for cubies */
-const uint16_t FACELET_MAP[][3] = {
+const uint16_t kFaceletMap[][3] = {
     {U4, R1, F2}, {U3, F1, L2}, {U1, L1, B2}, {U2, B1, R2},
     {D1, L4, F3}, {D2, F4, R3}, {D4, R4, B3}, {D3, B4, L3}
 };
@@ -132,55 +132,55 @@ using enums::Moves::Lx2;
 using enums::Moves::Bx2;
 
 /** Type of moves for a 3x3x3 cube */
-const uint16_t N_MOVE = 18;
+const uint16_t kNMove = 18;
 /** Total orientations count of first 7 corners of a 3x3x3 cube. */
-const uint16_t N_CORNER_TWIST = 2187;  // 3 ^ 7
+const uint16_t kNCornerTwist = 2187;  // 3 ^ 7
 /** Total permutations count of corners of a 3x3x3 cube. */
-const uint16_t N_CORNER_PERM = 40320;  // 8!
+const uint16_t kNCornerPerm = 40320;  // 8!
 /** Total orientations count of first 11 edges of a 3x3x3 cube. */
-const uint16_t N_EDGE_FLIP = 2048;  // 2 ^ 11
+const uint16_t kNEdgeFlip = 2048;  // 2 ^ 11
 /** Total permutations count of edges of a 3x3x3 cube. */
-const uint32_t N_EDGE_PERM = 479001600;  // 12!
+const uint32_t kNEdgePerm = 479001600;  // 12!
 /** Total permutations count of UD 8 edges of a 3x3x3 cube. */
-const uint16_t N_UD8EDGE_PERM = 40320;  // 8!
+const uint16_t kNUd8EdgePerm = 40320;  // 8!
 /** Total E-slice edges positions count of a 3x3x3 cube. */
-const uint16_t N_SLICE_POSITION = 495;  // C(12, 4)
+const uint16_t kNSlicePosition = 495;  // C(12, 4)
 /** Total permutations count of E-slice edges of a 3x3x3 cube. */
-const uint16_t N_SLICE_EDGE_PERM = 24;  // 4!
+const uint16_t kNSliceEdgePerm = 24;  // 4!
 
 /** Number of edges in a 3x3x3 cube */
-const uint16_t N_EDGE = 12;
+const uint16_t kNEdge = 12;
 
 /** Corner permutation index of solved state */
-const uint16_t SOLVED_CP = 0;
+const uint16_t kSolvedCp = 0;
 /** Corner orientation index of solved state */
-const uint16_t SOLVED_TWIST = 0;
+const uint16_t kSolvedTwist = 0;
 /** Edge permutation index of solved state */
-const uint32_t SOLVED_EP = 0;
+const uint32_t kSolvedEp = 0;
 /** Edge orientation index of solved state */
-const uint16_t SOLVED_FLIP = 0;
+const uint16_t kSolvedFlip = 0;
 /** E-slice edges choose index of solved state */
-const uint16_t SOLVED_SLICE_POSITION = 494;  // C(12, 4) - 1;
+const uint16_t kSolvedSlicePosition = 494;  // C(12, 4) - 1;
 /** UD 8 Edge permutation index of solved state */
-const uint32_t SOLVED_UD8_EP = 0;
+const uint32_t kSolvedUd8Ep = 0;
 /** E-slice edges permutation index of solved state */
-const uint16_t SOLVED_SLICE_EP = 0;
+const uint16_t kSolvedSliceEp = 0;
 /** Max solution length for first phase of the two-phase algorithm. */
-const uint16_t N_MAX_PHASE1_LENGTH = 20;
+const uint16_t kMaxPhase1Length = 20;
 /** Max solution length for second phase of the two-phase algorithm. */
-const uint16_t N_MAX_PHASE2_LENGTH = 18;
+const uint16_t kMaxPhase2Length = 18;
 /** Max solution length for two-phase algorithm. */
-const uint16_t N_MAX_LENGTH = 30;
+const uint16_t kMaxLength = 30;
 /** Max solution length to check if a cube is solvable. */
-const uint16_t N_MAX_CHECK_LENGTH = 11;
+const uint16_t kMaxCheckLength = 11;
 /** Different move types for phase 2 */
-const uint16_t N_PHASE2_MOVE_COUNT = 10;
+const uint16_t kPhase2MoveCount = 10;
 /** Possible moves in phase 2 */
-const uint16_t PHASE2_MOVE[] = {Ux1, Ux2, Ux3, Rx2, Fx2,
+const uint16_t kPhase2Move[] = {Ux1, Ux2, Ux3, Rx2, Fx2,
                                 Dx1, Dx2, Dx3, Lx2, Bx2};
 
 /** Number of stickers on a face */
-const uint16_t FACELET_PER_FACE = 9;
+const uint16_t kFaceletPerFace = 9;
 
 /** Facelets on each face */
 enum Facelets {
@@ -199,16 +199,16 @@ enum Edges {
 
 /** Edge orientation representations */
 enum EdgeFlips {
-  NOT_FLIPPED, FLIPPED,
+  kNotFlipped, kFlipped,
 };
 
 /** Facelet mapping for corners */
-const uint16_t CORNER_FACELET_MAP[][3] = {
+const uint16_t kCornerFaceletMap[][3] = {
     {U9, R1, F3}, {U7, F1, L3}, {U1, L1, B3}, {U3, B1, R3},
     {D1, L9, F7}, {D3, F9, R7}, {D9, R9, B7}, {D7, B9, L7}};
 
 /** Facelet mapping for edges */
-const uint16_t EDGE_FACELET_MAP[][2] = {
+const uint16_t kEdgeFaceletMap[][2] = {
     {U8, F2}, {U4, L2}, {U2, B2}, {U6, R2},
     {D2, F8}, {D6, R8}, {D8, B8}, {D4, L8},
     {F4, L6}, {B6, L4}, {B4, R6}, {F6, R4}};
@@ -383,7 +383,7 @@ uint16_t getPruning(const array<uint16_t, SIZE> &arr, uint32_t index) {
 }
 
 /**
- * Get choose value for no more than constants::N_CHOOSE_MAX elements.
+ * Get choose value for no more than #constants::kNChooseMax elements.
  * @param n total element number
  * @param k how many to choose
  * @return choose value

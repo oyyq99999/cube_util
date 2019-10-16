@@ -1,9 +1,9 @@
 // Copyright 2019 Yunqi Ouyang
 #define BOOST_TEST_MODULE scramble
-#include<boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include<cube_util/MoveSequenceNNN.hpp>
-#include<cube_util/Utils.hpp>
+#include "cube_util/move_sequence_nnn.hpp"
+#include "cube_util/utils.hpp"
 
 using std::vector;
 

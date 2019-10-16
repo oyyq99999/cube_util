@@ -1,7 +1,7 @@
 // Copyright 2019 Yunqi Ouyang
-#include<cube_util/Cube222Solver.hpp>
+#include "cube_util/cube_222_solver.hpp"
 
-#include<cube_util/MoveSequenceNNN.hpp>
+#include "cube_util/move_sequence_nnn.hpp"
 
 namespace cube_util {
 
@@ -9,38 +9,38 @@ using std::make_unique;
 using std::fill;
 using std::max;
 
-using constants::N_AXIS;
-using constants::N_MOVE_PER_AXIS;
-using constants::INVALID_AXIS;
-using cube222::SOLVED_PERM;
-using cube222::SOLVED_TWIST;
+using constants::kNAxis;
+using constants::kMovePerAxis;
+using constants::kInvalidAxis;
+using cube222::kSolvedPerm;
+using cube222::kSolvedTwist;
 
 using utils::setPruning;
 using utils::getPruning;
 using utils::reverseMove;
 
 Cube222Solver::Cube222Solver(const CubieCube222 &c) {
-  cc = c;
+  cc_ = c;
 }
 
 int16_t Cube222Solver::getSolutionLength() const {
-  return solutionLength;
+  return solution_length_;
 }
 
 unique_ptr<MoveSequence> Cube222Solver::solve(uint16_t minLength) {
-  this->_solve(minLength);
+  _solve(minLength);
   vector<uint16_t> moves;
-  for (auto i = 0; i < this->solutionLength; i++) {
-    moves.push_back(solution[i]);
+  for (auto i = 0; i < solution_length_; i++) {
+    moves.push_back(solution_[i]);
   }
   return make_unique<MoveSequenceNNN>(2, moves);
 }
 
 unique_ptr<MoveSequence> Cube222Solver::generate(uint16_t minLength) {
-  this->_solve(minLength);
+  _solve(minLength);
   vector<uint16_t> moves;
-  for (auto i = this->solutionLength - 1; i >= 0; i--) {
-    moves.push_back(reverseMove(solution[i]));
+  for (auto i = solution_length_ - 1; i >= 0; i--) {
+    moves.push_back(reverseMove(solution_[i]));
   }
   return make_unique<MoveSequenceNNN>(2, moves);
 }
@@ -59,17 +59,17 @@ bool Cube222Solver::search(
     uint16_t perm, uint16_t twist, uint16_t moveCount,
     uint16_t lastAxis, uint16_t depth, bool saveSolution) {
   if (moveCount == 0) {
-    if (perm == SOLVED_PERM && twist == SOLVED_TWIST) {
-      solutionLength = saveSolution ? depth : -1;
+    if (perm == kSolvedPerm && twist == kSolvedTwist) {
+      solution_length_ = saveSolution ? depth : -1;
       return true;
     }
     return false;
   }
-  for (auto axis = 0; axis < N_AXIS >> 1; axis++) {
+  for (auto axis = 0; axis < kNAxis >> 1; axis++) {
     if (axis != lastAxis) {
-      for (auto power = 0; power < N_MOVE_PER_AXIS; power++) {
-        auto move = axis * N_MOVE_PER_AXIS + power;
-        solution[depth] = move;
+      for (auto power = 0; power < kMovePerAxis; power++) {
+        auto move = axis * kMovePerAxis + power;
+        solution_[depth] = move;
         auto newPerm = CubieCube222::getPermMove(perm, move);
         auto newTwist = CubieCube222::getTwistMove(twist, move);
 
@@ -101,24 +101,24 @@ bool Cube222Solver::search(
  * @param minLength minimal length to start
  */
 void Cube222Solver::_solve(uint16_t minLength) {
-  if (minLength > N_MAX_LENGTH) {
-    minLength = N_MAX_LENGTH;
+  if (minLength > kMaxLength) {
+    minLength = kMaxLength;
   }
 
-  const auto perm = cc.getCPIndex();
-  const auto twist = cc.getCOIndex();
-  for (auto i = minLength; i <= N_MAX_LENGTH; i++) {
-    if (search(perm, twist, i, INVALID_AXIS, 0, true)) {
+  const auto perm = cc_.getCPIndex();
+  const auto twist = cc_.getCOIndex();
+  for (auto i = minLength; i <= kMaxLength; i++) {
+    if (search(perm, twist, i, kInvalidAxis, 0, true)) {
       break;
     }
   }
 }
 
 bool Cube222Solver::isSolvableIn(uint16_t maxLength) {
-  const auto perm = cc.getCPIndex();
-  const auto twist = cc.getCOIndex();
+  const auto perm = cc_.getCPIndex();
+  const auto twist = cc_.getCOIndex();
   for (auto i = 0; i <= maxLength; i++) {
-    if (search(perm, twist, i, INVALID_AXIS, 0, false)) {
+    if (search(perm, twist, i, kInvalidAxis, 0, false)) {
       return true;
     }
   }
@@ -127,18 +127,18 @@ bool Cube222Solver::isSolvableIn(uint16_t maxLength) {
 
 uint16_t Cube222Solver::getPermPruning(uint16_t perm) {
   static auto pruningTable = [] {
-    auto ret = array<uint16_t, ((N_PERM + 3) >> 2)>();
+    auto ret = array<uint16_t, ((kNPerm + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     auto count = 0;
-    for (auto depth = 0; count < N_PERM; depth++) {
+    for (auto depth = 0; count < kNPerm; depth++) {
       if (depth == 0) {
-        setPruning(&ret, SOLVED_PERM, depth);
+        setPruning(&ret, kSolvedPerm, depth);
         count++;
         continue;
       }
-      for (auto perm = 0; perm < N_PERM; perm++) {
+      for (auto perm = 0; perm < kNPerm; perm++) {
         if (getPruning(ret, perm) == depth - 1) {
-          for (auto move = 0; move < N_MOVE; move++) {
+          for (auto move = 0; move < kNMove; move++) {
             auto newPerm = CubieCube222::getPermMove(perm, move);
             if (getPruning(ret, newPerm) == 0xf) {
               setPruning(&ret, newPerm, depth);
@@ -155,18 +155,18 @@ uint16_t Cube222Solver::getPermPruning(uint16_t perm) {
 
 uint16_t Cube222Solver::getTwistPruning(uint16_t twist) {
   static auto pruningTable = [] {
-    auto ret = array<uint16_t, ((N_TWIST + 3) >> 2)>();
+    auto ret = array<uint16_t, ((kNTwist + 3) >> 2)>();
     fill(ret.begin(), ret.end(), 0xffff);
     auto count = 0;
-    for (auto depth = 0; count < N_TWIST; depth++) {
+    for (auto depth = 0; count < kNTwist; depth++) {
       if (depth == 0) {
-        setPruning(&ret, SOLVED_TWIST, depth);
+        setPruning(&ret, kSolvedTwist, depth);
         count++;
         continue;
       }
-      for (auto twist = 0; twist < N_TWIST; twist++) {
+      for (auto twist = 0; twist < kNTwist; twist++) {
         if (getPruning(ret, twist) == depth - 1) {
-          for (auto move = 0; move < N_MOVE; move++) {
+          for (auto move = 0; move < kNMove; move++) {
             auto newTwist = CubieCube222::getTwistMove(twist, move);
             if (getPruning(ret, newTwist) == 0xf) {
               setPruning(&ret, newTwist, depth);

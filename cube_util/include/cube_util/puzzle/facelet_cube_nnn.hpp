@@ -1,10 +1,10 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELETCUBENNN_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELETCUBENNN_HPP_
-#include<cstdint>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELET_CUBE_NNN_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELET_CUBE_NNN_HPP_
+#include <cstdint>
 
-#include<string>
-#include<vector>
+#include <string>
+#include <vector>
 
 namespace cube_util {
 
@@ -21,10 +21,10 @@ using std::vector;
 ////////////////////////////////////////////////////////////////////////////////
 class FaceletCubeNNN {
   /// Size of the cube.
-  /// Currently supports from 2 to constants::MAX_SIZE.
-  uint16_t size;
+  /// Currently supports from 2 to #constants::kMaxSize.
+  uint16_t size_;
   /** Facelets definitions of the cube. */
-  vector<uint16_t> facelets;
+  vector<uint16_t> facelets_;
 
   /**
    * Outputs info about the cube, includes size and facelets.
@@ -35,14 +35,14 @@ class FaceletCubeNNN {
   /**
    * Constructor of the class.
    * @param size size of the cube, currently supports
-   * from 2 to constants::MAX_SIZE
+   * from 2 to #constants::kMaxSize
    */
   explicit FaceletCubeNNN(uint16_t size);
 
   /**
    * Constructor of the class.
    * @param size size of the cube, currently supports
-   * from 2 to constants::MAX_SIZE
+   * from 2 to #constants::kMaxSize
    * @param facelets definition of the current facelets state
    */
   FaceletCubeNNN(uint16_t size, const vector<uint16_t> &facelets);
@@ -55,7 +55,7 @@ class FaceletCubeNNN {
 
   /**
    * Get current facelets status.
-   * @returns a copy of #facelets
+   * @returns a copy of #facelets_
    */
   vector<uint16_t> getFacelets() const;
 
@@ -160,37 +160,37 @@ class FaceletCubeNNN {
 
   /**
    * Turn the outer _shift_ layers from U axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveUw(int shift, int amount);
   /**
    * Turn the outer _shift_ layers from R axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveRw(int shift, int amount);
   /**
    * Turn the outer _shift_ layers from F axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveFw(int shift, int amount);
   /**
    * Turn the outer _shift_ layers from D axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveDw(int shift, int amount);
   /**
    * Turn the outer _shift_ layers from L axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveLw(int shift, int amount);
   /**
    * Turn the outer _shift_ layers from B axis clokwise for _amount_ times.
-   * @param shift how many layers to turn, this ranges from _2_ to #size
+   * @param shift how many layers to turn, this ranges from _2_ to #size_
    * @param amount how many times to turn
    */
   void moveBw(int shift, int amount);
@@ -228,4 +228,4 @@ class FaceletCubeNNN {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELETCUBENNN_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELET_CUBE_NNN_HPP_

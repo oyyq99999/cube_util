@@ -1,11 +1,11 @@
 // Copyright 2019 Yunqi Ouyang
 #ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
 #define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
-#include<cstdint>
+#include <cstdint>
 
-#include<memory>
+#include <memory>
 
-#include<cube_util/MoveSequence.hpp>
+#include "cube_util/move_sequence.hpp"
 
 namespace cube_util {
 
@@ -18,21 +18,21 @@ using std::unique_ptr;
 class Scrambler {
  protected:
   /** Whether to check the scramble state to satisfy WCA regulations */
-  bool wcaCheck = true;
+  bool wca_check_ = true;
 
   /** WCA scramble state requirement */
-  uint16_t minStateLength = 2;
+  uint16_t min_state_length_ = 2;
 
   /// Lower limit of the scramble sequence length, which is useful
   /// for small cubes
-  uint16_t minScrambleLength = 0;
+  uint16_t min_scramble_length_ = 0;
 
  public:
   /**
    * Constructor of the class.
-   * @param wcaCheck whether check for WCA state requirements
+   * @param wca_check whether check for WCA state requirements
    */
-  explicit Scrambler(bool wcaCheck);
+  explicit Scrambler(bool wca_check);
 
   /**
    * The scramble function. This generates a new scramble on each call.

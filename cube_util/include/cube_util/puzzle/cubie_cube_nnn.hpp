@@ -1,19 +1,19 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBENNN_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBENNN_HPP_
-#include<array>
-#include<iostream>
-#include<string>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_NNN_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_NNN_HPP_
+#include <array>
+#include <iostream>
+#include <string>
 
-#include<cube_util/puzzle/FaceletCubeNNN.hpp>
-#include<cube_util/Utils.hpp>
+#include "cube_util/puzzle/facelet_cube_nnn.hpp"
+#include "cube_util/utils.hpp"
 
 namespace cube_util {
 
 using std::array;
 using std::ostream;
 
-using constants::N_CORNER;
+using constants::kNCorner;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// An abstract class representing common part of any NxNxN cube models by
@@ -33,10 +33,10 @@ class CubieCubeNNN {
 
  protected:
   /** Permutations of the corners. */
-  array<uint16_t, N_CORNER> cp;
+  array<uint16_t, kNCorner> cp_;
 
   /** Orientations of the corners. */
-  array<uint16_t, N_CORNER> co;
+  array<uint16_t, kNCorner> co_;
 
   /**
    * Set corner permutation state according to given index.
@@ -85,4 +85,4 @@ class CubieCubeNNN {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIECUBENNN_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_NNN_HPP_

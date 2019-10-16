@@ -11,18 +11,18 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 set(CUBE_UTIL_SRC_FILES
-  src/Utils.cpp
-  src/puzzle/FaceletCubeNNN.cpp
-  src/puzzle/CubieCubeNNN.cpp
-  src/puzzle/CubieCube222.cpp
-  src/puzzle/CubieCube333.cpp
-  src/Cube222Solver.cpp
-  src/Cube333Solver.cpp
-  src/Scrambler.cpp
-  src/Scrambler222.cpp
-  src/Scrambler333.cpp
-  src/MoveSequence.cpp
-  src/MoveSequenceNNN.cpp
+  src/utils.cpp
+  src/puzzle/facelet_cube_nnn.cpp
+  src/puzzle/cubie_cube_nnn.cpp
+  src/puzzle/cubie_cube_222.cpp
+  src/puzzle/cubie_cube_333.cpp
+  src/cube_222_solver.cpp
+  src/cube_333_solver.cpp
+  src/scrambler.cpp
+  src/scrambler_222.cpp
+  src/scrambler_333.cpp
+  src/move_sequence.cpp
+  src/move_sequence_nnn.cpp
 )
 
 set(Boost_NO_BOOST_CMAKE ON)

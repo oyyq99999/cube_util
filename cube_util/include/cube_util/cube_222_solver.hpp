@@ -1,29 +1,29 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE222SOLVER_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE222SOLVER_HPP_
-#include<memory>
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_222_SOLVER_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_222_SOLVER_HPP_
+#include <memory>
 
-#include<cube_util/puzzle/CubieCube222.hpp>
-#include<cube_util/MoveSequence.hpp>
+#include "cube_util/puzzle/cubie_cube_222.hpp"
+#include "cube_util/move_sequence.hpp"
 
 namespace cube_util {
 
 using std::unique_ptr;
 
-using cube222::N_MAX_LENGTH;
+using cube222::kMaxLength;
 
 ////////////////////////////////////////////////////////////////////////////////
 /// A 2x2x2 cube solver utilizing the IDA* algorithm with prunning tables.
 ////////////////////////////////////////////////////////////////////////////////
 class Cube222Solver {
   /** The cube to solve */
-  CubieCube222 cc;
+  CubieCube222 cc_;
 
   /** Array storing solution move sequences */
-  array<uint16_t, N_MAX_LENGTH> solution;
+  array<uint16_t, kMaxLength> solution_;
 
   /** Length of the solution */
-  int16_t solutionLength = -1;
+  int16_t solution_length_ = -1;
 
   bool search(uint16_t perm, uint16_t twist, uint16_t moveCount,
               uint16_t lastAxis, uint16_t depth, bool saveSolution);
@@ -83,4 +83,4 @@ class Cube222Solver {
 
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE222SOLVER_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_CUBE_222_SOLVER_HPP_
