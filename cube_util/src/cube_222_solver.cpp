@@ -114,10 +114,10 @@ void Cube222Solver::_solve(uint16_t minLength) {
   }
 }
 
-bool Cube222Solver::isSolvableIn(uint16_t maxLength) {
+bool Cube222Solver::isSolvableIn(uint16_t max_length) {
   const auto perm = cc_.getCPIndex();
   const auto twist = cc_.getCOIndex();
-  for (auto i = 0; i <= maxLength; i++) {
+  for (auto i = 0; i <= max_length; i++) {
     if (search(perm, twist, i, kInvalidAxis, 0, false)) {
       return true;
     }

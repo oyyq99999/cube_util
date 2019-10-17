@@ -13,6 +13,10 @@ using std::ostream;
 using std::endl;
 
 using cube_util::constants::kMaxSize;
+using cube_util::constants::kMovePerAxis;
+using cube_util::constants::kMovePerShift;
+using cube_util::constants::kNAxis;
+using cube_util::constants::kNFace;
 
 using cube_util::utils::cycle4;
 
@@ -29,10 +33,8 @@ FaceletCubeNNN::FaceletCubeNNN(uint16_t size) {
         to_string(kMaxSize));
   }
   size_ = size;
-  facelets_ = vector<uint16_t>(6 * size * size);
-  for (auto i = 0; i < 6; i++) {
-    fill_n(facelets_.begin() + i * size * size, size * size, i);
-  }
+  facelets_ = vector<uint16_t>(kNFace * size * size);
+  reset();
 }
 
 FaceletCubeNNN::FaceletCubeNNN(uint16_t size,
@@ -41,9 +43,9 @@ FaceletCubeNNN::FaceletCubeNNN(uint16_t size,
     throw invalid_argument("The size should between 2 and " +
         to_string(kMaxSize));
   }
-  if (facelets.size() != 6 * size * size) {
+  if (facelets.size() != kNFace * size * size) {
     throw invalid_argument("The facelets definition length should be " +
-        to_string(6 * size * size));
+        to_string(kNFace * size * size));
   }
   size_ = size;
   facelets_ = facelets;
@@ -388,6 +390,86 @@ void FaceletCubeNNN::moveLw(int amount) {
 
 void FaceletCubeNNN::moveBw(int amount) {
   moveBw(2, amount);
+}
+
+void FaceletCubeNNN::move(uint16_t move) {
+  auto axis = (move / kMovePerAxis) % kNAxis;
+  auto shift = move / kMovePerShift + 1;
+  auto amount = move % kMovePerAxis + 1;
+  if (shift > 1) {
+    switch (axis) {
+      case U:
+        moveUw(shift, amount);
+        break;
+      case R:
+        moveRw(shift, amount);
+        break;
+      case F:
+        moveFw(shift, amount);
+        break;
+      case D:
+        moveDw(shift, amount);
+        break;
+      case L:
+        moveLw(shift, amount);
+        break;
+      case B:
+        moveBw(shift, amount);
+        break;
+    }
+  } else {
+    switch (axis) {
+      case U:
+        moveU(amount);
+        break;
+      case R:
+        moveR(amount);
+        break;
+      case F:
+        moveF(amount);
+        break;
+      case D:
+        moveD(amount);
+        break;
+      case L:
+        moveL(amount);
+        break;
+      case B:
+        moveB(amount);
+        break;
+    }
+  }
+}
+
+void FaceletCubeNNN::reset() {
+  for (auto i = 0; i < kNFace; i++) {
+    fill_n(facelets_.begin() + i * size_ * size_, size_ * size_, i);
+  }
+}
+
+bool FaceletCubeNNN::isSolvableIn(uint16_t max_length) const {
+  if (max_length > 2) {
+    throw invalid_argument("Max check length is 2");
+  }
+  auto ifcn = FaceletCubeNNN(size_);
+  if (*this == ifcn) {
+    return true;
+  }
+  if (max_length > 0) {
+    const uint16_t kNMove = (size_ - 1) * 9;
+    for (auto m = 0; m < kNMove; m++) {
+      auto another = FaceletCubeNNN(size_, facelets_);
+      another.move(m);
+      if (another.isSolvableIn(max_length - 1)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool FaceletCubeNNN::operator==(const FaceletCubeNNN &that) const {
+  return size_ == that.size_ && facelets_ == that.facelets_;
 }
 
 ostream& operator<<(ostream &os, const FaceletCubeNNN &fc) {

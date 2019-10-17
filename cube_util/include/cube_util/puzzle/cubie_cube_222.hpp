@@ -26,19 +26,6 @@ using cube222::kNTwist;
 /// twist of it needs to be `0` (oriented).
 ////////////////////////////////////////////////////////////////////////////////
 class CubieCube222 : public CubieCubeNNN {
-  void setCP(uint16_t index) override;
-
-  void setCO(uint16_t index) override;
-
-  /**
-   * Calculate product (_one_ * _another_) of two cubes.
-   * @param[in] one the first cube
-   * @param[in] another the second cube
-   * @param[out] result pointer to a cube to return the result to
-   */
-  static void cubeMult(const CubieCube222 &one, const CubieCube222 &another,
-                       CubieCube222 *result);
-
  public:
   CubieCube222() = default;
 
@@ -93,7 +80,7 @@ class CubieCube222 : public CubieCubeNNN {
    * @param move the move applied
    * @returns the move cube
    */
-  static CubieCube222 getMoveCube(uint16_t move);
+  static const CubieCube222& getMoveCube(uint16_t move);
 
   /**
    * Get new permutation coordinate by applying a move to
@@ -119,7 +106,22 @@ class CubieCube222 : public CubieCubeNNN {
    * @returns true if `this` is identical to `that`, false otherwise
    */
   bool operator==(const CubieCube222 &that) const;
+
+ private:
+  void setCP(uint16_t index) override;
+
+  void setCO(uint16_t index) override;
+
+  /**
+   * Calculate product (_one_ * _another_) of two cubes.
+   * @param[in] one the first cube
+   * @param[in] another the second cube
+   * @param[out] result pointer to a cube to return the result to
+   */
+  static void cubeMult(const CubieCube222 &one, const CubieCube222 &another,
+                       CubieCube222 *result);
 };
+
 }  // namespace cube_util
 
 #endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_CUBIE_CUBE_222_HPP_

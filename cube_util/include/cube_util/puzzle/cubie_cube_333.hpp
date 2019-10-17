@@ -158,7 +158,7 @@ class CubieCube333 : public CubieCubeNNN {
    * @param move the move applied
    * @returns the move cube
    */
-  static CubieCube333 getMoveCube(uint16_t move);
+  static const CubieCube333& getMoveCube(uint16_t move);
 
   /**
    * Get new twist coordinate by applying a move to specified twist coordinate.

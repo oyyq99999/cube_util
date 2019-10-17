@@ -1,5 +1,5 @@
 // Copyright 2019 Yunqi Ouyang
-#include "cube_util/scrambler_333.hpp"
+#include "cube_util/scramble/scrambler_333.hpp"
 
 #include "cube_util/cube_333_solver.hpp"
 #include "cube_util/utils.hpp"
@@ -12,6 +12,7 @@ Scrambler333::Scrambler333(uint16_t maxScrambleLength) : Scrambler(true) {
   min_scramble_length_ = 2;
   max_scramble_length_ = maxScrambleLength;
 }
+
 unique_ptr<MoveSequence> Scrambler333::scramble() {
   Cube333Solver s;
   do {

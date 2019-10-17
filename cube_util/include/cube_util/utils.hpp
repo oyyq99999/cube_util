@@ -18,6 +18,9 @@ namespace constants {
 /** Max cube size limited to a reasonable number */
 const uint16_t kMaxSize = 33;
 
+/** Max cube size to scramble by random state */
+const uint16_t kMaxRandomStateCubeSize = 3;
+
 /** Number of axis in a cube */
 const uint16_t kNAxis = 6;
 

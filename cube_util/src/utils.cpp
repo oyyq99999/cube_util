@@ -6,8 +6,9 @@
 
 #include <boost/algorithm/string/trim.hpp>
 
-#include "cube_util/scrambler_222.hpp"
-#include "cube_util/scrambler_333.hpp"
+#include "cube_util/scramble/scrambler_222.hpp"
+#include "cube_util/scramble/scrambler_333.hpp"
+#include "cube_util/scramble/scrambler_nnn.hpp"
 
 namespace cube_util {
 
@@ -67,27 +68,7 @@ string scrambleString(int cubeSize, int length) {
     length = length < kMaxPhase1Length ? kMaxPhase1Length : length;
     return Scrambler333(length).scramble()->toString();
   }
-  string scr;
-  int count = 0;
-  int lastAxis = -1;
-  auto turned = vector<bool>(cubeSize - 1, false);
-  auto r = randomizer(0, 3 * kMovePerAxis * (cubeSize - 1) - 1);
-  while (count < length) {
-    auto move = r();
-    auto axis = (move / kMovePerAxis) % 3;
-    auto shift = move / kMovePerShift;
-    if (axis != lastAxis) {
-      fill(turned.begin(), turned.end(), false);
-    } else if (turned[shift] == true) {
-      continue;
-    }
-    turned[shift] = true;
-    lastAxis = axis;
-    scr.append(move2Str(move)).append(" ");
-    count++;
-  }
-  trim(scr);
-  return scr;
+  return ScramblerNNN(cubeSize).scramble()->toString();
 }
 
 string scrambleString(int cubeSize) {

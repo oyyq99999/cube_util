@@ -1,5 +1,5 @@
 // Copyright 2019 Yunqi Ouyang
-#include "cube_util/scrambler.hpp"
+#include "cube_util/scramble/scrambler.hpp"
 
 namespace cube_util {
 

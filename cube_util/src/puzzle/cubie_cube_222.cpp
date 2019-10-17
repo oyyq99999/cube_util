@@ -173,7 +173,7 @@ CubieCube222 CubieCube222::randomCube() {
   return CubieCube222(r());
 }
 
-CubieCube222 CubieCube222::getMoveCube(uint16_t move) {
+const CubieCube222& CubieCube222::getMoveCube(uint16_t move) {
   static auto moveCubeTable = [] {
     auto ret = array<CubieCube222, kNMove>();
     ret[Ux1] = CubieCube222({UBR, URF, UFL, ULB, DLF, DFR, DRB, DBL},

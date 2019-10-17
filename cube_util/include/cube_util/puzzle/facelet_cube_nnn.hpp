@@ -225,7 +225,33 @@ class FaceletCubeNNN {
    * @param amount how many times to turn
    */
   void moveBw(int amount);
+
+  /**
+   * Apply move to the cube.
+   * @param move move to apply
+   */
+  void move(uint16_t move);  // NOLINT(build/include_what_you_use)
+
+  /**
+   * Reset the cube to solved state.
+   */
+  void reset();
+
+  /**
+   * Check whether the cube is solvable within given length.
+   * @param max_length max length to attempt
+   * @returns whether the cube is solvable within given length
+   */
+  bool isSolvableIn(uint16_t max_length) const;
+
+  /**
+   * Check if `this` is identical to `that`.
+   * @param that another FaceCubeNNN
+   * @returns true if `this` is identical to `that`, false otherwise
+   */
+  bool operator==(const FaceletCubeNNN &that) const;
 };
+
 }  // namespace cube_util
 
 #endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_PUZZLE_FACELET_CUBE_NNN_HPP_

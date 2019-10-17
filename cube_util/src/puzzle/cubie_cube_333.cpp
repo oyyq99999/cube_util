@@ -352,7 +352,7 @@ string CubieCube333::toString() const {
   return os.str();
 }
 
-CubieCube333 CubieCube333::getMoveCube(uint16_t move) {
+const CubieCube333& CubieCube333::getMoveCube(uint16_t move) {
   static auto moveCubeTable = [] {
     auto ret = array<CubieCube333, kNMove>();
     ret[Ux1] = CubieCube333(

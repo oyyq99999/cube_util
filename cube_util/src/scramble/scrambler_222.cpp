@@ -1,5 +1,5 @@
 // Copyright 2019 Yunqi Ouyang
-#include "cube_util/scrambler_222.hpp"
+#include "cube_util/scramble/scrambler_222.hpp"
 
 #include "cube_util/cube_222_solver.hpp"
 #include "cube_util/utils.hpp"
@@ -14,6 +14,7 @@ Scrambler222::Scrambler222(uint16_t minScrambleLength) : Scrambler(true) {
   min_state_length_ = 4;
   min_scramble_length_ = minScrambleLength;
 }
+
 unique_ptr<MoveSequence> Scrambler222::scramble() {
   Cube222Solver s;
   do {

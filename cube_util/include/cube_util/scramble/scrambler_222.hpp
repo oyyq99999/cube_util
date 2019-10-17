@@ -1,9 +1,9 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_222_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_222_HPP_
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_222_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_222_HPP_
 #include <memory>
 
-#include "cube_util/scrambler.hpp"
+#include "cube_util/scramble/scrambler.hpp"
 
 namespace cube_util {
 
@@ -19,8 +19,7 @@ class Scrambler222 : public Scrambler {
 
   /**
    * Constructor of the class.
-   * @param minScrambleLength lower limit of the scramble sequence
-   * length
+   * @param minScrambleLength lower limit of the scramble sequence length
    */
   explicit Scrambler222(uint16_t minScrambleLength);
 
@@ -28,4 +27,4 @@ class Scrambler222 : public Scrambler {
 };
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_222_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_222_HPP_

@@ -61,10 +61,10 @@ class Cube222Solver {
 
   /**
    * Check whether the cube is solvable within given length.
-   * @param maxLength maxLength to attempt
+   * @param max_length max length to attempt
    * @returns whether the cube is solvable within given length
    */
-  bool isSolvableIn(uint16_t maxLength);
+  bool isSolvableIn(uint16_t max_length);
 
   /**
    * Get pruning value for a specified permutation.

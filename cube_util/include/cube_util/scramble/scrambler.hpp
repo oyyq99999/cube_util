@@ -1,6 +1,6 @@
 // Copyright 2019 Yunqi Ouyang
-#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
-#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
+#ifndef CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_HPP_
+#define CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_HPP_
 #include <cstdint>
 
 #include <memory>
@@ -16,17 +16,6 @@ using std::unique_ptr;
 /// WCA-compatible scrambles.
 ////////////////////////////////////////////////////////////////////////////////
 class Scrambler {
- protected:
-  /** Whether to check the scramble state to satisfy WCA regulations */
-  bool wca_check_ = true;
-
-  /** WCA scramble state requirement */
-  uint16_t min_state_length_ = 2;
-
-  /// Lower limit of the scramble sequence length, which is useful
-  /// for small cubes
-  uint16_t min_scramble_length_ = 0;
-
  public:
   /**
    * Constructor of the class.
@@ -41,7 +30,19 @@ class Scrambler {
   virtual unique_ptr<MoveSequence> scramble() = 0;
 
   virtual ~Scrambler() = default;
+
+ protected:
+  /** Whether to check the scramble state to satisfy WCA regulations */
+  bool wca_check_ = true;
+
+  /** WCA scramble state requirement */
+  uint16_t min_state_length_ = 2;
+
+  /// Lower limit of the scramble sequence length, which is useful
+  /// for small cubes
+  uint16_t min_scramble_length_ = 0;
 };
+
 }  // namespace cube_util
 
-#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLER_HPP_
+#endif  // CUBE_UTIL_INCLUDE_CUBE_UTIL_SCRAMBLE_SCRAMBLER_HPP_
