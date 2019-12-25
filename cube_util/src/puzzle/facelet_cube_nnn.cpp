@@ -2,30 +2,33 @@
 #include "cube_util/puzzle/facelet_cube_nnn.hpp"
 
 #include <iostream>
+#include <sstream>
 
 #include "cube_util/utils.hpp"
 
 namespace cube_util {
 
-using std::to_string;
+using std::endl;
 using std::invalid_argument;
 using std::ostream;
-using std::endl;
+using std::ostringstream;
+using std::to_string;
 
-using cube_util::constants::kMaxSize;
-using cube_util::constants::kMovePerAxis;
-using cube_util::constants::kMovePerShift;
-using cube_util::constants::kNAxis;
-using cube_util::constants::kNFace;
+using constants::kFaceNames;
+using constants::kMaxSize;
+using constants::kMovePerAxis;
+using constants::kMovePerShift;
+using constants::kNAxis;
+using constants::kNFace;
 
-using cube_util::utils::cycle4;
+using utils::cycle4;
 
-using cube_util::enums::Colors::U;
-using cube_util::enums::Colors::R;
-using cube_util::enums::Colors::F;
-using cube_util::enums::Colors::D;
-using cube_util::enums::Colors::L;
-using cube_util::enums::Colors::B;
+using enums::Colors::U;
+using enums::Colors::R;
+using enums::Colors::F;
+using enums::Colors::D;
+using enums::Colors::L;
+using enums::Colors::B;
 
 FaceletCubeNNN::FaceletCubeNNN(uint16_t size) {
   if (size < 2 || size > kMaxSize) {
@@ -59,9 +62,15 @@ vector<uint16_t> FaceletCubeNNN::getFacelets() const {
   return facelets_;
 }
 
-string FaceletCubeNNN::prettify() const {
-  using constants::kFaceNames;
+string FaceletCubeNNN::getFaceletsString() const {
+  ostringstream os;
+  for (auto f : facelets_) {
+    os << kFaceNames[f];
+  }
+  return os.str();
+}
 
+string FaceletCubeNNN::prettify() const {
   string ret;
   for (auto i = 0; i < size_; i++) {
     for (auto j = 0; j < size_ + 1; j++) {

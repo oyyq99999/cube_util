@@ -60,6 +60,12 @@ class FaceletCubeNNN {
   vector<uint16_t> getFacelets() const;
 
   /**
+   * Get current facelets status in string presentation.
+   * @returns a string representation of #facelets_
+   */
+  string getFaceletsString() const;
+
+  /**
    * Get a prettified string representation of the current cube state.
    * @returns prettified cube state string
    */
