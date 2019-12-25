@@ -31,6 +31,8 @@ class Scrambler {
 
   virtual ~Scrambler() = default;
 
+  static unique_ptr<Scrambler> instance(uint16_t size);
+
  protected:
   /** Whether to check the scramble state to satisfy WCA regulations */
   bool wca_check_ = true;
